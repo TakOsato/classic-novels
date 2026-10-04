@@ -5,31 +5,95 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <title>怪盗紳士ルパン(和訳)</title>
+<meta name="theme-color" content="#f4f5f2">
+<script>
+(function () {
+  try {
+    var d = document.documentElement;
+    var t = localStorage.getItem('lupin-theme');
+    if (t && t !== 'auto') d.setAttribute('data-theme', t);
+    var s = parseFloat(localStorage.getItem('lupin-scale'));
+    if (isFinite(s) && s >= 0.5 && s <= 3) d.style.setProperty('--fs', String(s));
+  } catch (e) {}
+})();
+</script>
 <style>
   :root {
+    color-scheme: light;
     --paper: #f4f5f2;
     --ink: #1c2126;
     --muted: #5d6670;
     --rule: #c9ced2;
     --accent: #2b3f58;
     --quote-bg: #e9ecee;
-    --bar-bg: #f4f5f2;
-    --drawer-bg: #fbfbf9;
-    --scrim: rgba(20, 24, 28, 0.45);
-    --bar-h: 3.25rem;
+    --float-bg: rgba(244, 245, 242, 0.88);
+    --menu-bg: #fbfbf9;
+    --shadow: 0 6px 24px rgba(20, 24, 28, 0.18);
+    --edge: 0.5rem;
+    --fs: 1;
   }
+  /* 自動:端末のダーク設定に従う */
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme]) {
+      color-scheme: dark;
       --paper: #16191d;
       --ink: #e3e6e8;
       --muted: #98a1a9;
       --rule: #343a41;
       --accent: #9db6d3;
       --quote-bg: #1f242a;
-      --bar-bg: #16191d;
-      --drawer-bg: #1c2025;
-      --scrim: rgba(0, 0, 0, 0.6);
+      --float-bg: rgba(22, 25, 29, 0.88);
+      --menu-bg: #1c2025;
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
     }
+  }
+  :root[data-theme="sepia"] {
+    color-scheme: light;
+    --paper: #f3ead6;
+    --ink: #3a3023;
+    --muted: #7a6a55;
+    --rule: #d6c8a8;
+    --accent: #7a4a1e;
+    --quote-bg: #eaddc0;
+    --float-bg: rgba(243, 234, 214, 0.9);
+    --menu-bg: #f8f1df;
+    --shadow: 0 6px 24px rgba(58, 48, 35, 0.2);
+  }
+  :root[data-theme="green"] {
+    color-scheme: light;
+    --paper: #d9ead6;
+    --ink: #1d2b20;
+    --muted: #4f6554;
+    --rule: #b4cdb2;
+    --accent: #2d6a3e;
+    --quote-bg: #cbe0c8;
+    --float-bg: rgba(217, 234, 214, 0.9);
+    --menu-bg: #e6f2e3;
+    --shadow: 0 6px 24px rgba(29, 43, 32, 0.2);
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #16191d;
+      --ink: #e3e6e8;
+      --muted: #98a1a9;
+      --rule: #343a41;
+      --accent: #9db6d3;
+      --quote-bg: #1f242a;
+      --float-bg: rgba(22, 25, 29, 0.88);
+      --menu-bg: #1c2025;
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
+  }
+  :root[data-theme="black"] {
+    color-scheme: dark;
+    --paper: #000000;
+    --ink: #c8ccd0;
+    --muted: #8a9299;
+    --rule: #2a2f35;
+    --accent: #8fb0d4;
+    --quote-bg: #101318;
+    --float-bg: rgba(0, 0, 0, 0.88);
+    --menu-bg: #0d0f12;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.8);
   }
   * { box-sizing: border-box; }
   html { font-size: 100%; -webkit-text-size-adjust: 100%; }
@@ -42,100 +106,140 @@
     line-height: 2;
     letter-spacing: 0.02em;
   }
-  body.drawer-open { overflow: hidden; }
 
-  /* 上部バー */
-  .topbar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    height: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
-    padding: env(safe-area-inset-top, 0px) max(0.5rem, env(safe-area-inset-right, 0px)) 0 max(0.5rem, env(safe-area-inset-left, 0px));
-    background: var(--bar-bg);
-    border-bottom: 1px solid var(--rule);
-    font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
-  }
+  /* 右上の小さなメニューボタン */
   .menu-btn {
-    flex: none;
+    position: fixed;
+    z-index: 30;
+    top: calc(env(safe-area-inset-top, 0px) + var(--edge));
+    right: calc(env(safe-area-inset-right, 0px) + var(--edge));
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.75rem; height: 2.75rem;
-    border: 0; border-radius: 0.5rem;
-    background: transparent;
+    width: 2.5rem; height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: var(--float-bg);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
     color: var(--accent);
+    opacity: 0.7;
     cursor: pointer;
+    transition: opacity 0.15s ease;
   }
-  .menu-btn:hover { background: var(--quote-bg); }
-  .menu-btn svg { width: 1.5rem; height: 1.5rem; }
-  .bar-title {
-    min-width: 0;
-    flex: 1;
-    margin: 0;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .menu-btn:hover, .menu-btn[aria-expanded="true"], .menu-btn:focus-visible { opacity: 1; }
+  .menu-btn svg { width: 1.25rem; height: 1.25rem; }
 
-  /* ドロワー */
-  .scrim {
-    position: fixed; inset: 0;
-    z-index: 30;
-    background: var(--scrim);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-  body.drawer-open .scrim { opacity: 1; pointer-events: auto; }
-  .drawer {
+  /* ポップアップ(外側タップで閉じる) */
+  .catcher { position: fixed; inset: 0; z-index: 35; background: transparent; }
+  .catcher[hidden] { display: none; }
+  .menu {
     position: fixed;
-    top: 0; bottom: 0; left: 0;
     z-index: 40;
-    width: min(82vw, 20rem);
-    padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 0 calc(1.25rem + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px);
-    background: var(--drawer-bg);
-    border-right: 1px solid var(--rule);
-    transform: translateX(-100%);
-    visibility: hidden;
-    transition: transform 0.22s ease, visibility 0s linear 0.22s;
+    top: calc(env(safe-area-inset-top, 0px) + var(--edge) + 3rem);
+    right: calc(env(safe-area-inset-right, 0px) + var(--edge));
+    width: min(calc(100vw - 1rem), 19rem);
+    max-height: calc(100vh - 6rem);
+    max-height: calc(100dvh - 6rem);
     overflow-y: auto;
+    background: var(--menu-bg);
+    border: 1px solid var(--rule);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow);
+    transform-origin: top right;
+    animation: pop 0.14s ease-out;
     font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
   }
-  body.drawer-open .drawer {
-    transform: none;
-    visibility: visible;
-    transition: transform 0.22s ease, visibility 0s;
-  }
-  .drawer h2 {
-    margin: 0 1.25rem 0.25rem;
-    font-size: 1.0625rem;
+  .menu[hidden] { display: none; }
+  @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+  .menu p.head {
+    margin: 0;
+    padding: 0.75rem 1rem 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
     line-height: 1.5;
   }
-  .drawer .sub { margin: 0 1.25rem 1rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.6; }
-  .drawer ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
-  .drawer li { border-bottom: 1px solid var(--rule); }
-  .drawer a {
+  .menu ul { list-style: none; margin: 0; padding: 0 0 0.25rem; }
+  .menu a {
     display: block;
-    padding: 0.9rem 1.25rem 0.9rem calc(1.25rem - 4px);
-    border-left: 4px solid transparent;
+    padding: 0.7rem 1rem 0.7rem calc(1rem - 3px);
+    border-left: 3px solid transparent;
     color: var(--ink);
     text-decoration: none;
     font-size: 0.9375rem;
-    line-height: 1.6;
+    line-height: 1.55;
   }
-  .drawer a small { display: block; color: var(--muted); font-size: 0.75rem; }
-  .drawer a[aria-current="true"] {
+  .menu a small { display: block; color: var(--muted); font-size: 0.75rem; }
+  .menu a:hover { background: var(--quote-bg); }
+  .menu a[aria-current="true"] {
     border-left-color: var(--accent);
     background: var(--quote-bg);
     font-weight: 600;
   }
-  .drawer a:hover { background: var(--quote-bg); }
+
+  /* 表示設定 */
+  .menu .settings { border-top: 1px solid var(--rule); padding: 0.25rem 1rem 1rem; }
+  .menu .settings h2 {
+    margin: 0.85rem 0 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+  .theme-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0.2rem 0.45rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    cursor: pointer;
+  }
+  .theme-btn:hover { background: var(--quote-bg); }
+  .theme-btn[aria-checked="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+    font-weight: 600;
+  }
+  .theme-btn .sw {
+    width: 1.75rem; height: 1.75rem;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #8a9299;
+    border-radius: 50%;
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+  .sw[data-sw="auto"]  { background: linear-gradient(135deg, #f4f5f2 50%, #16191d 50%); color: #888; }
+  .sw[data-sw="light"] { background: #f4f5f2; color: #1c2126; }
+  .sw[data-sw="sepia"] { background: #f3ead6; color: #3a3023; }
+  .sw[data-sw="green"] { background: #d9ead6; color: #1d2b20; }
+  .sw[data-sw="dark"]  { background: #16191d; color: #e3e6e8; }
+  .sw[data-sw="black"] { background: #000000; color: #c8ccd0; }
+  .sizes { display: flex; align-items: stretch; gap: 0.4rem; }
+  .sizes button {
+    min-width: 2.75rem;
+    height: 2.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+  .sizes button:hover:not(:disabled) { background: var(--quote-bg); }
+  .sizes button:disabled { opacity: 0.35; cursor: default; }
+  .sizes .val { flex: 1; font-size: 0.8125rem; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* 本文 */
@@ -143,14 +247,15 @@
     max-width: 38rem;
     margin: 0 auto;
     padding:
-      calc(var(--bar-h) + env(safe-area-inset-top, 0px) + 2rem)
+      calc(env(safe-area-inset-top, 0px) + 3.25rem)
       max(1.25rem, env(safe-area-inset-right, 0px))
       calc(5rem + env(safe-area-inset-bottom, 0px))
       max(1.25rem, env(safe-area-inset-left, 0px));
   }
   .chapter[hidden] { display: none; }
+  .chapter { font-size: calc(1.0625rem * var(--fs, 1)); }
   .chapter h1 {
-    font-size: 1.5rem;
+    font-size: 1.4em;
     line-height: 1.5;
     margin: 0 0 2rem;
     padding-bottom: 0.75rem;
@@ -196,14 +301,15 @@
   .pager .spacer { flex: 1; }
 
   @media (max-width: 480px) {
-    body { font-size: 1rem; line-height: 1.95; }
-    .chapter h1 { font-size: 1.375rem; }
+    .chapter { font-size: calc(1rem * var(--fs, 1)); line-height: 1.95; }
+    .chapter h1 { font-size: 1.3em; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .scrim, .drawer, body.drawer-open .drawer { transition: none; }
+    .menu { animation: none; }
+    .menu-btn { transition: none; }
   }
   @media print {
-    .topbar, .scrim, .drawer, .pager { display: none; }
+    .menu-btn, .catcher, .menu, .pager { display: none; }
     main { padding-top: 0; }
     .chapter[hidden] { display: block; page-break-before: always; }
     body { background: #fff; color: #000; }
@@ -212,22 +318,36 @@
 </head>
 <body>
 
-<header class="topbar">
-  <button class="menu-btn" id="menuBtn" type="button" aria-label="章の一覧を開く" aria-controls="drawer" aria-expanded="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-  </button>
-  <p class="bar-title" id="barTitle">怪盗紳士ルパン</p>
-</header>
+<button class="menu-btn" id="menuBtn" type="button" aria-label="章の一覧を開く" aria-controls="menu" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
 
-<div class="scrim" id="scrim"></div>
+<div class="catcher" id="catcher" hidden></div>
 
-<nav class="drawer" id="drawer" aria-label="章の一覧" inert>
-  <h2>怪盗紳士ルパン</h2>
-  <p class="sub">モーリス・ルブラン著 ／ 和訳</p>
+<nav class="menu" id="menu" aria-label="章の一覧" hidden>
+  <p class="head">怪盗紳士ルパン ／ モーリス・ルブラン</p>
   <ul>
     <li><a href="#ch1" data-ch="ch1"><small>第一話</small>アルセーヌ・ルパンの逮捕</a></li>
     <li><a href="#ch2" data-ch="ch2"><small>第二話</small>アルセーヌ・ルパン、獄中にあり</a></li>
+    <li><a href="#ch3" data-ch="ch3"><small>第三話</small>アルセーヌ・ルパンの脱獄</a></li>
   </ul>
+  <div class="settings">
+    <h2 id="themeLabel">配色</h2>
+    <div class="themes" role="radiogroup" aria-labelledby="themeLabel">
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="auto"><span class="sw" data-sw="auto" aria-hidden="true">あ</span>自動</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="light"><span class="sw" data-sw="light" aria-hidden="true">あ</span>ライト</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="sepia"><span class="sw" data-sw="sepia" aria-hidden="true">あ</span>セピア</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="green"><span class="sw" data-sw="green" aria-hidden="true">あ</span>グリーン</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="dark"><span class="sw" data-sw="dark" aria-hidden="true">あ</span>ダーク</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="black"><span class="sw" data-sw="black" aria-hidden="true">あ</span>ブラック</button>
+    </div>
+    <h2>文字サイズ</h2>
+    <div class="sizes">
+      <button type="button" id="fsDown" aria-label="文字を小さくする">A−</button>
+      <button type="button" id="fsReset" class="val" aria-label="文字サイズを標準に戻す">100%</button>
+      <button type="button" id="fsUp" aria-label="文字を大きくする">A＋</button>
+    </div>
+  </div>
 </nav>
 
 <main>
@@ -1176,6 +1296,496 @@
 <p>「J・B……いったい誰だろう?……ああ、そうだ、思い出した。ジュール・ブーヴィエ、僕の予審判事だ、感じのいい人だよ……」</p>
 <div class="pager">
   <a class="prev" href="#ch1"><small>前の章</small>第一話　アルセーヌ・ルパンの逮捕</a>
+  <a class="next" href="#ch3"><small>次の章</small>第三話　アルセーヌ・ルパンの脱獄</a>
+</div>
+</article>
+
+<article class="chapter" id="ch3" data-title="第三話　アルセーヌ・ルパンの脱獄" hidden>
+<h1>アルセーヌ・ルパンの脱獄</h1>
+<p>アルセーヌ・ルパンが食事を終え、ポケットから金の帯がついた立派な葉巻を取り出して、満足げにそれを眺めていたとき、独房の扉が開いた。彼は葉巻を引き出しに放り込み、机から離れるのがやっとだった。看守が入ってきた。散歩の時間だった。</p>
+
+<p>「お待ちしていましたよ、わが友」とルパンは、相変わらず上機嫌で叫んだ。</p>
+
+<p>二人は出ていった。彼らが廊下の角に消えるか消えないかのうちに、今度は二人の男が独房に入り、念入りな検分を始めた。一人はディユジー警部、もう一人はフォルナンファン警部だった。</p>
+
+<p>決着をつけたかったのだ。疑いの余地はなかった。アルセーヌ・ルパンは外部と連絡を保ち、手下たちと通じている。つい前日にも、『グラン・ジュルナル』紙が、同紙の司法担当記者に宛てたこんな文面を掲載していた。</p>
+
+<blockquote>
+<p>「拝啓</p>
+<p>先日掲載された記事の中で、貴下は私について、何ら正当化できない言葉遣いで論じておられました。裁判が始まる数日前に、そのことについて釈明を求めに伺います。</p>
+<p>敬具</p>
+<p class="sign">アルセーヌ・ルパン」</p>
+</blockquote>
+
+<p>筆跡は紛れもなくアルセーヌ・ルパンのものだった。つまり、彼は手紙を出している。ならば、受け取ってもいる。ならば、あれほど傲慢に予告した脱獄を、彼が準備しているのは確実だった。</p>
+
+<p>状況は耐えがたいものになっていた。予審判事と協議のうえ、保安警察の長デュドゥイ氏は自らサンテ刑務所へ出向き、所長に取るべき措置を説明した。そして到着するやいなや、部下二人を被拘留者の独房に送り込んだのだった。</p>
+
+<p>彼らは敷石を一枚残らず持ち上げ、ベッドを解体し、こうした場合に通例行うことをすべて行ったが、結局何も見つけられなかった。調査を諦めかけたところへ、看守が大急ぎで駆けつけて言った。</p>
+
+<p>「引き出しです……机の引き出しを見てください。私が入ったとき、彼がそれを押し戻したように見えました」</p>
+
+<p>彼らは調べた。ディユジーが叫んだ。</p>
+
+<p>「ちくしょう、今度こそ奴を押さえたぞ」</p>
+
+<p>フォルナンファンが制した。</p>
+
+<p>「待て、坊や。目録を作るのはボスだ」</p>
+
+<p>「でも、この高級葉巻は……」</p>
+
+<p>「ハバナはそのままにしておけ。ボスに知らせよう」</p>
+
+<p>二分後、デュドゥイ氏は引き出しを調べていた。最初に見つかったのは、『アルギュス・ド・ラ・プレス』社が切り抜いたアルセーヌ・ルパン関連の新聞記事の束、それから煙草入れ、パイプ、いわゆる薄葉紙、そして最後に二冊の本だった。</p>
+
+<p>彼は題名を見た。カーライルの『英雄崇拝論』の英語版と、当時の装丁がついた美しいエルゼヴィル版の本、一六三四年にライデンで刊行されたドイツ語訳の『エピクテトス提要』である。ぱらぱらとめくってみると、どのページも傷がつけられ、線が引かれ、書き込みがされていた。これは符丁なのか、それとも本への熱意を示す跡なのか。</p>
+
+<p>「詳しくは後で調べよう」とデュドゥイ氏は言った。</p>
+
+<p>彼は煙草入れとパイプを調べた。それから、有名な金の帯の葉巻をつかんで言った。</p>
+
+<p>「これは驚いた。わが友は贅沢だな、アンリ・クレとは!」</p>
+
+<p>喫煙者の機械的な仕草で、彼はそれを耳に近づけ、ぱきりと鳴らした。たちまち、叫び声が口をついて出た。葉巻が、指の圧力で柔らかくなったのだ。彼はもっと注意深く調べ、やがて煙草の葉のあいだに何か白いものがあるのを見つけた。ピンを使って慎重に、爪楊枝ほどの太さしかない、ごく薄い紙の巻物を引き出した。それは伝言だった。彼は広げて、女性の細かな筆跡で書かれたこんな言葉を読んだ。</p>
+
+<blockquote>
+<p>「護送車は別のものと入れ替わりました。十室のうち八室は準備済みです。外側の足で押せば、板は上から下へと持ち上がります。毎日十二時から十六時まで、H・Pが待っています。でも、どこで?すぐに返事を。ご安心を、あなたの友があなたを見守っています」</p>
+</blockquote>
+
+<p>デュドゥイ氏はしばらく考えてから言った。</p>
+
+<p>「十分にはっきりしている……護送車……八つの区画……十二時から十六時、つまり正午から午後四時までか……」</p>
+
+<p>「しかし、待つというこのH・Pとは?」</p>
+
+<p>「この場合のH・Pは自動車のことだろう。H・Pはホース・パワー、スポーツ界では、エンジンの力をそう表すじゃないか?二十四H・Pなら、二十四馬力の自動車だ」</p>
+
+<p>彼は立ち上がり、尋ねた。</p>
+
+<p>「被拘留者は昼食を終えるところだったのか?」</p>
+
+<p>「はい」</p>
+
+<p>「それに、葉巻の状態が示すように、彼はまだこの伝言を読んでいない。おそらく受け取ったばかりだ」</p>
+
+<p>「どうやってです?」</p>
+
+<p>「食べ物の中だろう。パンの中か、じゃがいもの中か、さあ、何とも言えんが」</p>
+
+<p>「不可能です。彼に食事の取り寄せを許可したのは罠にかけるためで、何も見つかっていません」</p>
+
+<p>「今夜、ルパンの返事を探そう。今のところは、彼を独房の外に留めておいてくれ。私はこれを予審判事殿のところに持っていく。判事殿が私と同意見なら、すぐに手紙を撮影させ、一時間後には、これらの品に加えて、原物の伝言を入れた同じ葉巻を引き出しに戻せるだろう。被拘留者に何も疑わせてはならない」</p>
+
+<p>その夜、デュドゥイ氏は、ある種の好奇心を抱きながら、ディユジー警部とともにサンテ刑務所の事務室へ戻った。部屋の隅のストーブの上に、三枚の皿が並んでいた。</p>
+
+<p>「彼は食べたか?」</p>
+
+<p>「はい」と所長が答えた。</p>
+
+<p>「ディユジー、このマカロニの切れ端をごく細かく刻んで、このパンの団子を割ってくれ……何もないか?」</p>
+
+<p>「ありません、ボス」</p>
+
+<p>デュドゥイ氏は皿を調べ、フォーク、スプーン、そしてナイフ、先の丸い規格品のナイフを調べた。柄を左に回し、次に右に回した。右に回すと、柄が緩んで外れた。ナイフは空洞で、一枚の紙を収める筒になっていた。</p>
+
+<p>「ふん!」と彼は言った。「アルセーヌほどの男にしては、あまり巧妙ではないな。だが時間を無駄にするまい。ディユジー、君はこのレストランに行って調べてくれ」</p>
+
+<p>それから彼は読んだ。</p>
+
+<blockquote>
+<p>「君に任せる。H・Pは毎日、遠くからついてくること。僕のほうから迎えに行く。近いうちに、親愛なる、すばらしい友よ」</p>
+</blockquote>
+
+<p>「やれやれ」とデュドゥイ氏は両手をこすりながら叫んだ。「事件はうまくいきそうだ。我々がちょっと手を貸せば、脱走は成功する……少なくとも、共犯者たちを捕まえられるだけには成功するだろう」</p>
+
+<p>「それで、アルセーヌ・ルパンが指の間をすり抜けたら?」と所長が反論した。</p>
+
+<p>「必要なだけの人数を投入する。それでも、彼があまりに巧みにやってのけたなら……まあ、仕方がない!一味については、頭目が口を割らないのだから、ほかの者たちが話すだろう」</p>
+
+<hr class="scene">
+
+<p>実際、アルセーヌ・ルパンはあまり話さなかった。何か月も前から、予審判事のジュール・ブーヴィエ氏は、むなしく手を尽くしていた。尋問は、判事と、弁護士会の花形の一人であるダンヴァル弁護士のあいだの、味気ない問答に終始した。ただし、その弁護士も、被告人について知っていることは、そのへんの誰とも変わらなかった。</p>
+
+<p>ときどき、礼儀のつもりで、アルセーヌ・ルパンはこう口にした。</p>
+
+<p>「ええ、判事殿、おっしゃるとおりです。クレディ・リヨネの盗み、バビロン通りの盗み、偽造紙幣の発行、保険証券の件、アルメネル、グーレ、アンブルヴァン、グロゼイエ、マラキの各城の盗難、そのすべて、あなたのしもべの仕業です」</p>
+
+<p>「では、説明していただけますか……」</p>
+
+<p>「その必要はありません。一括して全部認めます。全部、あなたが想像する十倍のこともね」</p>
+
+<p>判事は根負けして、この退屈な尋問を中断していた。傍受した二通の伝言を知ってから、尋問を再開した。そして、規則的に、正午になると、アルセーヌ・ルパンは、何人かの被拘留者とともに、護送車でサンテ刑務所から留置所へ連れていかれた。彼らは三時か四時ごろ、そこから帰っていった。</p>
+
+<p>さて、ある日の午後、この帰りの移送が特別な状況で行われた。サンテ刑務所のほかの被拘留者たちはまだ尋問を受けていなかったので、まずアルセーヌ・ルパンだけを連れ帰ることになったのだ。そこで彼は、一人で車に乗った。</p>
+
+<p>これらの護送車は、俗に「サラダ籠」と呼ばれ、縦方向に中央の通路で仕切られ、その通路に面して十の小部屋が、右に五つ、左に五つ開いている。各小部屋は、座った姿勢でいなければならないように作られており、したがって五人の囚人は、互いに重なるように座りながら、平行な仕切り板で互いに隔てられている。端に置かれた衛兵が、通路を見張っている。</p>
+
+<p>アルセーヌは右の三番目の小部屋に入れられ、重い車が動き出した。彼は、車がオルロージュ河岸を離れ、裁判所の前を通り過ぎるのを感じ取った。それから、サン=ミシェル橋の中ほどで、彼は毎回そうしていたように、外側の足、つまり右足で、小部屋を閉じている鉄板を押した。すぐに何かが外れ、鉄板がそっと開いた。彼は、自分がちょうど二つの車輪の間にいるのを確かめることができた。</p>
+
+<p>彼は目を光らせて待った。車はサン=ミシェル大通りを歩調ゆるやかに上っていった。サン=ジェルマンの交差点で、車は止まった。荷馬車の馬が倒れたのだ。交通が遮断され、たちまち辻馬車や乗合馬車の渋滞になった。</p>
+
+<p>アルセーヌ・ルパンは顔を出した。別の護送車が、彼の乗っている車の横に止まっていた。彼は鉄板をもっと持ち上げ、大きな車輪のスポークの一本に足をかけ、地面に飛び降りた。</p>
+
+<p>一人の御者が彼を見て、爆笑し、それから呼び止めようとした。だが、再び流れ出した車の轟音に、その声はかき消された。それに、アルセーヌ・ルパンはもう遠くにいた。</p>
+
+<p>彼は数歩走ったが、左の歩道で振り返り、あたりを見回し、風向きをうかがうような様子をした。どの方向へ行くべきか、まだよくわからない人のように。それから決心して両手をポケットに突っ込み、散歩者の呑気な様子で、大通りをぶらぶらと上り続けた。</p>
+
+<p>天気は穏やかで、秋の幸せな軽やかな日だった。カフェはどこも満員だった。彼はその一軒のテラスに座った。</p>
+
+<p>ビールを一杯と、煙草を一箱注文した。小さく口をつけてグラスを空け、静かに一本吸い、二本目に火をつけた。やがて立ち上がり、給仕に支配人を呼んでくれと頼んだ。</p>
+
+<p>支配人が来ると、アルセーヌは、皆に聞こえるほどの声で言った。</p>
+
+<p>「申し訳ない、財布を忘れました。僕の名前をご存じなら、数日間のつけにしていただけるかもしれません。アルセーヌ・ルパンです」</p>
+
+<p>支配人は冗談だと思って彼を見た。だがアルセーヌは繰り返した。</p>
+
+<p>「ルパン。サンテ刑務所の被拘留者で、現在脱獄中です。この名前なら、十分に信用していただけるでしょう」</p>
+
+<p>そして、笑い声の中を、相手が支払いを求めようとも考えないうちに、彼は立ち去った。</p>
+
+<p>彼はスフロ通りを斜めに横切り、サン=ジャック通りに入った。ショーウィンドウの前で足を止め、煙草を吸いながら、のんびりとそこを進んだ。ポール=ロワイヤル大通りで方角を確かめ、道を尋ね、サンテ通りへまっすぐ歩いた。刑務所の高い陰気な壁がまもなく立ちはだかった。それに沿って歩き、見張りに立っている衛兵のそばへ来ると、彼は帽子を取って言った。</p>
+
+<p>「ここはサンテ刑務所で間違いありませんか?」</p>
+
+<p>「そうだが」</p>
+
+<p>「自分の独房に戻りたいのです。護送車が僕を途中で置いていってしまいまして、ご迷惑をおかけしたくないので……」</p>
+
+<p>衛兵はうなった。</p>
+
+<p>「おい、そこの男、行きすぎろ、さっさとだ」</p>
+
+<p>「失礼、失礼。ですが僕の道は、この門を通るのですよ。それにアルセーヌ・ルパンが通るのをあなたが妨げたら、高くつくかもしれませんよ、お友達」</p>
+
+<p>「アルセーヌ・ルパン!何を言っているんだ!」</p>
+
+<p>「名刺を持っていなくて残念です」と、アルセーヌはポケットを探るふりをしながら言った。</p>
+
+<p>衛兵は、呆然として、頭のてっぺんから爪先まで彼を眺めた。それから、一言も発さず、ほとんど無意識に、呼び鈴を引いた。鉄の扉が少し開いた。</p>
+
+<p>数分後、所長が事務室に駆けつけ、身振り手振りで激しく怒っているふりをした。アルセーヌは微笑んだ。</p>
+
+<p>「さあ、所長殿、僕の前で策士ぶるのはおやめなさい。何ということか!わざわざ僕を一人だけで車に乗せ、都合のいい小さな渋滞を用意しておいて、僕が一目散に友人たちのもとへ駆けつけると思っている。それなら、徒歩で、辻馬車で、自転車で僕たちを護衛していた二十人の保安警察の連中はどうなんです?いやあ、彼らは僕をどうしてくれたことか!生きて出られなかったでしょうよ。ねえ所長殿、もしかすると、そこに期待していたのではありませんか?」</p>
+
+<p>彼は肩をすくめて付け加えた。</p>
+
+<p>「お願いですから、所長殿、僕のことで世話を焼かないでください。僕が脱走したいと思う日には、誰の助けも要りません」</p>
+
+<p>二日後、『エコー・ド・フランス』紙は、確かにアルセーヌ・ルパンの武勲の公式な広報紙になりつつあった(同紙の主要な出資者の一人は彼だとも言われていた)。その『エコー・ド・フランス』が、この脱獄未遂についての最も詳細な内容を掲載した。被拘留者とその謎の友人とのあいだで交わされた伝言の文面そのもの、この通信に用いられた手段、警察の共謀、サン=ミシェル大通りの散歩、カフェ・スフロでの一件、すべてが暴露された。レストランの給仕たちを調べたディユジー警部の捜査が何の成果も上げなかったことも知れ渡った。さらに、この男が持つ手段の限りない多様さを示す驚くべき事実も知らされた。彼を運んだ護送車は、完全に細工された車で、刑務所の業務を構成する通常の六台のうちの一台に、彼の一味がすり替えたものだったというのである。</p>
+
+<p>アルセーヌ・ルパンの近い脱獄は、もはや誰にも疑われなかった。実際、彼自身がそれをきっぱりと予告していた。事件の翌日、ブーヴィエ氏への彼の返答がそれを証明した。判事が彼の失敗をあざ笑うと、彼は判事を見つめ、冷静に言った。</p>
+
+<p>「よく聞いてください、判事殿、僕の言葉を信じていただきたい。この脱獄未遂は、僕の脱獄計画の一部だったのです」</p>
+
+<p>「わけがわからんね」と判事は嘲笑った。</p>
+
+<p>「あなたがわかる必要はありません」</p>
+
+<p>そして、この尋問は『エコー・ド・フランス』の紙面にそっくり載ったのだが、判事が予審に話を戻そうとしたとき、彼はうんざりしたように叫んだ。</p>
+
+<p>「ああ、まったく、まったく、何になるんです!こんな質問は全部、何の重要性もない!」</p>
+
+<p>「どういうことだ、重要性がないとは?」</p>
+
+<p>「だって、僕は自分の裁判には出ないのですから」</p>
+
+<p>「君は出ない……」</p>
+
+<p>「ええ、これは固定観念です。撤回できない決意です。何があっても妥協しません」</p>
+
+<p>これほどの自信と、毎日のように起きる説明のつかない情報漏洩は、司法を苛立たせ、当惑させた。アルセーヌ・ルパンだけが知る秘密があり、したがってその漏洩は彼自身からしか来ようがない。だが、何のために彼はそれを暴露するのか?どうやって?</p>
+
+<p>アルセーヌ・ルパンは独房を移された。ある晩、彼は下の階に降りた。判事のほうは予審を締めくくり、事件を起訴審理部に回付した。</p>
+
+<p>静寂が訪れた。それは二か月続いた。アルセーヌはそれをベッドに横たわって過ごし、顔はほとんどいつも壁のほうを向いていた。この独房の移動が、彼を打ちのめしたかのようだった。弁護士との面会も拒んだ。看守たちとさえ、ほとんど言葉を交わさなかった。</p>
+
+<p>裁判の前の二週間、彼は元気を取り戻したようだった。空気が足りないと訴えた。朝のごく早い時間に、二人の男に両脇を固められて、中庭に出されるようになった。</p>
+
+<p>とはいえ、世間の好奇心は衰えていなかった。毎日、人々は彼の脱獄の知らせを待っていた。ほとんど望んでさえいた。それほどまでに、この人物は、その熱弁、陽気さ、多彩さ、発明の才、生涯の謎によって、群衆に愛されていたのだ。アルセーヌ・ルパンは脱獄するはずだった。それは避けられない、宿命的なことだった。それがこれほど遅れることに、人々は驚きさえしていた。毎朝、警視総監は秘書に尋ねた。</p>
+
+<p>「それで、彼はまだ出ていかないのか?」</p>
+
+<p>「はい、総監閣下」</p>
+
+<p>「では、明日だな」</p>
+
+<p>そして、裁判の前日、一人の紳士が『グラン・ジュルナル』の事務所に現れ、司法担当記者を呼び出し、その顔に名刺を投げつけ、足早に立ち去った。名刺にはこう書かれていた。「アルセーヌ・ルパンは、常に約束を守る」</p>
+
+<hr class="scene">
+
+<p>こうした状況のもとで、公判が始まった。</p>
+
+<p>傍聴人の数は膨大だった。名高いアルセーヌ・ルパンを見たがらない者はなく、彼が裁判長をどう手玉に取るかを、あらかじめ味わおうとしない者もいなかった。弁護士や判事、コラムニストや社交界の人々、芸術家や上流の婦人たち、パリ中の名士たちが、傍聴席に押し合っていた。</p>
+
+<p>外は雨で、日は暗く、衛兵に連れられて入ってきたアルセーヌ・ルパンの姿はよく見えなかった。それでも、その重い態度、自分の席に身を投げ出すように座った様子、無関心で受け身の不動の姿は、彼に好印象を与えなかった。何度も、彼の弁護人が、ダンヴァル弁護士が、自分に課せられた役割を品位に欠けるとして降りたため、その事務所の書記の一人が彼に話しかけた。彼は首を振って黙っていた。</p>
+
+<p>書記官が起訴状を読み上げ、それから裁判長が宣告した。</p>
+
+<p>「被告人、起立しなさい。氏名、年齢、職業は?」</p>
+
+<p>返事がないので、彼は繰り返した。</p>
+
+<p>「氏名は?名前を尋ねているのだが?」</p>
+
+<p>濁った疲れた声が発音した。</p>
+
+<p>「ボードリュ、デジレ」</p>
+
+<p>ざわめきが起こった。だが裁判長は続けた。</p>
+
+<p>「ボードリュ、デジレ?ほう、また新しい化身か!君が名乗るのはこれでおよそ八つ目の名前で、おそらく他の名前と同様に架空だろうから、よければ、君がより有利に知られている、アルセーヌ・ルパンという名前で通すことにしよう」</p>
+
+<p>裁判長は書類を見て、また口を開いた。</p>
+
+<p>「あらゆる捜査にもかかわらず、君の身元を再構成することは不可能だった。君は、現代社会ではかなり珍しいことだが、過去を持たない。君が誰なのか、どこから来たのか、子供時代をどこで過ごしたのか、何もわからない。三年前、どんな環境からかもわからず、突然あらわれ、たちまちアルセーヌ・ルパンとして正体を現した。つまり、知性と倒錯、不道徳と寛大さが奇妙に混ざり合った者としてだ。この時期以前の君に関する資料は、むしろ推測にすぎない。八年前に奇術師ディクソンの傍らで働いたロスタという男は、おそらくアルセーヌ・ルパンその人だった。六年前にサン=ルイ病院のアルティエ博士の研究室に出入りし、細菌学についての仮説の巧妙さと皮膚病の実験の大胆さで、しばしば師を驚かせたロシア人学生は、おそらくアルセーヌ・ルパンその人だった。アルセーヌ・ルパンはまた、パリで柔術が話題になるずっと前にこの地に居を構えた、日本式格闘技の教師でもある。アルセーヌ・ルパンは、我々の考えでは、万国博覧会のグランプリを獲得し、一万フランを受け取り、二度と姿を現さなかった自転車選手でもある。そして、慈善バザーの小窓から多くの人を救い出し……その人々から金品を奪った者も、おそらくアルセーヌ・ルパンだ」</p>
+
+<p>そして、間を置いて、裁判長は結論づけた。</p>
+
+<p>「これこそが、君が社会に対して企てた闘いのための、念入りな準備にすぎなかったと思われる時期だ。君の力、精力、手腕を最高度に高めた、系統的な修行の時代だった。こうした事実の正確さを認めるか?」</p>
+
+<p>この演説のあいだ、被告人は片足からもう片足へと体を揺らし、背を丸め、腕をだらりと下げていた。より明るい光の下で、その極端な痩せ方、こけた頬、奇妙に突き出た頬骨、小さな赤い斑点がまだらにある土色の顔、不揃いでまばらな髭に縁取られた顔が目についた。牢獄は彼を著しく老けさせ、しなびさせていた。新聞が何度もその好感を呼ぶ肖像を載せてきた、あの優雅な姿も、あの若々しい顔も、もう見分けがつかなかった。</p>
+
+<p>彼は、自分に向けられた質問が聞こえなかったかのようだった。質問は二度繰り返された。やがて彼は目を上げ、考えているように見え、それから、激しく努力して、つぶやいた。</p>
+
+<p>「ボードリュ、デジレ」</p>
+
+<p>裁判長は笑い出した。</p>
+
+<p>「君が採用した弁護方針がよくわからないな、アルセーヌ・ルパン。愚か者や責任能力のない者を演じるつもりなら、好きにしたまえ。私としては、君の気まぐれには構わず、まっすぐ本題に入る」</p>
+
+<p>そして、彼はルパンにかけられた窃盗、詐欺、偽造の容疑の詳細に入っていった。ときどき被告人に問いただした。被告人はうなり声を上げるか、答えなかった。</p>
+
+<p>証人の入廷が始まった。取るに足らない証言がいくつか、もっと重みのある証言も続いたが、そのすべてが互いに矛盾するという共通点を持っていた。厄介な暗闇が公判を包んでいたが、ガニマール主任警部が入廷すると、関心が目を覚ました。</p>
+
+<p>ところが、最初から、この老警官は多少の失望を与えた。彼は臆してはいなかった(彼はもっと多くのことを見てきたのだ)が、不安げで、居心地が悪そうに見えた。何度も、明らかな気まずさをもって被告人のほうに目を向けた。それでも、両手を証言台について、彼は自分が関わった出来事を語り、ヨーロッパ中の追跡、アメリカへの到着を述べた。人々は貪るように聞き入った。最も心躍る冒険の物語を聞くかのように。しかし終わりのほうで、アルセーヌ・ルパンとの面会に触れたとき、彼は二度、上の空になり、ためらって言葉を止めた。</p>
+
+<p>別の考えが彼に取りついているのは明らかだった。裁判長が言った。</p>
+
+<p>「具合が悪いのなら、証言を中断したほうがよいかもしれない」</p>
+
+<p>「いえ、いえ、ただ……」</p>
+
+<p>彼は黙り、長く、深く被告人を見つめ、それから言った。</p>
+
+<p>「被告人をもっと近くで調べる許可をお願いします。私が解明しなければならない謎がここにあります」</p>
+
+<p>彼は近づき、さらに長く、全神経を集中させて被告人を観察し、それから証言台に戻った。そこで、いささか厳粛な口調で彼は宣言した。</p>
+
+<p>「裁判長閣下、私に向かい合っているここのこの男は、アルセーヌ・ルパンではないと断言します」</p>
+
+<p>この言葉は、大きな沈黙で迎えられた。最初は面食らった裁判長が叫んだ。</p>
+
+<p>「何を言うのだ!君は気が狂ったのか」</p>
+
+<p>警部は落ち着いて断言した。</p>
+
+<p>「一見すると、確かに存在する、認めますが、似ているという印象に騙されることがあります。しかし、一秒注意して見れば十分です。鼻、口、髪、肌の色……要するに、これはアルセーヌ・ルパンではありません。それに目です!あの男が、こんな酒飲みの目をしていたことがありますか?」</p>
+
+<p>「さあ、さあ、説明してもらおう。証人、君は何を主張しているのだ?」</p>
+
+<p>「私にわかるものですか!あの男が、自分の身代わりに、哀れな男を据えたのでしょう。その男が、彼の身代わりに有罪を宣告されようとしている……さもなければ、共犯者です」</p>
+
+<p>この予期せぬ劇的な展開に揺れる法廷中から、叫び声、笑い声、感嘆の声が上がった。裁判長は予審判事、サンテ刑務所の所長、看守たちを呼び出し、休廷とした。</p>
+
+<p>再開したとき、被告人と対面したブーヴィエ氏と所長は、アルセーヌ・ルパンとこの男のあいだには、ごく漠然とした顔立ちの類似しかないと証言した。</p>
+
+<p>「では」と裁判長は叫んだ。「この男は誰なのだ?どこから来たのだ?どうして司法の手中にあるのだ?」</p>
+
+<p>サンテ刑務所の二人の看守が呼び入れられた。驚くべき矛盾だが、彼らは交代で見張っていた被拘留者だと認めた!裁判長は息をついた。</p>
+
+<p>だが看守の一人が続けた。</p>
+
+<p>「ええ、ええ、この男だと思います」</p>
+
+<p>「どういうことだ、思う、とは?」</p>
+
+<p>「それが、ほとんど見ていないのです。夜に引き渡されて、二か月前から、いつも壁のほうを向いて寝ているので」</p>
+
+<p>「しかし、この二か月より前は?」</p>
+
+<p>「ああ、その前は、二十四号室にはいませんでした」</p>
+
+<p>刑務所長がこの点を明確にした。</p>
+
+<p>「脱獄未遂の後、被拘留者を別の独房に移しました」</p>
+
+<p>「しかし所長、あなたはこの二か月、彼を見ましたか?」</p>
+
+<p>「見る機会がありませんでした……おとなしくしていたので」</p>
+
+<p>「そして、この男は、あなたに引き渡された被拘留者ではないのか?」</p>
+
+<p>「違います」</p>
+
+<p>「では、誰なのだ?」</p>
+
+<p>「わかりません」</p>
+
+<p>「ならば我々は、二か月前に行われたかもしれないすり替えに直面していることになる。どう説明するのか?」</p>
+
+<p>「不可能です」</p>
+
+<p>「では?」</p>
+
+<p>万策尽きた裁判長は、被告人のほうを向き、優しい声で言った。</p>
+
+<p>「さあ、被告人、いつ、どのようにして司法の手に渡ったのか、説明してもらえないだろうか?」</p>
+
+<p>この好意的な口調が、男の警戒心を解いたのか、理解力を刺激したのか。彼は答えようと努めた。ついに、巧みに穏やかに質問されて、いくつかの文をまとめることができ、そこから次のことが明らかになった。二か月前、彼は留置所に連れてこられた。そこで一晩と午前を過ごした。七十五サンチームの所持金があったので、釈放された。しかし、中庭を横切っているとき、二人の衛兵が彼の腕をつかみ、護送車まで連れていった。それ以来、二十四号室で暮らしている。不幸ではない……食事はいいし……眠りも悪くない……だから抗議しなかった、と。</p>
+
+<p>すべてがもっともらしく思えた。笑いと大きな興奮の中で、裁判長は追加調査のため、事件を別の開廷期に回した。</p>
+
+<hr class="scene">
+
+<p>調査はたちまち、留置所の入所台帳に記録された事実を確定した。八週間前、ボードリュ・デジレという男が留置所に泊まった。翌日釈放され、午後二時に留置所を出た。ところが、その日の二時、最後の尋問を受けたアルセーヌ・ルパンが予審を終えて、護送車で戻っていったのだ。</p>
+
+<p>看守たちは間違いを犯したのか?似ていることに騙され、一瞬の不注意で、この男を自分たちの囚人とすり替えたのか?それには、彼らの勤務記録からは想像できないほどの手心が必要だった。</p>
+
+<p>すり替えは事前に仕組まれていたのか?場所の配置が、それをほとんど実現不可能にしていたうえに、その場合、ボードリュが共犯者で、アルセーヌ・ルパンの身代わりになる目的だけで自分を逮捕させたのでなければならなかった。しかしそれでは、ありえない偶然の連続、偶発的な出会い、途方もない間違いだけに基づくそんな計画が、どんな奇跡で成功したのか?</p>
+
+<p>デジレ・ボードリュは人体測定課に回されたが、彼の人相書きに対応するカードはなかった。そのうえ、彼の足取りは容易に見つかった。クルブヴォワ、アニエール、ルヴァロワで、彼は知られていた。施しで暮らし、テルヌ市門の近くに密集する屑拾いの小屋の一つで寝ていた。だが、一年前から姿を消していた。</p>
+
+<p>彼はアルセーヌ・ルパンに雇われたのか?そう信じる根拠は何もなかった。仮にそうだったとしても、囚人の逃亡について、それ以上のことはわからなかっただろう。奇跡は同じままだった。それを説明しようとする二十の仮説のうち、どれ一つとして満足のいくものはなかった。脱獄だけは疑いようがなかった。理解できず、人を圧倒するような脱獄だった。世間も司法も、そこに長い準備の努力と、見事に絡み合った一連の行為を感じていた。その結末は、アルセーヌ・ルパンの誇らしげな予言、「僕は自分の裁判には出ない」を正当化していた。</p>
+
+<p>念入りな捜査の一か月が過ぎても、謎は相変わらず解読不能なままだった。それでも、この哀れなボードリュを無期限に拘留しておくわけにはいかなかった。彼の裁判は馬鹿げたものになっただろう。どんな罪状が彼にあるというのか?予審判事によって釈放が署名された。しかし保安警察の長は、彼の周囲に厳重な監視を敷くことにした。</p>
+
+<p>この案はガニマールから出たものだった。彼の見方では、共犯も偶然もなかった。ボードリュは、アルセーヌ・ルパンがその並外れた巧みさで弄んだ道具だった。ボードリュが自由になれば、彼を通じてアルセーヌ・ルパンまで、少なくとも一味の誰かまで辿り着けるはずだった。</p>
+
+<p>ガニマールには二人の警部、フォルナンファンとディユジーが付けられ、一月のある朝、霧深い天気の中、牢獄の扉がボードリュ・デジレのために開いた。</p>
+
+<p>彼は初め、かなり当惑した様子で、時間の使い方についてはっきりした考えのない男のように歩いた。サンテ通りとサン=ジャック通りを進んだ。古着屋の店の前で上着とチョッキを脱ぎ、チョッキを数スーで売り、上着を着直して立ち去った。</p>
+
+<p>彼はセーヌ川を渡った。シャトレで乗合馬車が彼を追い越した。乗ろうとしたが、席がなかった。車掌が番号札を取るよう勧めたので、彼は待合室に入った。</p>
+
+<p>そのとき、ガニマールは二人の部下を呼び寄せ、事務所から目を離さずに、急いで言った。</p>
+
+<p>「馬車を止めろ……いや、二台だ、そのほうが用心になる。私は君たちの一人と行って、あとをつける」</p>
+
+<p>部下たちは従った。だがボードリュは姿を現さなかった。ガニマールは進み出た。待合室には誰もいなかった。</p>
+
+<p>「俺は間抜けだ」と彼はつぶやいた。「もう一つの出口を忘れていた」</p>
+
+<p>その事務所は、実際、内部の通路でサン=マルタン通りの事務所とつながっている。ガニマールは飛び出した。ちょうど間に合い、リヴォリ通りの角を曲がるバティニョル=植物園行きの乗合馬車の二階席にボードリュを見つけた。彼は走って乗合馬車に追いついた。だが二人の部下を見失っていた。追跡を続けるのは彼一人だった。</p>
+
+<p>怒りのあまり、彼はこれ以上の手続きを踏まずに男の襟首をつかみそうになった。このいわゆる愚か者は、周到に、巧妙な策略で、自分を助手たちから引き離したのではないか?</p>
+
+<p>彼はボードリュを見た。長椅子でうとうとし、頭が右へ左へと揺れていた。口を少し開け、その顔は信じられないほどの愚かさを表していた。いや、これは老ガニマールを手玉に取れる敵ではない。偶然が彼に味方した、それだけのことだ。</p>
+
+<p>ギャルリー・ラファイエットの交差点で、男は乗合馬車からミュエット行きの市電に飛び移った。オスマン大通り、ヴィクトル・ユゴー大通りを進んだ。ボードリュはミュエット駅の前でしか降りなかった。そして悠然とした足取りで、ブーローニュの森に入っていった。</p>
+
+<p>彼はある小道から別の小道へ移り、引き返し、遠ざかった。何を探していたのか?目的があったのか?</p>
+
+<p>一時間もこの動きを続けたのち、彼は疲れ果てているようだった。実際、ベンチを見つけて座った。オートゥイユからそう遠くない、木々に隠れた小さな湖のほとりのその場所は、まったく人気がなかった。半時間が過ぎた。じれたガニマールは、話しかけることにした。</p>
+
+<p>そこで近づき、ボードリュの隣に腰を下ろした。煙草に火をつけ、杖の先で砂に丸を描いて言った。</p>
+
+<p>「寒いですな」</p>
+
+<p>沈黙があった。そして突然、その沈黙の中に笑い声が響いた。だが陽気な、幸せな笑い声、笑いの発作に襲われて、笑わずにいられない子供の笑い声だった。はっきりと、本当に、ガニマールは、持ち上がった頭皮の下で髪が逆立つのを感じた。この笑い声、彼がよく知っているこの悪魔のような笑い声!……</p>
+
+<p>彼は荒々しい身振りで、男の上着の折り返しをつかみ、深く、激しく、重罪裁判所で見たとき以上に男を見つめた。そして実のところ、もはやその男は見えなかった。それは男であり、同時にもう一人の男、本物だった。</p>
+
+<p>共犯めいた意志に助けられて、彼は目の熱い生命を取り戻し、やせこけた仮面を補い、傷んだ表皮の下に本物の肉を、歪めた口元越しに本物の口を認めた。それはあの男の目であり、あの男の口であり、とりわけその鋭く、生き生きとして、嘲るような、才気のある、とても澄んで若々しい表情だった!</p>
+
+<p>「アルセーヌ・ルパン、アルセーヌ・ルパン」と彼はどもった。</p>
+
+<p>そして突然、怒りにとらわれて、その喉を締め上げ、押し倒そうとした。五十歳にもかかわらず、彼はまだ並外れた力を持っていたが、相手はかなり体調が悪そうに見えた。それに、もし連れ戻せたなら、何という大手柄だろう!</p>
+
+<p>闘いは短かった。アルセーヌ・ルパンはほとんど抵抗せず、そして襲いかかったときと同じ素早さで、ガニマールは手を離した。彼の右腕はだらりと垂れ、麻痺していた。</p>
+
+<p>「もし、オルフェーヴル河岸で柔術を教えていれば」とルパンは言った。「この技が日本語でウデ・シギと呼ばれることを、君は知っていただろうに」</p>
+
+<p>そして冷ややかに付け加えた。</p>
+
+<p>「あと一秒で、腕を折っていたよ。そうされても自業自得だ。何ということだ、僕が尊敬する旧友の君に、自分から正体を明かしたというのに、僕の信頼を裏切るとは!悪いことだよ……それで、どうしたんだね?」</p>
+
+<p>ガニマールは黙っていた。自分に責任があると思っているこの脱獄は(センセーショナルな証言で司法を誤らせたのは、彼ではなかったか?)、彼の経歴の恥のように思えた。涙が一粒、灰色の口髭のほうへ転がった。</p>
+
+<p>「おやおや、ガニマール、気に病むなよ。君が話さなかったとしても、他の誰かに話させるように僕が手配したさ。考えてみたまえ、ボードリュ・デジレが有罪にされるのを、僕が許せたと思うか?」</p>
+
+<p>「では」とガニマールはつぶやいた。「あそこにいたのはあなただったのか?ここにいるのも、あなたなのか!」</p>
+
+<p>「僕さ、いつも僕、僕だけだ」</p>
+
+<p>「そんなことが可能なのか?」</p>
+
+<p>「ああ、魔法使いである必要はないよ。あの立派な裁判長が言ったように、あらゆる事態に備えられるよう、十二年ほど準備しておけば十分なんだ」</p>
+
+<p>「しかし、顔は?目は?」</p>
+
+<p>「サン=ルイ病院でアルティエ博士と十八か月も働いたのは、芸術への愛からではないと、わかるだろう。いつかアルセーヌ・ルパンと名乗る名誉を得る者は、外見と身元という通常の法則から逃れなければならないと考えたんだ。外見?好きなように変えられる。パラフィンの皮下注射は、選んだ場所の皮膚をちょうど膨らませる。ピロガロール酸は君をモヒカン族に変える。クサノオウの汁は、このうえなく効果的な湿疹や腫れ物で君を飾る。ある化学処理は髭や髪の伸びに作用し、別のものは声の調子に作用する。それに加えて、二十四号室での二か月の絶食、口をこの引きつり笑いの形に開け、頭をこの傾きに保ち、背中をこの曲線に保つための、千回の反復練習。最後に、目に五滴のアトロピンを点して、おどおどと落ち着きのない目にすれば、手品は完成だ」</p>
+
+<p>「看守たちが、気づかなかったとは考えられない……」</p>
+
+<p>「変身は段階的だった。彼らには日々の変化に気づけなかったんだ」</p>
+
+<p>「だが、ボードリュ・デジレは?」</p>
+
+<p>「ボードリュは実在する。去年出会った哀れな無邪気な男で、実に僕と顔立ちがいくらか似ている。いつでも起こりうる逮捕に備えて、彼を安全な場所に置き、最初から二人を隔てる相違点を見極めて、できるだけ自分の側でそれを和らげるように努めた。仲間たちは彼を留置所で一晩過ごさせ、僕とほぼ同じ時刻に出てくるようにして、偶然の一致が容易に確認できるようにした。というのも、いいかね、彼が通過した痕跡が見つかるようにする必要があったんだ。さもなければ、司法は僕が誰なのかを問うただろう。ところが、この立派なボードリュを差し出せば、司法がそれに飛びつくのは必然、わかるか、必然なんだ。すり替えには乗り越えがたい困難があるにもかかわらず、自分の無知を認めるよりは、すり替えを信じるほうを選ぶ、とね」</p>
+
+<p>「ああ、ああ、確かに」とガニマールはつぶやいた。</p>
+
+<p>「それに」とアルセーヌ・ルパンは叫んだ。「僕は手に強力な切り札を持っていた。最初から自分で仕掛けておいたカードだ。皆が僕の脱獄を待ち構えているという状況だよ。ここが、司法と僕が始めた、僕の自由を賭けたあの心躍る勝負で、君も他の者たちも犯した大きな間違いだ。君たちはまたしても、僕が虚勢を張っていると、青二才のように成功に酔っていると思い込んだ。この僕、アルセーヌ・ルパンが、そんな弱さを!カオルン事件のときと同じで、君たちは『アルセーヌ・ルパンが脱獄すると屋根の上から叫んでいるのは、そう叫ばなければならない理由があるからだ』とは考えなかった。いやはや、わかってくれたまえ、脱獄しないで脱獄するには、人々がその脱獄をあらかじめ信じている必要があった。それが信仰箇条であり、絶対的な確信であり、太陽のように明らかな真実であることが必要だったんだ。そして、僕の意志で、そうなった。アルセーヌ・ルパンは脱獄する、アルセーヌ・ルパンは自分の裁判には出ない、と。だから、君が立ち上がって『この男はアルセーヌ・ルパンではない』と言ったとき、皆が即座に、僕がアルセーヌ・ルパンではないと信じない方が不自然だった。たった一人でも疑ったなら、たった一人でも『もしアルセーヌ・ルパンだったら?』という単純な留保を口にしたなら、その瞬間に僕は終わりだった。僕のほうに身を乗り出すだけでよかった。君や他の者たちがやったように、僕がアルセーヌ・ルパンではないと思ってではなく、僕がアルセーヌ・ルパンかもしれないと思って。そうすれば、あらゆる用心にもかかわらず、僕は見破られていた。でも僕は安心していた。論理的にも心理的にも、誰もそんな単純なささやかな考えを持てるはずがなかったんだ」</p>
+
+<p>彼は突然、ガニマールの手をつかんだ。</p>
+
+<p>「さあ、ガニマール、認めたまえ。サンテ刑務所での面会の八日後、僕が頼んだとおり、君は四時に自宅で僕を待っていたろう?」</p>
+
+<p>「それで、あなたの護送車は?」とガニマールは、答えるのを避けて言った。</p>
+
+<p>「はったりだ!あの使えなくなった古い車を修繕してすり替えたのは仲間たちで、一撃を試みたかったんだ。でも、例外的な状況の重なりがなければ実行できないことは、わかっていた。ただ、この脱獄未遂を完成させ、最大限に宣伝するのが有益だと考えたんだ。大胆に仕組まれた最初の脱獄が、二度目の脱獄に、あらかじめ実現済みの脱獄の価値を与えたんだよ」</p>
+
+<p>「ということは、葉巻は……」</p>
+
+<p>「僕がくり抜いた。ナイフもだ」</p>
+
+<p>「それに伝言は?」</p>
+
+<p>「僕が書いた」</p>
+
+<p>「あの謎の女性の文通相手は?」</p>
+
+<p>「彼女と僕は一人だ。どんな筆跡も好きなように書ける」</p>
+
+<p>ガニマールはしばらく考え、反論した。</p>
+
+<p>「どうして人体測定課で、ボードリュのカードを取ったとき、それがアルセーヌ・ルパンのものと一致しているのに気づかなかったのか?」</p>
+
+<p>「アルセーヌ・ルパンのカードは存在しない」</p>
+
+<p>「まさか!」</p>
+
+<p>「少なくとも、偽物だ。これは僕がずいぶん研究した問題でね。ベルティヨン方式にはまず視覚的な人相書きがあり(完全ではないとわかるだろう)、次に寸法による記録、つまり頭、指、耳などの計測がある。これは打つ手がない」</p>
+
+<p>「では?」</p>
+
+<p>「では、金を払うしかなかった。僕がアメリカから戻る前に、課の職員の一人が、いくらかの金で、僕の計測の最初に偽の寸法を記入することを引き受けた。それで制度全体が逸れるのに十分だ。カードは、本来行き着くはずの欄と正反対の欄に向かう。だからボードリュのカードが、アルセーヌ・ルパンのカードと一致するはずはなかったんだ」</p>
+
+<p>また沈黙があり、それからガニマールが尋ねた。</p>
+
+<p>「それで、これからどうするのです?」</p>
+
+<p>「これから」とルパンは声を上げた。「休息をとって、栄養過多の食事療法を続けて、少しずつ自分に戻る。ボードリュだろうが何だろうが、シャツのように人格を取り替え、外見、声、眼差し、筆跡を選ぶのは、とても結構なことだ。でも、そのうち自分がわからなくなってしまうことがあって、それはとても悲しいんだ。いま僕は、影をなくした男が感じたに違いないことを感じている。自分を探しに行こう……そして、自分を見つけるんだ」</p>
+
+<p>彼は行ったり来たりした。日の光に少しだけ暗がりが混じっていた。彼はガニマールの前で足を止めた。</p>
+
+<p>「もう、話すことはないと思うが?」</p>
+
+<p>「いえ」と警部は答えた。「あなたの脱獄の真実を明かすのかどうか、知りたいのです……私が犯した間違いを……」</p>
+
+<p>「ああ!釈放されたのがアルセーヌ・ルパンだったなんて、誰にも知られることはないよ。僕の周りに最も不思議な闇を積み重ねることに、僕は大きな関心がある。この脱獄に、ほとんど奇跡のような性格を残しておかないわけにはいかない。だから、心配はいらない、わが善き友よ。さようなら。今夜は外で食事なんだ、着替える時間しかない」</p>
+
+<p>「あなたは、とても休息をとりたがっていると思っていましたが!」</p>
+
+<p>「ああ!逃れられない社交上の義務もあるのさ。休息は明日から始まる」</p>
+
+<p>「それで、どこで食事を?」</p>
+
+<p>「イギリス大使館で」</p>
+<div class="pager">
+  <a class="prev" href="#ch2"><small>前の章</small>第二話　アルセーヌ・ルパン、獄中にあり</a>
   <span class="spacer"></span>
 </div>
 </article>
@@ -1184,24 +1794,27 @@
 <script>
 (function () {
   var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
-  var links = Array.prototype.slice.call(document.querySelectorAll('#drawer a[data-ch]'));
-  var drawer = document.getElementById('drawer');
+  var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[data-ch]'));
+  var menu = document.getElementById('menu');
   var menuBtn = document.getElementById('menuBtn');
-  var scrim = document.getElementById('scrim');
-  var barTitle = document.getElementById('barTitle');
+  var catcher = document.getElementById('catcher');
   var KEY = 'lupin-last-chapter';
 
   function store(id) { try { localStorage.setItem(KEY, id); } catch (e) {} }
   function recall() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
 
-  function setDrawer(open) {
-    document.body.classList.toggle('drawer-open', open);
+  function isOpen() { return !menu.hidden; }
+
+  function setMenu(open, restoreFocus) {
+    menu.hidden = !open;
+    catcher.hidden = !open;
     menuBtn.setAttribute('aria-expanded', String(open));
     menuBtn.setAttribute('aria-label', open ? '章の一覧を閉じる' : '章の一覧を開く');
-    drawer.inert = !open;
     if (open) {
-      var current = drawer.querySelector('[aria-current="true"]') || links[0];
+      var current = menu.querySelector('[aria-current="true"]') || links[0];
       if (current) current.focus();
+    } else if (restoreFocus) {
+      menuBtn.focus();
     }
   }
 
@@ -1212,39 +1825,96 @@
       if (a.getAttribute('data-ch') === target.id) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
-    var title = target.getAttribute('data-title');
-    barTitle.textContent = title;
-    document.title = title + ' | 怪盗紳士ルパン';
+    document.title = target.getAttribute('data-title') + ' | 怪盗紳士ルパン';
     store(target.id);
     if (scrollTop) window.scrollTo(0, 0);
   }
 
-  menuBtn.addEventListener('click', function () {
-    setDrawer(!document.body.classList.contains('drawer-open'));
-  });
-  scrim.addEventListener('click', function () { setDrawer(false); menuBtn.focus(); });
+  menuBtn.addEventListener('click', function () { setMenu(!isOpen(), false); });
+  catcher.addEventListener('click', function () { setMenu(false, false); });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) {
-      setDrawer(false);
-      menuBtn.focus();
-    }
+    if (e.key === 'Escape' && isOpen()) setMenu(false, true);
   });
 
   links.forEach(function (a) {
     a.addEventListener('click', function () {
-      /* 同じ章を選んだ場合は hashchange が起きないので、ここで閉じる */
-      setDrawer(false);
+      /* 今の章を選んだ場合は hashchange が起きないので、ここで閉じる */
+      setMenu(false, false);
       if (a.getAttribute('data-ch') === (location.hash || '').slice(1)) window.scrollTo(0, 0);
     });
   });
 
   window.addEventListener('hashchange', function () {
-    setDrawer(false);
+    setMenu(false, false);
     show((location.hash || '').slice(1), true);
   });
 
-  var initial = (location.hash || '').slice(1) || recall() || 'ch1';
-  show(initial, false);
+
+  /* 表示設定:配色と文字サイズ */
+  var root = document.documentElement;
+  var THEMES = ['auto', 'light', 'sepia', 'green', 'dark', 'black'];
+  var SCALES = [0.85, 1, 1.15, 1.3, 1.5, 1.7];
+  var themeBtns = Array.prototype.slice.call(document.querySelectorAll('[data-theme-choice]'));
+  var fsDown = document.getElementById('fsDown');
+  var fsUp = document.getElementById('fsUp');
+  var fsReset = document.getElementById('fsReset');
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  var scaleIdx = 1;
+
+  function updateThemeColor() {
+    var c = getComputedStyle(root).getPropertyValue('--paper').trim();
+    if (themeMeta && c) themeMeta.setAttribute('content', c);
+  }
+
+  function applyTheme(t, save) {
+    if (THEMES.indexOf(t) < 0) t = 'auto';
+    if (t === 'auto') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', t);
+    themeBtns.forEach(function (b) {
+      b.setAttribute('aria-checked', String(b.getAttribute('data-theme-choice') === t));
+    });
+    if (save) store2('lupin-theme', t);
+    updateThemeColor();
+  }
+
+  function applyScale(i, save) {
+    scaleIdx = Math.max(0, Math.min(SCALES.length - 1, i));
+    root.style.setProperty('--fs', String(SCALES[scaleIdx]));
+    fsReset.textContent = Math.round(SCALES[scaleIdx] * 100) + '%';
+    fsDown.disabled = (scaleIdx === 0);
+    fsUp.disabled = (scaleIdx === SCALES.length - 1);
+    if (save) store2('lupin-scale', String(SCALES[scaleIdx]));
+  }
+
+  function store2(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function recall2(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  themeBtns.forEach(function (b) {
+    b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-choice'), true); });
+  });
+  fsDown.addEventListener('click', function () { applyScale(scaleIdx - 1, true); });
+  fsUp.addEventListener('click', function () { applyScale(scaleIdx + 1, true); });
+  fsReset.addEventListener('click', function () { applyScale(1, true); });
+
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var onScheme = function () { updateThemeColor(); };
+    if (mq.addEventListener) mq.addEventListener('change', onScheme);
+    else if (mq.addListener) mq.addListener(onScheme);
+  }
+
+  var savedScale = parseFloat(recall2('lupin-scale'));
+  var nearest = 1, best = Infinity;
+  if (isFinite(savedScale)) {
+    SCALES.forEach(function (s, i) {
+      var diff = Math.abs(s - savedScale);
+      if (diff < best) { best = diff; nearest = i; }
+    });
+  }
+  applyTheme(recall2('lupin-theme') || 'auto', false);
+  applyScale(nearest, false);
+
+  show((location.hash || '').slice(1) || recall() || 'ch1', false);
 })();
 </script>
 </body>

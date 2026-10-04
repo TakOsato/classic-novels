@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>怪盗紳士ルパン 第一話・第二話(和訳)</title>
+<title>怪盗紳士ルパン(和訳)</title>
 <style>
   :root {
     --paper: #f4f5f2;
@@ -13,6 +13,10 @@
     --rule: #c9ced2;
     --accent: #2b3f58;
     --quote-bg: #e9ecee;
+    --bar-bg: #f4f5f2;
+    --drawer-bg: #fbfbf9;
+    --scrim: rgba(20, 24, 28, 0.45);
+    --bar-h: 3.25rem;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -22,10 +26,13 @@
       --rule: #343a41;
       --accent: #9db6d3;
       --quote-bg: #1f242a;
+      --bar-bg: #16191d;
+      --drawer-bg: #1c2025;
+      --scrim: rgba(0, 0, 0, 0.6);
     }
   }
   * { box-sizing: border-box; }
-  html { font-size: 100%; scroll-behavior: smooth; }
+  html { font-size: 100%; -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
     background: var(--paper);
@@ -34,39 +41,115 @@
     font-size: 1.0625rem;
     line-height: 2;
     letter-spacing: 0.02em;
-    -webkit-text-size-adjust: 100%;
   }
+  body.drawer-open { overflow: hidden; }
+
+  /* 上部バー */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: calc(var(--bar-h) + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) max(0.5rem, env(safe-area-inset-right, 0px)) 0 max(0.5rem, env(safe-area-inset-left, 0px));
+    background: var(--bar-bg);
+    border-bottom: 1px solid var(--rule);
+    font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+  }
+  .menu-btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem; height: 2.75rem;
+    border: 0; border-radius: 0.5rem;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+  }
+  .menu-btn:hover { background: var(--quote-bg); }
+  .menu-btn svg { width: 1.5rem; height: 1.5rem; }
+  .bar-title {
+    min-width: 0;
+    flex: 1;
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ドロワー */
+  .scrim {
+    position: fixed; inset: 0;
+    z-index: 30;
+    background: var(--scrim);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  body.drawer-open .scrim { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    z-index: 40;
+    width: min(82vw, 20rem);
+    padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 0 calc(1.25rem + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px);
+    background: var(--drawer-bg);
+    border-right: 1px solid var(--rule);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 0.22s ease, visibility 0s linear 0.22s;
+    overflow-y: auto;
+    font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+  }
+  body.drawer-open .drawer {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.22s ease, visibility 0s;
+  }
+  .drawer h2 {
+    margin: 0 1.25rem 0.25rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  .drawer .sub { margin: 0 1.25rem 1rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.6; }
+  .drawer ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .drawer li { border-bottom: 1px solid var(--rule); }
+  .drawer a {
+    display: block;
+    padding: 0.9rem 1.25rem 0.9rem calc(1.25rem - 4px);
+    border-left: 4px solid transparent;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  .drawer a small { display: block; color: var(--muted); font-size: 0.75rem; }
+  .drawer a[aria-current="true"] {
+    border-left-color: var(--accent);
+    background: var(--quote-bg);
+    font-weight: 600;
+  }
+  .drawer a:hover { background: var(--quote-bg); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* 本文 */
   main {
     max-width: 38rem;
     margin: 0 auto;
-    padding: 3.5rem 1.25rem 6rem;
+    padding:
+      calc(var(--bar-h) + env(safe-area-inset-top, 0px) + 2rem)
+      max(1.25rem, env(safe-area-inset-right, 0px))
+      calc(5rem + env(safe-area-inset-bottom, 0px))
+      max(1.25rem, env(safe-area-inset-left, 0px));
   }
-  header.book { margin-bottom: 3rem; }
-  header.book h1 {
-    font-size: 1.75rem;
-    line-height: 1.5;
-    margin: 0 0 0.5rem;
-    font-weight: 700;
-  }
-  header.book p { margin: 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.8; }
-  nav.toc {
-    margin: 0 0 4rem;
-    padding: 1rem 0;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
-  nav.toc ul { list-style: none; margin: 0; padding: 0; }
-  nav.toc li { margin: 0; }
-  nav.toc a {
-    display: block;
-    padding: 0.4rem 0;
-    color: var(--accent);
-    text-decoration: none;
-  }
-  nav.toc a:hover { text-decoration: underline; }
-  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  section.story { margin-bottom: 5rem; }
-  section.story h2 {
+  .chapter[hidden] { display: none; }
+  .chapter h1 {
     font-size: 1.5rem;
     line-height: 1.5;
     margin: 0 0 2rem;
@@ -84,49 +167,72 @@
   blockquote p { margin: 0 0 0.8em; }
   blockquote p:last-child { margin-bottom: 0; }
   blockquote .sign { text-align: right; }
-  hr.scene {
-    border: 0;
-    margin: 2.5rem 0;
-    text-align: center;
-    height: 1.5rem;
+  hr.scene { border: 0; margin: 2.5rem 0; text-align: center; height: 1.5rem; }
+  hr.scene::after { content: "＊　＊　＊"; color: var(--muted); letter-spacing: 0.3em; }
+
+  /* 章末ナビ */
+  .pager {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
   }
-  hr.scene::after {
-    content: "＊　＊　＊";
-    color: var(--muted);
-    letter-spacing: 0.3em;
+  .pager a {
+    flex: 1;
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
-  .endnote { color: var(--muted); font-size: 0.9375rem; text-align: center; margin-top: 3rem; }
-  .top { display: inline-block; margin-top: 2rem; color: var(--accent); font-size: 0.9375rem; }
+  .pager a small { display: block; color: var(--muted); font-size: 0.75rem; }
+  .pager a:hover { background: var(--quote-bg); }
+  .pager .next { text-align: right; }
+  .pager .spacer { flex: 1; }
+
   @media (max-width: 480px) {
     body { font-size: 1rem; line-height: 1.95; }
-    main { padding-top: 2.5rem; }
-    header.book h1 { font-size: 1.5rem; }
+    .chapter h1 { font-size: 1.375rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scrim, .drawer, body.drawer-open .drawer { transition: none; }
   }
   @media print {
+    .topbar, .scrim, .drawer, .pager { display: none; }
+    main { padding-top: 0; }
+    .chapter[hidden] { display: block; page-break-before: always; }
     body { background: #fff; color: #000; }
-    nav.toc, .top { display: none; }
-    section.story { page-break-before: always; }
   }
 </style>
 </head>
 <body>
-<main id="top">
 
-<header class="book">
-  <h1>怪盗紳士ルパン</h1>
-  <p>モーリス・ルブラン著 ／ 第一話・第二話(和訳)</p>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="章の一覧を開く" aria-controls="drawer" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <p class="bar-title" id="barTitle">怪盗紳士ルパン</p>
 </header>
 
-<nav class="toc" aria-label="目次">
+<div class="scrim" id="scrim"></div>
+
+<nav class="drawer" id="drawer" aria-label="章の一覧" inert>
+  <h2>怪盗紳士ルパン</h2>
+  <p class="sub">モーリス・ルブラン著 ／ 和訳</p>
   <ul>
-    <li><a href="#story1">第一話　アルセーヌ・ルパンの逮捕</a></li>
-    <li><a href="#story2">第二話　アルセーヌ・ルパン、獄中にあり</a></li>
+    <li><a href="#ch1" data-ch="ch1"><small>第一話</small>アルセーヌ・ルパンの逮捕</a></li>
+    <li><a href="#ch2" data-ch="ch2"><small>第二話</small>アルセーヌ・ルパン、獄中にあり</a></li>
   </ul>
 </nav>
 
-<section class="story" id="story1">
-<h2>アルセーヌ・ルパンの逮捕</h2>
-
+<main>
+<article class="chapter" id="ch1" data-title="第一話　アルセーヌ・ルパンの逮捕" hidden>
+<h1>アルセーヌ・ルパンの逮捕</h1>
 <p>奇妙な旅だった!それなのに、実にいい始まりだったのだ。私自身は、これほど幸先のよさそうな旅を経験したことがなかった。プロヴァンス号は、快適な高速の大西洋横断船で、船長はこの上なく愛想のいい人物だった。船には選りすぐりの人々が集まっていた。人間関係が生まれ、娯楽が催された。私たちは、世間から切り離され、見知らぬ島にいるように自分たちだけになった、という素晴らしい感覚を味わっていた。だからこそ、互いに近づき合わざるをえなかった。</p>
 
 <p>そして私たちは近づいていった……</p>
@@ -478,13 +584,14 @@
 <p>「『これがアルセーヌ・ルパンだ』と確信をもって言える人間が誰もいないなら、むしろ結構。大事なのは、『アルセーヌ・ルパンがこれをやった』と、間違いなく言えることだ」</p>
 
 <p>私が再構成しようとしているのは、そうした行いのいくつか、そうした冒険のいくつかである。ある冬の夜、書斎の静けさの中で、彼が親切にも打ち明けてくれた話をもとに……</p>
+<div class="pager">
+  <span class="spacer"></span>
+  <a class="next" href="#ch2"><small>次の章</small>第二話　アルセーヌ・ルパン、獄中にあり</a>
+</div>
+</article>
 
-<p><a class="top" href="#top">先頭へ戻る</a></p>
-</section>
-
-<section class="story" id="story2">
-<h2>アルセーヌ・ルパン、獄中にあり</h2>
-
+<article class="chapter" id="ch2" data-title="第二話　アルセーヌ・ルパン、獄中にあり" hidden>
+<h1>アルセーヌ・ルパン、獄中にあり</h1>
 <p>旅行者を名乗るほどの者なら、セーヌ河畔を知らぬ者はいないだろう。ジュミエージュの廃墟からサン=ヴァンドリーユの廃墟へ向かう道すがら、川の真ん中の岩の上に誇らしげに据えられた、あの奇妙で小さな封建時代の城、マラキ城に目を留めなかった者もいないはずだ。橋の一つのアーチが、城を街道につないでいる。暗い塔の根元は、それを支える花崗岩に溶け込んでいる。どこかの山から切り離され、恐ろしい激動によってここへ投げ出された、巨大な岩塊である。まわりでは大河の静かな水が葦のあいだに戯れ、セキレイが濡れた小石の頂で震えている。</p>
 
 <p>マラキ城の歴史は、その名前のように荒々しく、その姿のように気難しい。戦い、包囲、襲撃、略奪、虐殺ばかりだった。コー地方の夜なべの席では、そこで行われた犯罪の数々が、身震いとともに語られる。不思議な伝説が語られる。かつてジュミエージュ修道院へ、そしてシャルル七世の美しい愛妾アニェス・ソレルの館へ通じていたという、有名な地下道の話もされる。</p>
@@ -1067,10 +1174,78 @@
 <p>アルセーヌ・ルパンは、イニシャルを無造作に眺めた。</p>
 
 <p>「J・B……いったい誰だろう?……ああ、そうだ、思い出した。ジュール・ブーヴィエ、僕の予審判事だ、感じのいい人だよ……」</p>
-
-<p><a class="top" href="#top">先頭へ戻る</a></p>
-</section>
-
+<div class="pager">
+  <a class="prev" href="#ch1"><small>前の章</small>第一話　アルセーヌ・ルパンの逮捕</a>
+  <span class="spacer"></span>
+</div>
+</article>
 </main>
+
+<script>
+(function () {
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('#drawer a[data-ch]'));
+  var drawer = document.getElementById('drawer');
+  var menuBtn = document.getElementById('menuBtn');
+  var scrim = document.getElementById('scrim');
+  var barTitle = document.getElementById('barTitle');
+  var KEY = 'lupin-last-chapter';
+
+  function store(id) { try { localStorage.setItem(KEY, id); } catch (e) {} }
+  function recall() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+
+  function setDrawer(open) {
+    document.body.classList.toggle('drawer-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? '章の一覧を閉じる' : '章の一覧を開く');
+    drawer.inert = !open;
+    if (open) {
+      var current = drawer.querySelector('[aria-current="true"]') || links[0];
+      if (current) current.focus();
+    }
+  }
+
+  function show(id, scrollTop) {
+    var target = chapters.filter(function (c) { return c.id === id; })[0] || chapters[0];
+    chapters.forEach(function (c) { c.hidden = (c !== target); });
+    links.forEach(function (a) {
+      if (a.getAttribute('data-ch') === target.id) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+    var title = target.getAttribute('data-title');
+    barTitle.textContent = title;
+    document.title = title + ' | 怪盗紳士ルパン';
+    store(target.id);
+    if (scrollTop) window.scrollTo(0, 0);
+  }
+
+  menuBtn.addEventListener('click', function () {
+    setDrawer(!document.body.classList.contains('drawer-open'));
+  });
+  scrim.addEventListener('click', function () { setDrawer(false); menuBtn.focus(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) {
+      setDrawer(false);
+      menuBtn.focus();
+    }
+  });
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      /* 同じ章を選んだ場合は hashchange が起きないので、ここで閉じる */
+      setDrawer(false);
+      if (a.getAttribute('data-ch') === (location.hash || '').slice(1)) window.scrollTo(0, 0);
+    });
+  });
+
+  window.addEventListener('hashchange', function () {
+    setDrawer(false);
+    show((location.hash || '').slice(1), true);
+  });
+
+  var initial = (location.hash || '').slice(1) || recall() || 'ch1';
+  show(initial, false);
+})();
+</script>
 </body>
 </html>

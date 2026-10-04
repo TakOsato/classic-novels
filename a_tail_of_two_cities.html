@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>二都物語(和訳)</title>
+<meta name="theme-color" content="#f4f5f2">
+<script>
+(function () {
+  try {
+    var d = document.documentElement;
+    var t = localStorage.getItem('twocities-theme');
+    if (t && t !== 'auto') d.setAttribute('data-theme', t);
+    var s = parseFloat(localStorage.getItem('twocities-scale'));
+    if (isFinite(s) && s >= 0.5 && s <= 3) d.style.setProperty('--fs', String(s));
+  } catch (e) {}
+})();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --paper: #f4f5f2;
+  --ink: #1c2126;
+  --muted: #5d6670;
+  --rule: #c9ced2;
+  --accent: #2b3f58;
+  --quote-bg: #e9ecee;
+  --float-bg: rgba(244, 245, 242, 0.88);
+  --menu-bg: #fbfbf9;
+  --shadow: 0 6px 24px rgba(20, 24, 28, 0.18);
+  --edge: 0.5rem;
+  --fs: 1;
+}
+
+/* 自動:端末のダーク設定に従う */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --paper: #16191d;
+    --ink: #e3e6e8;
+    --muted: #98a1a9;
+    --rule: #343a41;
+    --accent: #9db6d3;
+    --quote-bg: #1f242a;
+    --float-bg: rgba(22, 25, 29, 0.88);
+    --menu-bg: #1c2025;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
+  }
+}
+:root[data-theme="sepia"] {
+  color-scheme: light;
+  --paper: #f3ead6;
+  --ink: #3a3023;
+  --muted: #7a6a55;
+  --rule: #d6c8a8;
+  --accent: #7a4a1e;
+  --quote-bg: #eaddc0;
+  --float-bg: rgba(243, 234, 214, 0.9);
+  --menu-bg: #f8f1df;
+  --shadow: 0 6px 24px rgba(58, 48, 35, 0.2);
+}
+:root[data-theme="green"] {
+  color-scheme: light;
+  --paper: #d9ead6;
+  --ink: #1d2b20;
+  --muted: #4f6554;
+  --rule: #b4cdb2;
+  --accent: #2d6a3e;
+  --quote-bg: #cbe0c8;
+  --float-bg: rgba(217, 234, 214, 0.9);
+  --menu-bg: #e6f2e3;
+  --shadow: 0 6px 24px rgba(29, 43, 32, 0.2);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #16191d;
+  --ink: #e3e6e8;
+  --muted: #98a1a9;
+  --rule: #343a41;
+  --accent: #9db6d3;
+  --quote-bg: #1f242a;
+  --float-bg: rgba(22, 25, 29, 0.88);
+  --menu-bg: #1c2025;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
+}
+:root[data-theme="black"] {
+  color-scheme: dark;
+  --paper: #000000;
+  --ink: #c8ccd0;
+  --muted: #8a9299;
+  --rule: #2a2f35;
+  --accent: #8fb0d4;
+  --quote-bg: #101318;
+  --float-bg: rgba(0, 0, 0, 0.88);
+  --menu-bg: #0d0f12;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.8);
+}
+
+* { box-sizing: border-box; }
+html { font-size: 100%; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Source Han Serif JP", serif;
+  font-size: 1.0625rem;
+  line-height: 2;
+  letter-spacing: 0.02em;
+}
+
+/* 右上の小さなメニューボタン */
+.menu-btn {
+  position: fixed;
+  z-index: 30;
+  top: calc(env(safe-area-inset-top, 0px) + var(--edge));
+  right: calc(env(safe-area-inset-right, 0px) + var(--edge));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--float-bg);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--accent);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.menu-btn:hover, .menu-btn[aria-expanded="true"], .menu-btn:focus-visible { opacity: 1; }
+.menu-btn svg { width: 1.25rem; height: 1.25rem; }
+
+/* ポップアップ(外側タップで閉じる) */
+.catcher { position: fixed; inset: 0; z-index: 35; background: transparent; }
+.catcher[hidden] { display: none; }
+.menu {
+  position: fixed;
+  z-index: 40;
+  top: calc(env(safe-area-inset-top, 0px) + var(--edge) + 3rem);
+  right: calc(env(safe-area-inset-right, 0px) + var(--edge));
+  width: min(calc(100vw - 1rem), 19rem);
+  max-height: calc(100vh - 6rem);
+  max-height: calc(100dvh - 6rem);
+  overflow-y: auto;
+  background: var(--menu-bg);
+  border: 1px solid var(--rule);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow);
+  transform-origin: top right;
+  animation: pop 0.14s ease-out;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+}
+.menu[hidden] { display: none; }
+@keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+.menu p.head {
+  margin: 0;
+  padding: 0.75rem 1rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.menu ul { list-style: none; margin: 0; padding: 0 0 0.25rem; }
+.menu a {
+  display: block;
+  padding: 0.7rem 1rem 0.7rem calc(1rem - 3px);
+  border-left: 3px solid transparent;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.menu a small { display: block; color: var(--muted); font-size: 0.75rem; }
+.menu a:hover { background: var(--quote-bg); }
+.menu a[aria-current="true"] {
+  border-left-color: var(--accent);
+  background: var(--quote-bg);
+  font-weight: 600;
+}
+
+/* 表示設定 */
+.menu .settings { border-top: 1px solid var(--rule); padding: 0.25rem 1rem 1rem; }
+.menu .settings h2 {
+  margin: 0.85rem 0 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+.theme-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.2rem 0.45rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.theme-btn:hover { background: var(--quote-bg); }
+.theme-btn[aria-checked="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+  font-weight: 600;
+}
+.theme-btn .sw {
+  width: 1.75rem; height: 1.75rem;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid #8a9299;
+  border-radius: 50%;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+.sw[data-sw="auto"]  { background: linear-gradient(135deg, #f4f5f2 50%, #16191d 50%); color: #888; }
+.sw[data-sw="light"] { background: #f4f5f2; color: #1c2126; }
+.sw[data-sw="sepia"] { background: #f3ead6; color: #3a3023; }
+.sw[data-sw="green"] { background: #d9ead6; color: #1d2b20; }
+.sw[data-sw="dark"]  { background: #16191d; color: #e3e6e8; }
+.sw[data-sw="black"] { background: #000000; color: #c8ccd0; }
+
+.sizes { display: flex; align-items: stretch; gap: 0.4rem; }
+.sizes button {
+  min-width: 2.75rem;
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+.sizes button:hover:not(:disabled) { background: var(--quote-bg); }
+.sizes button:disabled { opacity: 0.35; cursor: default; }
+.sizes .val { flex: 1; font-size: 0.8125rem; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 本文 */
+main {
+  max-width: 38rem;
+  margin: 0 auto;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 3.25rem)
+    max(1.25rem, env(safe-area-inset-right, 0px))
+    calc(5rem + env(safe-area-inset-bottom, 0px))
+    max(1.25rem, env(safe-area-inset-left, 0px));
+}
+.chapter[hidden] { display: none; }
+.chapter { font-size: calc(1.0625rem * var(--fs, 1)); }
+.chapter h1 {
+  font-size: 1.4em;
+  line-height: 1.5;
+  margin: 0 0 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--accent);
+  font-weight: 700;
+}
+.chapter h1 small {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--muted);
+  font-size: 0.6em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+p { margin: 0 0 1.1em; }
+hr.scene { border: 0; margin: 2.5rem 0; text-align: center; height: 1.5rem; }
+hr.scene::after { content: "＊ ＊ ＊"; color: var(--muted); letter-spacing: 0.3em; }
+
+/* 章末ナビ */
+.pager {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+}
+.pager a {
+  flex: 1;
+  display: block;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.pager a small { display: block; color: var(--muted); font-size: 0.75rem; }
+.pager a:hover { background: var(--quote-bg); }
+.pager .next { text-align: right; }
+.pager .spacer { flex: 1; }
+
+@media (max-width: 480px) {
+  .chapter { font-size: calc(1rem * var(--fs, 1)); line-height: 1.95; }
+  .chapter h1 { font-size: 1.3em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu { animation: none; }
+  .menu-btn { transition: none; }
+}
+@media print {
+  .menu-btn, .catcher, .menu, .pager { display: none; }
+  main { padding-top: 0; }
+  .chapter[hidden] { display: block; page-break-before: always; }
+  body { background: #fff; color: #000; }
+}
+</style>
+</head>
+<body>
+
+<button class="menu-btn" id="menuBtn" type="button" aria-label="章の一覧を開く" aria-controls="menu" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+<div class="catcher" id="catcher" hidden></div>
+
+<nav class="menu" id="menu" aria-label="章の一覧" hidden>
+  <p class="head">二都物語 ／ チャールズ・ディケンズ</p>
+  <ul>
+    <li><a href="#b1c1" data-ch="b1c1"><small>第一巻 よみがえり　第1章</small>時代</a></li>
+  </ul>
+  <div class="settings">
+    <h2 id="themeLabel">配色</h2>
+    <div class="themes" role="radiogroup" aria-labelledby="themeLabel">
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="auto"><span class="sw" data-sw="auto" aria-hidden="true">あ</span>自動</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="light"><span class="sw" data-sw="light" aria-hidden="true">あ</span>ライト</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="sepia"><span class="sw" data-sw="sepia" aria-hidden="true">あ</span>セピア</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="green"><span class="sw" data-sw="green" aria-hidden="true">あ</span>グリーン</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="dark"><span class="sw" data-sw="dark" aria-hidden="true">あ</span>ダーク</button>
+      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="black"><span class="sw" data-sw="black" aria-hidden="true">あ</span>ブラック</button>
+    </div>
+    <h2>文字サイズ</h2>
+    <div class="sizes">
+      <button type="button" id="fsDown" aria-label="文字を小さくする">A−</button>
+      <button type="button" id="fsReset" class="val" aria-label="文字サイズを標準に戻す">100%</button>
+      <button type="button" id="fsUp" aria-label="文字を大きくする">A＋</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<article class="chapter" id="b1c1" data-title="第一巻 第1章 時代" hidden>
+<h1><small>第一巻　よみがえり</small>第1章　時代</h1>
+
+<p>それは最良の時代であり、最悪の時代であった。知恵の時代であり、愚かさの時代であった。信仰の時代であり、不信の時代であった。光の季節であり、闇の季節であった。希望の春であり、絶望の冬であった。われわれの前にはすべてがあり、われわれの前には何もなかった。われわれは皆まっすぐ天国へ向かっており、われわれは皆まっすぐ反対の方へ向かっていた――要するに、その時代は今の時代にあまりにもよく似ていて、その声高な権威者たちの中には、善きにつけ悪しきにつけ、その時代を最上級の比較でしか受け取ってはならないと言い張る者さえいたのである。</p>
+
+<p>イギリスの王座には、あごの大きな王と顔立ちの冴えない王妃がおり、フランスの王座には、あごの大きな王と顔立ちの美しい王妃がいた。どちらの国でも、国家の「パンと魚」の分け前にあずかる貴顕たちにとって、万事は永久に定まったものであることが、水晶よりも明らかだった。</p>
+
+<p>時は主の御代、一七七五年。この恵まれた時期にも、今と同じように、霊的な啓示がイギリスに授けられていた。サウスコット夫人はちょうど祝福された二十五歳の誕生日を迎えたところで、近衛騎兵隊のある予言者気取りの一兵卒が、ロンドンとウェストミンスターが呑み込まれる手はずが整ったと告げて、その崇高な降臨を触れ回っていた。コック・レーンの幽霊でさえ、ここ一年の霊たちが（超自然的に独創性を欠いていたため）同じように叩いてみせたのと同じく、壁を叩いて告げ知らせた後、ちょうど十二年ほどしか寝かされていなかった。ところが、この世の出来事という意味での知らせは、最近イギリスの王室と国民のもとに、アメリカにいる英国臣民たちの会議から届いていた。不思議なことに、それはコック・レーンの雛たちのどの口から受け取ったどんな通信よりも、人類にとって重大なものとなったのである。</p>
+
+<p>フランスは、盾と三叉の矛を持つ姉妹国に比べれば、霊的な面ではおおむね恵まれておらず、紙幣を刷っては使いながら、いたってなめらかに坂を転げ落ちていた。キリスト教の牧者たちの導きのもと、フランスはほかにも人道的な事業で楽しみを得ていた。たとえば、ある若者に、両手を切り落とし、舌をやっとこで引き抜き、生きたまま身体を焼くという判決を下したのは、五、六十ヤードほど先を通り過ぎた汚らしい修道士の行列に、雨の中ひざまずいて敬意を表さなかったからである。その受難者が処刑されたとき、フランスやノルウェーの森には根を張って育っている木々があり、それらはすでに「きこり」である運命によって印をつけられ、やがて切り倒され、板に挽かれて、袋と刃物を備えたあの可動の枠組み、歴史に恐ろしく名を残す断頭台となる定めだったとしても、少しも不思議ではない。また、パリ近郊の重い土地を耕す百姓たちの粗末な納屋には、その同じ日、雨風をしのいで、田舎のぬかるみに汚れ、豚に嗅ぎ回られ、鶏にねぐらにされている粗末な荷車が置かれ、それらが「農夫」である死神によってすでに、革命の死刑囚護送車として取り分けられていたとしても、やはり不思議ではない。だがそのきこりも農夫も、絶え間なく働いてはいても、働くさまは静かであり、足音を忍ばせて歩く彼らの気配を聞いた者はいなかった。まして、彼らが目覚めているのではないかと少しでも疑うことは、無神論的で国家に対する裏切りとされていたのだから。</p>
+
+<p>イギリスはといえば、国として大いに誇れるほどの秩序や保護があったとは言いがたい。武装した男たちによる大胆な押し込み強盗や追いはぎが、首都そのものの中で毎晩のように起こっていた。一家が田舎へ出かけるときには、安全のために家具を家具商の倉庫に預けてから行くよう、公然と注意が呼びかけられた。闇の中の追いはぎは、明るいところでは市内の商人であり、「頭領」として呼び止めた同業の商人に顔を見破られて誰何されると、勇ましくその男の頭を撃ち抜いて馬で走り去った。郵便馬車は七人の強盗に待ち伏せされ、護衛は三人を撃ち殺したが、そのあと残る四人に撃ち殺された。「弾薬が尽きたため」である。その後、郵便馬車は安らかに略奪された。ロンドン市長閣下という堂々たる大人物は、ターナム・グリーンで一人の追いはぎに馬車を止められて金品を出させられ、その高名な御仁は随行の者たちの目の前で身ぐるみを剥がれた。ロンドンの監獄の囚人たちは看守と戦闘を繰り広げ、法の威厳は彼らの只中へ、散弾と弾丸を込めたラッパ銃を撃ち込んだ。宮廷の客間では、泥棒が貴族たちの首からダイヤの十字架を切り取った。銃士たちが密輸品を捜索にセント・ジャイルズへ踏み込むと、暴徒が銃士たちに発砲し、銃士たちも暴徒に発砲したが、これらの出来事をさほど尋常でないと思う者は誰もいなかった。そうした中で、死刑執行人は、いつも忙しく、いつも役立たず以下の存在だったが、絶えず駆り出されていた。あるときは、種々雑多な罪人たちを長い列にして吊るし、あるときは、火曜日に捕まった押し込み強盗を土曜日に絞首刑にし、あるときは、ニューゲートで人々を何ダースも手に焼印を押し、またあるときは、ウェストミンスター・ホールの戸口でパンフレットを焼いた。今日は凶悪な殺人犯の命を取り、明日は農夫の小僧から六ペンスを盗んだ哀れなこそ泥の命を取った。</p>
+
+<p>こうしたこと、そしてそれに似た千のことが、なつかしい一七七五年という年に、またその間近の年々に起こった。それらに取り囲まれ、きこりと農夫が気づかれぬまま働くうちに、あの大きなあごの二人と、あの冴えない顔と美しい顔の二人は、騒がしく歩を進め、神授の権利を傲然と振りかざしていた。こうして一七七五年という年は、この記録の登場人物たちをはじめとする無数の小さな生き物たちと、陛下方とを、それぞれの前に延びる道へと導いていったのである。</p>
+
+</article>
+
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('.menu a[data-ch]'));
+  var btn = document.getElementById('menuBtn');
+  var menu = document.getElementById('menu');
+  var catcher = document.getElementById('catcher');
+  var baseTitle = '二都物語(和訳)';
+
+  /* ---- メニューの開閉 ---- */
+  function openMenu() {
+    menu.hidden = false;
+    catcher.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', '章の一覧を閉じる');
+  }
+  function closeMenu() {
+    menu.hidden = true;
+    catcher.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', '章の一覧を開く');
+  }
+  btn.addEventListener('click', function () { menu.hidden ? openMenu() : closeMenu(); });
+  catcher.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !menu.hidden) { closeMenu(); btn.focus(); }
+  });
+
+  /* ---- 章の切り替え ---- */
+  function show(id) {
+    var found = false;
+    chapters.forEach(function (c) {
+      var on = c.id === id;
+      c.hidden = !on;
+      if (on) found = true;
+    });
+    if (!found && chapters.length) { id = chapters[0].id; chapters[0].hidden = false; }
+    links.forEach(function (a) {
+      if (a.getAttribute('data-ch') === id) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+    var cur = document.getElementById(id);
+    document.title = (cur ? cur.getAttribute('data-title') + ' - ' : '') + baseTitle;
+    window.scrollTo(0, 0);
+  }
+  function fromHash() { show(location.hash.replace(/^#/, '')); }
+  window.addEventListener('hashchange', fromHash);
+  links.forEach(function (a) {
+    a.addEventListener('click', function () { closeMenu(); });
+  });
+  fromHash();
+
+  /* ---- 配色 ---- */
+  var themeBtns = Array.prototype.slice.call(document.querySelectorAll('[data-theme-choice]'));
+  function currentTheme() {
+    var t = null;
+    try { t = localStorage.getItem('twocities-theme'); } catch (e) {}
+    return t || 'auto';
+  }
+  function syncThemeColor() {
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (!m) return;
+    var c = getComputedStyle(root).getPropertyValue('--paper').trim();
+    if (c) m.setAttribute('content', c);
+  }
+  function applyTheme(t) {
+    if (t === 'auto') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', t);
+    themeBtns.forEach(function (b) {
+      b.setAttribute('aria-checked', b.getAttribute('data-theme-choice') === t ? 'true' : 'false');
+    });
+    syncThemeColor();
+  }
+  themeBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-theme-choice');
+      try { localStorage.setItem('twocities-theme', t); } catch (e) {}
+      applyTheme(t);
+    });
+  });
+  applyTheme(currentTheme());
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function () { if (currentTheme() === 'auto') syncThemeColor(); };
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  }
+
+  /* ---- 文字サイズ ---- */
+  var MIN = 0.7, MAX = 2, STEP = 0.1;
+  var fsDown = document.getElementById('fsDown');
+  var fsUp = document.getElementById('fsUp');
+  var fsReset = document.getElementById('fsReset');
+  var scale = 1;
+  try {
+    var s = parseFloat(localStorage.getItem('twocities-scale'));
+    if (isFinite(s) && s >= 0.5 && s <= 3) scale = s;
+  } catch (e) {}
+  function applyScale() {
+    scale = Math.round(Math.min(MAX, Math.max(MIN, scale)) * 100) / 100;
+    root.style.setProperty('--fs', String(scale));
+    fsReset.textContent = Math.round(scale * 100) + '%';
+    fsDown.disabled = scale <= MIN + 0.001;
+    fsUp.disabled = scale >= MAX - 0.001;
+    try { localStorage.setItem('twocities-scale', String(scale)); } catch (e) {}
+  }
+  fsDown.addEventListener('click', function () { scale -= STEP; applyScale(); });
+  fsUp.addEventListener('click', function () { scale += STEP; applyScale(); });
+  fsReset.addEventListener('click', function () { scale = 1; applyScale(); });
+  applyScale();
+})();
+</script>
+</body>
+</html>

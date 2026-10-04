@@ -4,1917 +4,367 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>怪盗紳士ルパン(和訳)</title>
+<title>古典名作 和訳文庫</title>
+<meta name="description" content="海外の古典名作を日本語に訳して公開しているライブラリ">
 <meta name="theme-color" content="#f4f5f2">
 <script>
 (function () {
   try {
-    var d = document.documentElement;
-    var t = localStorage.getItem('lupin-theme');
-    if (t && t !== 'auto') d.setAttribute('data-theme', t);
-    var s = parseFloat(localStorage.getItem('lupin-scale'));
-    if (isFinite(s) && s >= 0.5 && s <= 3) d.style.setProperty('--fs', String(s));
+    var t = localStorage.getItem('classic-novels-theme');
+    if (t && t !== 'auto') document.documentElement.setAttribute('data-theme', t);
   } catch (e) {}
 })();
 </script>
 <style>
-  :root {
-    color-scheme: light;
-    --paper: #f4f5f2;
-    --ink: #1c2126;
-    --muted: #5d6670;
-    --rule: #c9ced2;
-    --accent: #2b3f58;
-    --quote-bg: #e9ecee;
-    --float-bg: rgba(244, 245, 242, 0.88);
-    --menu-bg: #fbfbf9;
-    --shadow: 0 6px 24px rgba(20, 24, 28, 0.18);
-    --edge: 0.5rem;
-    --fs: 1;
-  }
-  /* 自動:端末のダーク設定に従う */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
-      color-scheme: dark;
-      --paper: #16191d;
-      --ink: #e3e6e8;
-      --muted: #98a1a9;
-      --rule: #343a41;
-      --accent: #9db6d3;
-      --quote-bg: #1f242a;
-      --float-bg: rgba(22, 25, 29, 0.88);
-      --menu-bg: #1c2025;
-      --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
-    }
-  }
-  :root[data-theme="sepia"] {
-    color-scheme: light;
-    --paper: #f3ead6;
-    --ink: #3a3023;
-    --muted: #7a6a55;
-    --rule: #d6c8a8;
-    --accent: #7a4a1e;
-    --quote-bg: #eaddc0;
-    --float-bg: rgba(243, 234, 214, 0.9);
-    --menu-bg: #f8f1df;
-    --shadow: 0 6px 24px rgba(58, 48, 35, 0.2);
-  }
-  :root[data-theme="green"] {
-    color-scheme: light;
-    --paper: #d9ead6;
-    --ink: #1d2b20;
-    --muted: #4f6554;
-    --rule: #b4cdb2;
-    --accent: #2d6a3e;
-    --quote-bg: #cbe0c8;
-    --float-bg: rgba(217, 234, 214, 0.9);
-    --menu-bg: #e6f2e3;
-    --shadow: 0 6px 24px rgba(29, 43, 32, 0.2);
-  }
-  :root[data-theme="dark"] {
+:root {
+  color-scheme: light;
+  --paper: #f4f5f2;
+  --ink: #1c2126;
+  --muted: #5d6670;
+  --rule: #c9ced2;
+  --card: #fbfbf9;
+  --accent: #2b3f58;
+  --shadow: 0 1px 2px rgba(20, 24, 28, 0.06), 0 8px 24px rgba(20, 24, 28, 0.08);
+  --shadow-hover: 0 2px 4px rgba(20, 24, 28, 0.08), 0 14px 34px rgba(20, 24, 28, 0.16);
+  --glow: rgba(43, 63, 88, 0.07);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
     color-scheme: dark;
     --paper: #16191d;
-      --ink: #e3e6e8;
-      --muted: #98a1a9;
-      --rule: #343a41;
-      --accent: #9db6d3;
-      --quote-bg: #1f242a;
-      --float-bg: rgba(22, 25, 29, 0.88);
-      --menu-bg: #1c2025;
-      --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
+    --ink: #e3e6e8;
+    --muted: #98a1a9;
+    --rule: #343a41;
+    --card: #1c2025;
+    --accent: #9db6d3;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.5), 0 14px 34px rgba(0, 0, 0, 0.55);
+    --glow: rgba(157, 182, 211, 0.07);
   }
-  :root[data-theme="black"] {
-    color-scheme: dark;
-    --paper: #000000;
-    --ink: #c8ccd0;
-    --muted: #8a9299;
-    --rule: #2a2f35;
-    --accent: #8fb0d4;
-    --quote-bg: #101318;
-    --float-bg: rgba(0, 0, 0, 0.88);
-    --menu-bg: #0d0f12;
-    --shadow: 0 6px 24px rgba(0, 0, 0, 0.8);
-  }
-  * { box-sizing: border-box; }
-  html { font-size: 100%; -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Source Han Serif JP", serif;
-    font-size: 1.0625rem;
-    line-height: 2;
-    letter-spacing: 0.02em;
-  }
+}
+:root[data-theme="sepia"] {
+  color-scheme: light;
+  --paper: #f3ead6;
+  --ink: #3a3023;
+  --muted: #7a6a55;
+  --rule: #d6c8a8;
+  --card: #f8f1df;
+  --accent: #7a4a1e;
+  --shadow: 0 1px 2px rgba(58, 48, 35, 0.08), 0 8px 24px rgba(58, 48, 35, 0.12);
+  --shadow-hover: 0 2px 4px rgba(58, 48, 35, 0.1), 0 14px 34px rgba(58, 48, 35, 0.22);
+  --glow: rgba(122, 74, 30, 0.08);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #16191d;
+  --ink: #e3e6e8;
+  --muted: #98a1a9;
+  --rule: #343a41;
+  --card: #1c2025;
+  --accent: #9db6d3;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.5), 0 14px 34px rgba(0, 0, 0, 0.55);
+  --glow: rgba(157, 182, 211, 0.07);
+}
 
-  /* 右上の小さなメニューボタン */
-  .menu-btn {
-    position: fixed;
-    z-index: 30;
-    top: calc(env(safe-area-inset-top, 0px) + var(--edge));
-    right: calc(env(safe-area-inset-right, 0px) + var(--edge));
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem; height: 2.5rem;
-    padding: 0;
-    border: 1px solid var(--rule);
-    border-radius: 50%;
-    background: var(--float-bg);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-    color: var(--accent);
-    opacity: 0.7;
-    cursor: pointer;
-    transition: opacity 0.15s ease;
-  }
-  .menu-btn:hover, .menu-btn[aria-expanded="true"], .menu-btn:focus-visible { opacity: 1; }
-  .menu-btn svg { width: 1.25rem; height: 1.25rem; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(60rem 28rem at 50% -8rem, var(--glow), transparent 70%),
+    var(--paper);
+  color: var(--ink);
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Source Han Serif JP", serif;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-  /* ポップアップ(外側タップで閉じる) */
-  .catcher { position: fixed; inset: 0; z-index: 35; background: transparent; }
-  .catcher[hidden] { display: none; }
-  .menu {
-    position: fixed;
-    z-index: 40;
-    top: calc(env(safe-area-inset-top, 0px) + var(--edge) + 3rem);
-    right: calc(env(safe-area-inset-right, 0px) + var(--edge));
-    width: min(calc(100vw - 1rem), 19rem);
-    max-height: calc(100vh - 6rem);
-    max-height: calc(100dvh - 6rem);
-    overflow-y: auto;
-    background: var(--menu-bg);
-    border: 1px solid var(--rule);
-    border-radius: 0.75rem;
-    box-shadow: var(--shadow);
-    transform-origin: top right;
-    animation: pop 0.14s ease-out;
-    font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
-  }
-  .menu[hidden] { display: none; }
-  @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
-  .menu p.head {
-    margin: 0;
-    padding: 0.75rem 1rem 0.5rem;
-    color: var(--muted);
-    font-size: 0.75rem;
-    line-height: 1.5;
-  }
-  .menu ul { list-style: none; margin: 0; padding: 0 0 0.25rem; }
-  .menu a {
-    display: block;
-    padding: 0.7rem 1rem 0.7rem calc(1rem - 3px);
-    border-left: 3px solid transparent;
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 0.9375rem;
-    line-height: 1.55;
-  }
-  .menu a small { display: block; color: var(--muted); font-size: 0.75rem; }
-  .menu a:hover { background: var(--quote-bg); }
-  .menu a[aria-current="true"] {
-    border-left-color: var(--accent);
-    background: var(--quote-bg);
-    font-weight: 600;
-  }
+/* テーマ切り替え */
+.theme-toggle {
+  position: fixed;
+  z-index: 10;
+  top: calc(env(safe-area-inset-top, 0px) + 0.5rem);
+  right: calc(env(safe-area-inset-right, 0px) + 0.5rem);
+  height: 2.25rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.85;
+}
+.theme-toggle:hover { opacity: 1; color: var(--ink); }
 
-  /* 表示設定 */
-  .menu .settings { border-top: 1px solid var(--rule); padding: 0.25rem 1rem 1rem; }
-  .menu .settings h2 {
-    margin: 0.85rem 0 0.45rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--muted);
-  }
-  .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
-  .theme-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.5rem 0.2rem 0.45rem;
-    border: 1px solid var(--rule);
-    border-radius: 0.5rem;
-    background: transparent;
-    color: var(--ink);
-    font: inherit;
-    font-size: 0.75rem;
-    line-height: 1.3;
-    cursor: pointer;
-  }
-  .theme-btn:hover { background: var(--quote-bg); }
-  .theme-btn[aria-checked="true"] {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent);
-    font-weight: 600;
-  }
-  .theme-btn .sw {
-    width: 1.75rem; height: 1.75rem;
-    display: flex; align-items: center; justify-content: center;
-    border: 1px solid #8a9299;
-    border-radius: 50%;
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-    font-size: 0.875rem;
-    line-height: 1;
-  }
-  .sw[data-sw="auto"]  { background: linear-gradient(135deg, #f4f5f2 50%, #16191d 50%); color: #888; }
-  .sw[data-sw="light"] { background: #f4f5f2; color: #1c2126; }
-  .sw[data-sw="sepia"] { background: #f3ead6; color: #3a3023; }
-  .sw[data-sw="green"] { background: #d9ead6; color: #1d2b20; }
-  .sw[data-sw="dark"]  { background: #16191d; color: #e3e6e8; }
-  .sw[data-sw="black"] { background: #000000; color: #c8ccd0; }
-  .sizes { display: flex; align-items: stretch; gap: 0.4rem; }
-  .sizes button {
-    min-width: 2.75rem;
-    height: 2.5rem;
-    padding: 0 0.5rem;
-    border: 1px solid var(--rule);
-    border-radius: 0.5rem;
-    background: transparent;
-    color: var(--ink);
-    font: inherit;
-    font-size: 0.9375rem;
-    cursor: pointer;
-  }
-  .sizes button:hover:not(:disabled) { background: var(--quote-bg); }
-  .sizes button:disabled { opacity: 0.35; cursor: default; }
-  .sizes .val { flex: 1; font-size: 0.8125rem; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 4.5rem)
+    max(1.25rem, env(safe-area-inset-right, 0px))
+    calc(4rem + env(safe-area-inset-bottom, 0px))
+    max(1.25rem, env(safe-area-inset-left, 0px));
+}
 
-  /* 本文 */
-  main {
-    max-width: 38rem;
-    margin: 0 auto;
-    padding:
-      calc(env(safe-area-inset-top, 0px) + 3.25rem)
-      max(1.25rem, env(safe-area-inset-right, 0px))
-      calc(5rem + env(safe-area-inset-bottom, 0px))
-      max(1.25rem, env(safe-area-inset-left, 0px));
-  }
-  .chapter[hidden] { display: none; }
-  .chapter { font-size: calc(1.0625rem * var(--fs, 1)); }
-  .chapter h1 {
-    font-size: 1.4em;
-    line-height: 1.5;
-    margin: 0 0 2rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--accent);
-    font-weight: 700;
-  }
-  p { margin: 0 0 1.1em; }
-  blockquote {
-    margin: 1.6rem 0;
-    padding: 0.9rem 1.1rem 0.9rem 1.2rem;
-    background: var(--quote-bg);
-    border-left: 3px solid var(--accent);
-  }
-  blockquote p { margin: 0 0 0.8em; }
-  blockquote p:last-child { margin-bottom: 0; }
-  blockquote .sign { text-align: right; }
-  hr.scene { border: 0; margin: 2.5rem 0; text-align: center; height: 1.5rem; }
-  hr.scene::after { content: "＊　＊　＊"; color: var(--muted); letter-spacing: 0.3em; }
+/* ヘッダー */
+header { text-align: center; margin-bottom: 3.5rem; }
+header .eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8125rem;
+  font-style: italic;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+header h1 {
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+}
+header .ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin: 1.4rem auto 1.1rem;
+  max-width: 16rem;
+  color: var(--accent);
+}
+header .ornament::before, header .ornament::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent));
+  opacity: 0.6;
+}
+header .ornament::after { background: linear-gradient(to left, transparent, var(--accent)); }
+header .ornament span { font-size: 0.9rem; line-height: 1; }
+header .lead { margin: 0; color: var(--muted); font-size: 0.9375rem; }
 
-  /* 章末ナビ */
-  .pager {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 3rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
-  }
-  .pager a {
-    flex: 1;
-    display: block;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--rule);
-    border-radius: 0.5rem;
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-  .pager a small { display: block; color: var(--muted); font-size: 0.75rem; }
-  .pager a:hover { background: var(--quote-bg); }
-  .pager .next { text-align: right; }
-  .pager .spacer { flex: 1; }
+/* 本のカード */
+.shelf { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+.book {
+  --spine: var(--accent);
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.6rem 1fr;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 0.9rem;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.book:hover, .book:focus-within { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.book[data-tone="navy"]   { --spine: #2b3f58; }
+.book[data-tone="wine"]   { --spine: #7b2d3a; }
+.book[data-tone="forest"] { --spine: #2d6a3e; }
+.book[data-tone="amber"]  { --spine: #a8691f; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .book[data-tone="navy"] { --spine: #6f93bd; }
+  :root:not([data-theme]) .book[data-tone="wine"] { --spine: #c4616f; }
+}
+:root[data-theme="dark"] .book[data-tone="navy"] { --spine: #6f93bd; }
+:root[data-theme="dark"] .book[data-tone="wine"] { --spine: #c4616f; }
 
-  @media (max-width: 480px) {
-    .chapter { font-size: calc(1rem * var(--fs, 1)); line-height: 1.95; }
-    .chapter h1 { font-size: 1.3em; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .menu { animation: none; }
-    .menu-btn { transition: none; }
-  }
-  @media print {
-    .menu-btn, .catcher, .menu, .pager { display: none; }
-    main { padding-top: 0; }
-    .chapter[hidden] { display: block; page-break-before: always; }
-    body { background: #fff; color: #000; }
-  }
+.book .spine { background: var(--spine); }
+.book .body { padding: 1.4rem 1.5rem 1.3rem 1.4rem; }
+.book .meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.8rem;
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.badge {
+  display: inline-block;
+  padding: 0 0.6rem;
+  border: 1px solid var(--spine);
+  border-radius: 999px;
+  color: var(--spine);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+.book h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+}
+.book h2 a { text-decoration: none; }
+/* カード全体をクリック可能にする */
+.book h2 a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.book .original {
+  margin: 0.1rem 0 0.8rem;
+  color: var(--muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.875rem;
+  font-style: italic;
+  line-height: 1.6;
+}
+.book .desc { margin: 0 0 1rem; font-size: 0.9375rem; line-height: 1.85; }
+
+.chapters {
+  position: relative;
+  z-index: 2; /* カード全体リンクより上に出す */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+}
+.chapters a {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  text-decoration: none;
+}
+.chapters a:hover { border-color: var(--spine); color: var(--spine); }
+.book .go {
+  display: block;
+  margin-top: 1rem;
+  color: var(--spine);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.book .go span { display: inline-block; transition: transform 0.18s ease; }
+.book:hover .go span { transform: translateX(4px); }
+
+footer {
+  margin-top: 3.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.9;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .book .body { padding: 1.15rem 1.1rem 1.1rem 1.05rem; }
+  .book h2 { font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book, .book .go span { transition: none; }
+  .book:hover, .book:focus-within { transform: none; }
+}
 </style>
 </head>
 <body>
 
-<button class="menu-btn" id="menuBtn" type="button" aria-label="章の一覧を開く" aria-controls="menu" aria-expanded="false">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-</button>
-
-<div class="catcher" id="catcher" hidden></div>
-
-<nav class="menu" id="menu" aria-label="章の一覧" hidden>
-  <p class="head">怪盗紳士ルパン ／ モーリス・ルブラン</p>
-  <ul>
-    <li><a href="#ch1" data-ch="ch1"><small>第一話</small>アルセーヌ・ルパンの逮捕</a></li>
-    <li><a href="#ch2" data-ch="ch2"><small>第二話</small>アルセーヌ・ルパン、獄中にあり</a></li>
-    <li><a href="#ch3" data-ch="ch3"><small>第三話</small>アルセーヌ・ルパンの脱獄</a></li>
-  </ul>
-  <div class="settings">
-    <h2 id="themeLabel">配色</h2>
-    <div class="themes" role="radiogroup" aria-labelledby="themeLabel">
-      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="auto"><span class="sw" data-sw="auto" aria-hidden="true">あ</span>自動</button>
-      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="light"><span class="sw" data-sw="light" aria-hidden="true">あ</span>ライト</button>
-      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="sepia"><span class="sw" data-sw="sepia" aria-hidden="true">あ</span>セピア</button>
-      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="green"><span class="sw" data-sw="green" aria-hidden="true">あ</span>グリーン</button>
-      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="dark"><span class="sw" data-sw="dark" aria-hidden="true">あ</span>ダーク</button>
-      <button type="button" class="theme-btn" role="radio" aria-checked="false" data-theme-choice="black"><span class="sw" data-sw="black" aria-hidden="true">あ</span>ブラック</button>
-    </div>
-    <h2>文字サイズ</h2>
-    <div class="sizes">
-      <button type="button" id="fsDown" aria-label="文字を小さくする">A−</button>
-      <button type="button" id="fsReset" class="val" aria-label="文字サイズを標準に戻す">100%</button>
-      <button type="button" id="fsUp" aria-label="文字を大きくする">A＋</button>
-    </div>
-  </div>
-</nav>
-
-<main>
-<article class="chapter" id="ch1" data-title="第一話　アルセーヌ・ルパンの逮捕" hidden>
-<h1>アルセーヌ・ルパンの逮捕</h1>
-<p>奇妙な旅だった!それなのに、実にいい始まりだったのだ。私自身は、これほど幸先のよさそうな旅を経験したことがなかった。プロヴァンス号は、快適な高速の大西洋横断船で、船長はこの上なく愛想のいい人物だった。船には選りすぐりの人々が集まっていた。人間関係が生まれ、娯楽が催された。私たちは、世間から切り離され、見知らぬ島にいるように自分たちだけになった、という素晴らしい感覚を味わっていた。だからこそ、互いに近づき合わざるをえなかった。</p>
-
-<p>そして私たちは近づいていった……</p>
-
-<p>考えたことがあるだろうか。前日まで互いを知らなかった人々が集まり、数日間、果てしない空と広大な海のあいだで、最も親密な生活を送り、ともに海の怒りや、波の恐ろしい襲撃、嵐の悪意、眠れる水面のずるい静けさに立ち向かうことの、独特さと意外さを?</p>
-
-<p>それは、いわば悲劇的に凝縮された人生そのものだ。嵐も偉大さも、単調さも多様さもある。だからこそ人は、始まった瞬間に終わりが見えているこの短い旅を、熱に浮かされたような急ぎようで、それだけ強い悦びとともに味わうのかもしれない。</p>
-
-<p>ところが、数年前から、航海の感動にひときわ加わるものが生まれた。この浮かぶ小さな島は、解放されたと思っていた世界にまだ属しているのだ。外洋の真ん中で少しずつ解けていき、また少しずつ結び直される絆がある。無線電信だ!別の世界からの呼びかけ、この上なく神秘的なやり方で便りを受け取れる。見えない伝言が滑り込む針金を思い描くことはもうできない。謎はいっそう底知れず、いっそう詩的で、この新しい奇跡を説明するには風の翼に頼るほかない。</p>
-
-<p>こうして最初の数時間、私たちは、遠くからの声に付き添われ、護衛され、先導されているとさえ感じていた。その声は時おり、向こう側の言葉を私たちの誰かにささやいた。二人の友人が私に語りかけた。ほかの十人、二十人が、空間を越えて、悲しげな、あるいは微笑みを含んだ別れの言葉を私たち全員に送ってきた。</p>
-
-<p>さて、二日目、フランスの海岸から五百マイルの沖合で、嵐の午後、無線電信が私たちに次のような電報を伝えた。</p>
-
-<blockquote>
-<p>「アルセーヌ・ルパン、貴船に乗船。一等、金髪、右前腕に傷、単独旅行、R……の名で」</p>
-</blockquote>
-
-<p>まさにその瞬間、暗い空に激しい雷鳴がとどろいた。電波は途切れた。電報の残りは届かなかった。アルセーヌ・ルパンが隠れている名前は、頭文字しかわからなかった。</p>
-
-<p>これがほかのどんな知らせであったなら、電信所の職員も、事務長も、船長も、きっと細心の注意をもって秘密を守っただろう。しかし、どんなに厳格な慎みでも守りきれない出来事というものがある。その日のうちに、どうして漏れたのかはわからないが、私たちは皆、名高いアルセーヌ・ルパンが自分たちの中に隠れていると知っていた。</p>
-
-<p>アルセーヌ・ルパンが私たちの中にいる!何か月も前から、あらゆる新聞が武勇伝を伝えている、とらえどころのない怪盗が!われわれ最高の警官である老ガニマールと、死闘を演じ、その波乱が実に鮮やかに繰り広げられていた、謎の人物が!城館やサロンでしか仕事をしない気まぐれな紳士。あるとき、シェルマン男爵邸に忍び込みながら、手ぶらで立ち去り、こんな文句を添えた名刺を残していったという。「アルセーヌ・ルパン、怪盗紳士、家具が本物になったらまた参ります」。千の変装を持つ男、アルセーヌ・ルパン。あるときは運転手、テノール歌手、馬券屋、良家の息子、少年、老人、マルセイユの行商人、ロシアの医者、スペインの闘牛士!</p>
-
-<p>どうかよく考えてほしい。アルセーヌ・ルパンが、大西洋横断船という比較的狭い空間を行き来しているのだ。いや、一等船室のこの小さな一角、いつも顔を合わせるこの食堂、このサロン、この喫煙室を!アルセーヌ・ルパンは、あの紳士かもしれない……それともこちらの……私の食卓の隣人か……同室の相手か……</p>
-
-<p>「それがあと五日間も続くなんて!」と、翌日ミス・ネリー・アンダーダウンが叫んだ。「耐えられないわ!早く捕まえてほしいものね」</p>
-
-<p>そして私のほうを向いて、</p>
-
-<p>「ねえ、ダンドレジーさん、船長さんとすでに仲がよろしいのだから、何かご存じないの?」</p>
-
-<p>ミス・ネリーを喜ばせるために、何か知っていたらよかったのに!彼女は、どこにいてもすぐに最も目立つ場所を占めてしまう、あの見事な人々のひとりだった。その美しさも財産も、人の目を眩ませる。彼女には取り巻きがいて、崇拝者や熱狂者がいた。</p>
-
-<p>パリでフランス人の母に育てられ、彼女はシカゴの大富豪である父アンダーダウン氏のもとへ向かっていた。友人のジャーランド夫人が同伴していた。</p>
-
-<p>最初の時間から、私は恋の戯れの候補に名乗りを上げていた。だが、旅の中で急速に親しくなるうちに、彼女の魅力はたちまち私を動揺させ、その大きな黒い瞳が私の目と合うと、戯れにするには少し感情が高ぶりすぎるのを感じた。それでも、彼女は私の敬意を好意的に受け止めてくれた。私の洒落に笑い、私の逸話に関心を示してくれた。私が示す熱意には、漠然とした共感が応えているように思えた。</p>
-
-<p>ただひとり、おそらく気がかりになりうる恋敵がいた。なかなかの美青年で、優雅で、控えめで、彼女はときどき、パリっ子である私の「外向的」な振る舞いより、その無口な気質を好むように見えた。</p>
-
-<p>彼は、ミス・ネリーが私に尋ねたとき、ちょうど彼女を囲む崇拝者の輪の中にいた。私たちは甲板の、心地よいロッキングチェアに座っていた。前日の嵐が空を晴らしていた。すてきな時間だった。</p>
-
-<p>「はっきりしたことは何も知りません、お嬢さん」と私は答えた。「でも、アルセーヌ・ルパンの宿敵である老ガニマールがするのと同じように、私たち自身で捜査を行うのは、不可能でしょうか?」</p>
-
-<p>「まあ!ずいぶん大きく出ますのね!」</p>
-
-<p>「どうしてです?問題はそんなに複雑ですか?」</p>
-
-<p>「とても複雑よ」</p>
-
-<p>「解決するためにこちらにある材料をお忘れですよ」</p>
-
-<p>「どんな材料?」</p>
-
-<p>「第一に、ルパンはR氏と名乗っている」</p>
-
-<p>「ずいぶん曖昧な特徴ね」</p>
-
-<p>「第二に、単独で旅をしている」</p>
-
-<p>「その特徴だけで足りるならね!」</p>
-
-<p>「第三に、彼は金髪です」</p>
-
-<p>「それで?」</p>
-
-<p>「それなら、あとは乗客名簿を調べて、消去法で絞っていくだけです」</p>
-
-<p>名簿はポケットに入っていた。取り出して目を通した。</p>
-
-<p>「まず、頭文字から注目すべき人物は、たった十三人です」</p>
-
-<p>「十三人だけ?」</p>
-
-<p>「一等ではね。そのR氏十三人のうち、ご覧のとおり九人は、女性や子供、使用人を連れています。残るのは単独の四人。ラヴェルダン侯爵……」</p>
-
-<p>「大使館の書記官ですわ」とミス・ネリーが遮った。「存じておりますの」</p>
-
-<p>「ローソン少佐……」</p>
-
-<p>「私の叔父です」と誰かが言った。</p>
-
-<p>「リヴォルタ氏……」</p>
-
-<p>「ここにいます」と私たちのひとりが叫んだ。見事なまでに黒いひげで顔が隠れているイタリア人だった。</p>
-
-<p>ミス・ネリーが吹き出した。</p>
-
-<p>「この方は、まったく金髪ではありませんわね」</p>
-
-<p>「それなら」と私は続けた。「犯人は名簿の最後の人物だと結論せざるをえません」</p>
-
-<p>「つまり?」</p>
-
-<p>「つまり、ロザイーヌ氏です。誰かロザイーヌ氏をご存じですか?」</p>
-
-<p>誰も答えなかった。ところがミス・ネリーが、彼女のそばにいつも付き添っていて私を悩ませていた、あの無口な青年に呼びかけた。</p>
-
-<p>「あの、ロザイーヌさん、お答えになりませんの?」</p>
-
-<p>皆の目が彼に向いた。彼は金髪だった。</p>
-
-<p>正直に言おう。私は胸の奥に小さな衝撃を感じた。私たちにのしかかった気まずい沈黙から、ほかの者たちも同じ息苦しさを覚えているのがわかった。そもそも馬鹿げた話だった。この紳士の振る舞いのどこにも、疑うに足るものはなかったのだから。</p>
-
-<p>「なぜ答えないか、ですって?」と彼は言った。「私の名前、単独旅行者であること、髪の色。それを考えて、私も同じような調査をすでにしてみたのです。そして同じ結論に達しました。だから、私は逮捕されるべきだと思いますよ」</p>
-
-<p>そう言うときの彼の様子は奇妙だった。二本の動かない線のように薄い唇が、いっそう薄くなって青ざめた。目には赤い血の筋が走った。</p>
-
-<p>もちろん、彼は冗談を言っていた。それでも、その顔つきと態度は私たちに強い印象を与えた。ミス・ネリーは無邪気に尋ねた。</p>
-
-<p>「でも、お怪我はありませんでしょう?」</p>
-
-<p>「たしかに」と彼は言った。「怪我はありませんね」</p>
-
-<p>彼は神経質な手つきで袖口をまくり上げ、腕を見せた。しかしその瞬間、ある考えが私の頭をよぎった。私の目はミス・ネリーの目と合った。彼が見せたのは左腕だったのだ。</p>
-
-<p>そして、まさにそのことをはっきり指摘しようとしたとき、ある出来事が私たちの注意をそらした。ミス・ネリーの友人、ジャーランド夫人が走ってきたのだ。</p>
-
-<p>夫人は取り乱していた。皆が駆け寄った。そして夫人はさんざん苦労して、やっとのことでこう口にした。</p>
-
-<p>「私の宝石が、真珠が!……全部盗まれましたわ!……」</p>
-
-<p>いいや、全部ではなかった。あとでわかったことだが、それはもっと奇妙なことだった。犯人は「選んで」いたのだ!</p>
-
-<p>ダイヤモンドの星形飾りや、ルビーのカボションをあしらったペンダント、壊されたネックレスやブレスレットから、取り去られていたのは、最も大きな石ではなく、最も上質で貴重な石だった。いわば、価値が最も高く、かさばらないものだった。台座だけがテーブルの上に転がっていた。私はそれを見た。私たち全員が見た。輝く色鮮やかな美しい花びらをむしり取られた花のように、宝石を奪われた台座を。</p>
-
-<p>この仕事をやってのけるには、ジャーランド夫人がお茶を飲んでいたあの一時間のうちに、真昼間に、人通りのある廊下で、船室の扉をこじ開け、帽子箱の底にわざと隠してあった小さな袋を見つけ、それを開けて、選び取らねばならなかった!</p>
-
-<p>私たちの間に叫び声が上がった。盗難が知れ渡ると、乗客全員の意見が一致した。アルセーヌ・ルパンだ、と。実際、それは彼らしい、複雑で、謎めいて、想像を絶する、しかし筋の通ったやり方だった。宝石全部では場所を取りすぎて隠しにくいが、互いに独立した小さなもの、真珠やエメラルドやサファイアなら、はるかに隠しやすい。</p>
-
-<p>そして夕食のとき、こんなことが起きた。ロザイーヌの右にも左にも、席が空いたままだった。そして夜には、彼が船長に呼び出されたことがわかった。</p>
-
-<p>誰もが疑わなかった彼の逮捕は、本物の安堵をもたらした。ようやく息がつけた。その夜は小さなゲームに興じ、ダンスをした。とりわけミス・ネリーは目の覚めるような陽気さを見せ、ロザイーヌの敬意が最初は彼女に心地よかったとしても、もうほとんど覚えていないのだと私にわからせた。その優雅さが、私の心を完全に捕らえた。真夜中ごろ、月の静かな明かりの下で、私は彼女に自分の献身を誓った。その感動は、彼女を不快にさせなかったようだった。</p>
-
-<p>だが翌日、皆が唖然としたことに、彼に対する嫌疑は不十分だということで、ロザイーヌは自由の身になったと知らされた。</p>
-
-<p>ボルドーの大商人の息子である彼は、完璧に整った書類を見せたのだった。そのうえ、彼の両腕には傷跡ひとつなかった。</p>
-
-<p>「書類だって!出生証明書だって!」とロザイーヌの敵たちは叫んだ。「そんなもの、アルセーヌ・ルパンなら好きなだけ用意してみせるさ!傷だって、負っていないか……跡を消したかのどちらかだ!」</p>
-
-<p>盗みの時刻には、ロザイーヌは(これは証明されていたが)甲板を散歩していた、と反論する者もいた。すると彼らは言い返した。</p>
-
-<p>「アルセーヌ・ルパンほどの男が、自分で盗みの現場に居合わせる必要があるかね?」</p>
-
-<p>それに、あらゆる余計な考慮を除いても、最も懐疑的な人々でさえ言い逃れできない点が一つあった。ロザイーヌ以外に、単独で旅をし、金髪で、Rで始まる名前の者が誰かいるか?電報が指していたのは、ロザイーヌでなければ誰だというのか?</p>
-
-<p>そしてロザイーヌが昼食の数分前に、大胆にも私たちのグループへ歩み寄ってきたとき、ミス・ネリーとジャーランド夫人は立ち上がって離れていった。</p>
-
-<p>それは紛れもなく恐怖だった。</p>
-
-<p>一時間後、手書きの回状が、船の職員たちや水夫たち、あらゆる等級の乗客たちの手から手へと回された。ルイ・ロザイーヌ氏が、アルセーヌ・ルパンの正体を暴いた者、または盗まれた宝石の持ち主を見つけた者に、一万フランを約束するというのだ。</p>
-
-<p>「この悪党に対して誰も助けてくれないなら、私が自分で片をつけます」とロザイーヌは船長に言い切った。</p>
-
-<p>ロザイーヌ対アルセーヌ・ルパン、というより、囁かれた言い方を借りれば、アルセーヌ・ルパン自身対アルセーヌ・ルパン。この闘いはなかなか面白かった!</p>
-
-<p>それは二日間続いた。ロザイーヌがあちらこちらをさまよい、船員たちに混じって質問し、嗅ぎまわるのが見られた。夜、彼の影がうろつくのも目撃された。</p>
-
-<p>船長のほうも、このうえなく精力的に動いた。船の上から下まで、あらゆる隅々まで、プロヴァンス号は捜索された。例外なくすべての船室が調べられた。宝石は、犯人の船室以外ならどこにでも隠せるのだから、という至極もっともな口実のもとで。</p>
-
-<p>「結局、何か見つかるんじゃありませんの?」とミス・ネリーは私に尋ねた。「魔法使いだからって、ダイヤや真珠を見えなくすることまではできないはずですわ」</p>
-
-<p>「いや、できますよ」と私は答えた。「でなければ、私たちの帽子の裏地や、上着の内張り、身につけているものすべてを調べなければならなくなります」</p>
-
-<p>そして彼女を、あらゆる姿勢でいつまでも撮り続けていた私のコダック、9×12判のカメラを見せて、こう言った。</p>
-
-<p>「これくらいの大きさの機械の中にでも、ジャーランド夫人の宝石全部が入る余地があると思いませんか。写真を撮るふりをすれば、それで手品は成功です」</p>
-
-<p>「でも、犯人は必ず何かしらの手がかりを残していくものだと聞きましたわ」</p>
-
-<p>「ひとりだけ例外がいます。アルセーヌ・ルパンです」</p>
-
-<p>「どうしてですの?」</p>
-
-<p>「どうして?彼は自分が行う盗みだけでなく、自分を告発しかねないあらゆる状況まで考えているからです」</p>
-
-<p>「最初のうちは、もっと自信がおありでしたのに」</p>
-
-<p>「でも、あれから彼の仕事ぶりを見ましたから」</p>
-
-<p>「それで、あなたのお考えは?」</p>
-
-<p>「時間の無駄だと思います」</p>
-
-<p>実際、捜査は何の成果も出さなかった。少なくとも、成果といえるものは全体の努力に見合わなかった。船長の懐中時計が盗まれたのだ。</p>
-
-<p>激怒した船長は、いっそう熱心になり、何度か面会を重ねたロザイーヌの監視をさらに厳しくした。翌日、見事な皮肉というべきか、時計は副船長の替えカラーの中から見つかった。</p>
-
-<p>すべてが不思議なことのようで、それはアルセーヌ・ルパンのユーモラスなやり口を物語っていた。泥棒、たしかにそうだが、好事家でもある。趣味と天職から仕事をしているのは確かだが、面白がってもいる。自分が上演させている芝居を楽しむ紳士のようで、楽屋では自分の機知や自分が考え出した場面に腹を抱えて笑っているような印象を与えた。</p>
-
-<p>間違いなく、彼はその道の芸術家だった。陰鬱で頑固なロザイーヌを観察し、この奇妙な人物がおそらく演じている二重の役柄を思うとき、私はある種の感嘆なしにはそれを語れなかった。</p>
-
-<p>さて、最後から二日目の夜、当直の士官が、甲板の最も暗い場所からうめき声を聞いた。近づいてみると、男がひとり横たわっていた。頭はとても厚い灰色のマフラーで包まれ、手首は細い紐で縛られていた。</p>
-
-<p>縛めが解かれた。男は助け起こされ、手当てを受けた。</p>
-
-<p>その男はロザイーヌだった。</p>
-
-<p>ロザイーヌは、探索のさなかに襲われ、打ち倒され、身ぐるみを剥がされたのだった。服にピンで留められた名刺には、こう書かれていた。「アルセーヌ・ルパンは、ロザイーヌ氏の一万フランを感謝をもって受け取る」</p>
-
-<p>実際のところ、盗まれた財布には千フラン札が二十枚入っていた。</p>
-
-<p>当然、哀れな男が自分でこの襲撃を自作自演したのだと責める者もいた。しかし、そのように自分を縛るのは不可能だったうえ、名刺の筆跡がロザイーヌのものとまったく異なり、むしろ船内で見つかった古い新聞に再現されていたアルセーヌ・ルパンの筆跡に、見間違うほどよく似ていることも確認された。</p>
-
-<p>こうして、ロザイーヌはもうアルセーヌ・ルパンではなくなった。ロザイーヌはロザイーヌ、ボルドーの商人の息子だったのだ!そしてアルセーヌ・ルパンの存在は、またしても、何と恐るべき行為によって、確かなものとなった!</p>
-
-<p>恐怖が広がった。誰も自分の船室にひとりでいる勇気がなく、人気のない場所へひとりで出ていく勇気もなかった。用心深く、互いに信頼できる者同士で固まった。それでも、本能的な疑念が、最も親しい者たちさえ分断した。脅威は、もはや見張られ、それゆえに危険の少ない一個人から来るのではなかった。アルセーヌ・ルパンは今や……それは、誰でもあった。過熱した想像力は、彼に奇跡的で際限のない力を与えた。彼が最も意外な変装をできると考えられた。あるときは尊敬すべきローソン少佐、あるときは高貴なラヴェルダン侯爵、あるいはさらに(もう疑わしい頭文字にこだわる者はいなかった)、誰もが知っている、妻も子供も使用人もいる、あの人この人にさえなりうる、と。</p>
-
-<p>最初の無線電報は、何の知らせももたらさなかった。少なくとも船長は私たちに何も伝えなかったし、そのような沈黙は私たちを安心させはしなかった。</p>
-
-<p>そのため、最終日は果てしなく長く思われた。人々は不幸が起こるのを不安に待ち構えて暮らしていた。今度は、もう盗みではなく、単なる襲撃でもなく、犯罪、殺人だろう。アルセーヌ・ルパンが、あの取るに足らない二件の窃盗だけで済ませるはずがないと思われた。船の絶対的な支配者であり、当局は無力に追いやられ、彼が望みさえすればすべてが許された。財産も命も、彼の意のままだった。</p>
-
-<p>白状するが、私にとっては甘美な時間だった。それがミス・ネリーの信頼をもたらしてくれたからだ。数々の出来事に動揺し、もともと不安になりやすい性格の彼女は、自然と私のそばに保護と安心を求め、私はそれを差し出せることが嬉しかった。</p>
-
-<p>心の底では、私はアルセーヌ・ルパンを祝福していた。私たちを近づけたのは彼ではないか?彼のおかげで、最も美しい夢に身を委ねる権利を得たのではないか?恋の夢、そして、それほど空想的ではない夢。白状してもかまわないだろう。ダンドレジー家はポワトゥーの良き血筋だが、その紋章はいくらか金箔が剥げている。名前の失われた輝きを取り戻そうと考えるのは、紳士にとって恥ずべきことではないと思う。</p>
-
-<p>そして私は感じていた。こうした夢が、ネリーを不快にさせないことを。微笑む瞳が、それを抱くことを許してくれていた。声の優しさが、希望を持つようにと告げていた。</p>
-
-<p>そして最後の瞬間まで、私たちは手すりに肘をついて寄り添い、アメリカの海岸線が私たちのほうへ流れてくるのを見ていた。</p>
-
-<p>捜索は打ち切られていた。人々は待った。一等船室から、移民たちがひしめく下層甲板に至るまで、解けない謎がついに明かされる最後の瞬間を待っていた。アルセーヌ・ルパンとは誰か?あの有名なアルセーヌ・ルパンは、どんな名前、どんな仮面の下に隠れているのか?</p>
-
-<p>そしてその最後の瞬間が訪れた。たとえ百年生きようとも、そのどんな些細な点も、私は忘れないだろう。</p>
-
-<p>「顔色が悪いですよ、ミス・ネリー」と、私の腕にもたれて今にも倒れそうな連れに言った。</p>
-
-<p>「あなたこそ!」と彼女は答えた。「まあ、すっかりお変わりになって!」</p>
-
-<p>「考えてもみてください!この瞬間は胸が高鳴ります。それをあなたのそばで迎えられて、私はとても幸せです、ミス・ネリー。あなたの思い出が、ときどき長く残ってくれるといいのですが……」</p>
-
-<p>彼女は聞いていなかった。息を弾ませ、熱に浮かされていた。タラップが降ろされた。しかし私たちが渡る自由を得る前に、人々が乗り込んできた。税関吏、制服の男たち、郵便配達人。</p>
-
-<p>ミス・ネリーがつぶやいた。</p>
-
-<p>「アルセーヌ・ルパンが航海中に逃げてしまっていたとわかっても、私は驚きませんわ」</p>
-
-<p>「名誉を失うより死を選んで、捕まるくらいなら大西洋に飛び込んだのかもしれませんね」</p>
-
-<p>「笑わないでください」と彼女は苛立って言った。</p>
-
-<p>突然、私は身を震わせた。彼女が問いただすので、私は言った。</p>
-
-<p>「タラップの端に立っている、あの小柄な老人が見えますか?」</p>
-
-<p>「雨傘を持って、オリーブグリーンのフロックコートを着た方?」</p>
-
-<p>「ガニマールです」</p>
-
-<p>「ガニマール?」</p>
-
-<p>「そう、有名な警官ですよ。アルセーヌ・ルパンは自分の手で逮捕してみせる、と誓った男です。ああ、これで大洋のこちら側から何の情報も来なかったのがわかります。ガニマールがいたんですから!彼は、自分の細かな仕事に誰も口を出さないのが好きなんです」</p>
-
-<p>「では、アルセーヌ・ルパンは捕まるに違いありませんの?」</p>
-
-<p>「さあ、どうでしょう?ガニマールは、ルパンを化粧と変装した姿でしか見たことがないそうですから。偽名を知っていれば別ですが……」</p>
-
-<p>「まあ!」と彼女は、女性特有の少し残酷な好奇心で言った。「逮捕の場に居合わせられたらいいのに!」</p>
-
-<p>「辛抱しましょう。アルセーヌ・ルパンはすでに敵の存在に気づいているはずです。あの老人の目が疲れた頃、最後のほうに出てくるほうを選ぶでしょう」</p>
-
-<p>下船が始まった。雨傘にもたれ、無関心な様子のガニマールは、二つの手すりの間に押し合う群衆に注意を払っていないように見えた。彼の背後に控えた船の士官が、ときおり彼に何かを教えているのに私は気づいた。</p>
-
-<p>ラヴェルダン侯爵、ローソン少佐、イタリア人のリヴォルタが通り過ぎ、ほかの人々も、さらに多くの人々が……そしてロザイーヌが近づいてくるのが見えた。</p>
-
-<p>かわいそうなロザイーヌ!災難から立ち直っていないようだった!</p>
-
-<p>「それでも、やっぱりあの人かもしれませんわ」とミス・ネリーが私に言った。「どう思われます?」</p>
-
-<p>「ガニマールとロザイーヌを同じ写真に収められたら、きっとおもしろいと思いますよ。私のカメラを持ってください。荷物が多くて」</p>
-
-<p>私はそれを彼女に渡したが、彼女が使うには遅すぎた。ロザイーヌは通り過ぎていた。士官がガニマールの耳元に身をかがめ、ガニマールは軽く肩をすくめ、ロザイーヌは通っていった。</p>
-
-<p>だが、そうなると、いったい誰がアルセーヌ・ルパンなのか?</p>
-
-<p>「ええ」と彼女は声に出して言った。「誰ですの?」</p>
-
-<p>もう二十人ほどしか残っていなかった。彼女は順番にその人々を観察した。彼が、あの男が、この二十人の中にいないのではないかという、漠然とした恐れを抱きながら。</p>
-
-<p>私は彼女に言った。</p>
-
-<p>「これ以上待てません」</p>
-
-<p>彼女は進み出た。私はあとに続いた。しかし十歩も行かないうちに、ガニマールが私たちの行く手を遮った。</p>
-
-<p>「どうしたんです?」と私は叫んだ。</p>
-
-<p>「ちょっと待ってください。何を急いでいるんです?」</p>
-
-<p>「このお嬢さんにお供しているのです」</p>
-
-<p>「ちょっと待ちなさい」と彼はいっそう高圧的な声で繰り返した。</p>
-
-<p>彼は私の顔をじっと見つめ、それから私の目を見据えて言った。</p>
-
-<p>「アルセーヌ・ルパンだな?」</p>
-
-<p>私は笑い出した。</p>
-
-<p>「いいえ、ただのベルナール・ダンドレジーです」</p>
-
-<p>「ベルナール・ダンドレジーは三年前にマケドニアで死んだ」</p>
-
-<p>「ベルナール・ダンドレジーが死んでいたなら、私はもうこの世にいないでしょう。でもそうではない。これが私の書類です」</p>
-
-<p>「それは彼のものだ。どうやって手に入れたかは、あとでゆっくり説明してもらうのを楽しみにしているよ」</p>
-
-<p>「あなたは気が狂っている!アルセーヌ・ルパンはRの名で乗船したのですよ」</p>
-
-<p>「ああ、またお前の手だな。向こうで彼らをそちらへ誘導した偽の手がかりだ。ああ、なかなかの腕前だよ、お若いの。しかし今回は風向きが変わった。さあ、ルパン、潔くしたらどうだ」</p>
-
-<p>私は一瞬ためらった。彼が鋭く私の右前腕を叩いた。私は痛みに叫び声を上げた。彼が叩いたのは、電報が告げていた、まだ完全にはふさがっていない傷だった。</p>
-
-<p>もはや、観念するしかなかった。私はミス・ネリーのほうを向いた。彼女は青ざめ、ふらつきながら聞いていた。</p>
-
-<p>彼女の視線が私の視線とぶつかり、それから、私が預けたコダックのほうへ落ちた。彼女は急に身を動かした。そして私は、彼女が突然すべてを理解したという印象を、確信を持った。そうだ、あの狭い黒い革の壁のあいだ、あの小さな物の窪みの中に、ガニマールが私を逮捕する前に、用心して彼女の手に預けておいたあの中にこそ、ロザイーヌの二万フランと、ジャーランド夫人の真珠とダイヤモンドがあったのだ。</p>
-
-<p>ああ、誓って言うが、ガニマールとその部下二人が私を取り囲んだこの厳粛な瞬間、私にとってすべてがどうでもよかった。私の逮捕も、人々の敵意も、すべて。ただ一つを除いて。私が彼女に託したものについて、ミス・ネリーがどんな決断を下すかということだ。</p>
-
-<p>私に不利なこの決定的な物的証拠が握られることなど、恐れようとも思わなかった。ただ、ミス・ネリーがこの証拠を差し出す決心をするだろうか、それが気がかりだった。</p>
-
-<p>彼女に裏切られるのだろうか?彼女に破滅させられるのだろうか?許さない敵として振る舞うのか、それとも、思い出を胸に、軽蔑をいくらかの寛容と、思わず湧いた共感でやわらげる女性として振る舞うのか?</p>
-
-<p>彼女は私の前を通った。私は一言も発さずに、深々と頭を下げた。ほかの乗客たちに混じって、彼女は私のコダックを手に、タラップへ向かった。</p>
-
-<p>きっと、と私は思った。人前では、彼女は思い切れないのだ。一時間後、あるいはほんの少し後に、彼女はそれを渡すのだろう。</p>
-
-<p>しかしタラップの真ん中まで来たとき、不器用なふりをして、彼女はそれを、岸壁の壁と船腹のあいだの水の中へ落とした。</p>
-
-<p>それから、彼女が遠ざかっていくのが見えた。</p>
-
-<p>その美しい姿は群衆の中に消え、また現れ、そして見えなくなった。すべては終わった。永遠に終わったのだ。</p>
-
-<p>しばらく私は動かずにいた。悲しく、同時にやさしい感動に満たされて。それから、ガニマールが大いに驚いたことに、私はため息をついた。</p>
-
-<p>「それにしても残念だ、誠実な人間ではないというのは……」</p>
-
-<p>こうして、ある冬の夜、アルセーヌ・ルパンは私に自分の逮捕の物語を語ってくれた。いつか私が書き記すことになる数々の偶然の出来事が、私たちの間に絆を結んでいた……友情の、と言えばよいだろうか?そう、アルセーヌ・ルパンは何がしかの友情で私を遇してくれていると、あえて信じたい。そして、友情ゆえに、彼は時おり不意に私の家を訪れ、書斎の静けさの中に、若々しい陽気さと、燃えるような人生の輝きと、運命が好意と微笑みしか与えない男の上機嫌を持ち込んでくれるのだ。</p>
-
-<p>彼の肖像?どうして描けようか。二十回、私はアルセーヌ・ルパンに会い、二十回とも、違う人間が私の前に現れた……というより、二十枚の鏡が歪んだ像をそれぞれ映し返したような、同じ人間だ。どの像にも、それぞれの目があり、それぞれの顔つき、それぞれの身振り、それぞれの輪郭と性格がある。</p>
-
-<p>「自分でも」と彼は私に言った。「自分が誰なのか、もうよくわからないんだ。鏡を見ても、自分だとわからない」</p>
-
-<p>冗談であり、逆説であるのは確かだが、彼に会う人々、彼の限りない手立て、忍耐、化粧の技、顔の釣り合いまで変え、目鼻立ち同士の関係まで変えてしまう驚異的な能力を知らない人々にとっては、真実でもある。</p>
-
-<p>「なぜ」と彼はさらに言った。「決まった外見を持たなければいけないんだ?いつも同じ人格でいる危険を、なぜ避けてはいけない?僕の行いが、僕が誰かを十分に示してくれる」</p>
-
-<p>そして彼は、少しばかり誇らしげに付け加える。</p>
-
-<p>「『これがアルセーヌ・ルパンだ』と確信をもって言える人間が誰もいないなら、むしろ結構。大事なのは、『アルセーヌ・ルパンがこれをやった』と、間違いなく言えることだ」</p>
-
-<p>私が再構成しようとしているのは、そうした行いのいくつか、そうした冒険のいくつかである。ある冬の夜、書斎の静けさの中で、彼が親切にも打ち明けてくれた話をもとに……</p>
-<div class="pager">
-  <span class="spacer"></span>
-  <a class="next" href="#ch2"><small>次の章</small>第二話　アルセーヌ・ルパン、獄中にあり</a>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="配色を切り替える">配色：自動</button>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Classic Novels</p>
+    <h1>古典名作 和訳文庫</h1>
+    <div class="ornament" aria-hidden="true"><span>❖</span></div>
+    <p class="lead">海外の古典名作を、日本語でゆっくり味わうための小さな書架です。</p>
+  </header>
+
+  <main>
+    <!--
+      本を追加するには、<li class="book"> ... </li> を1つコピーして、
+      タイトル・著者・リンク先ファイル名を書き換えてください。
+      data-tone は navy / wine / forest / amber から選べます。
+    -->
+    <ul class="shelf">
+
+      <li class="book" data-tone="navy">
+        <div class="spine" aria-hidden="true"></div>
+        <div class="body">
+          <p class="meta">
+            <span>モーリス・ルブラン</span>
+            <span>1907年</span>
+            <span class="badge">全3話</span>
+          </p>
+          <h2><a href="arsene_lupin.html">怪盗紳士ルパン</a></h2>
+          <p class="original">Arsène Lupin, gentleman-cambrioleur</p>
+          <p class="desc">変装と機知を武器に、パリ中を翻弄する大怪盗アルセーヌ・ルパン。宿敵ガニマール警部との知恵比べを描く、冒険と推理の短編集。</p>
+          <ul class="chapters">
+            <li><a href="arsene_lupin.html#ch1">第一話　アルセーヌ・ルパンの逮捕</a></li>
+            <li><a href="arsene_lupin.html#ch2">第二話　アルセーヌ・ルパン、獄中にあり</a></li>
+            <li><a href="arsene_lupin.html#ch3">第三話　アルセーヌ・ルパンの脱獄</a></li>
+          </ul>
+          <span class="go">読む <span aria-hidden="true">→</span></span>
+        </div>
+      </li>
+
+      <li class="book" data-tone="wine">
+        <div class="spine" aria-hidden="true"></div>
+        <div class="body">
+          <p class="meta">
+            <span>チャールズ・ディケンズ</span>
+            <span>1859年</span>
+            <span class="badge">翻訳中</span>
+          </p>
+          <h2><a href="a_tail_of_two_cities.html">二都物語</a></h2>
+          <p class="original">A Tale of Two Cities</p>
+          <p class="desc">ロンドンとパリを舞台に、フランス革命の嵐の中で交差する人々の運命を描いた長編。「それは最良の時代であり、最悪の時代であった」の一文で知られる。</p>
+          <ul class="chapters">
+            <li><a href="a_tail_of_two_cities.html#b1c1">第一巻 第1章　時代</a></li>
+          </ul>
+          <span class="go">読む <span aria-hidden="true">→</span></span>
+        </div>
+      </li>
+
+    </ul>
+  </main>
+
+  <footer>
+    原作はいずれもパブリックドメインです。<br>
+    日本語訳は読みやすさを優先した試訳です。
+  </footer>
 </div>
-</article>
-
-<article class="chapter" id="ch2" data-title="第二話　アルセーヌ・ルパン、獄中にあり" hidden>
-<h1>アルセーヌ・ルパン、獄中にあり</h1>
-<p>旅行者を名乗るほどの者なら、セーヌ河畔を知らぬ者はいないだろう。ジュミエージュの廃墟からサン=ヴァンドリーユの廃墟へ向かう道すがら、川の真ん中の岩の上に誇らしげに据えられた、あの奇妙で小さな封建時代の城、マラキ城に目を留めなかった者もいないはずだ。橋の一つのアーチが、城を街道につないでいる。暗い塔の根元は、それを支える花崗岩に溶け込んでいる。どこかの山から切り離され、恐ろしい激動によってここへ投げ出された、巨大な岩塊である。まわりでは大河の静かな水が葦のあいだに戯れ、セキレイが濡れた小石の頂で震えている。</p>
-
-<p>マラキ城の歴史は、その名前のように荒々しく、その姿のように気難しい。戦い、包囲、襲撃、略奪、虐殺ばかりだった。コー地方の夜なべの席では、そこで行われた犯罪の数々が、身震いとともに語られる。不思議な伝説が語られる。かつてジュミエージュ修道院へ、そしてシャルル七世の美しい愛妾アニェス・ソレルの館へ通じていたという、有名な地下道の話もされる。</p>
-
-<p>かつて英雄と盗賊の巣窟であったこの城に、いまはナタン・カオルン男爵が住んでいる。株式取引所で、あまりに急に財を成したため、かつて「悪魔男爵」と呼ばれていた男である。没落したマラキ城の領主たちは、先祖伝来の住まいを、パン一切れ同然の値で彼に売らねばならなかった。男爵はここに、家具や絵画、陶器や彫刻木工の見事な収集品を運び込んだ。三人の年老いた使用人とだけ、ここに独りで暮らしている。誰も入ってこない。この古めかしい広間の装飾の中に、彼が持つ三枚のルーベンスも、二枚のワトーも、ジャン・グージョンの説教壇も、公開競売の最も裕福な常連たちから札束で奪い取ってきた数々の驚異も、誰一人見たことがない。</p>
-
-<p>悪魔男爵は怯えている。自分のためではない。粘り強い情熱と、最も老獪な商人でさえ欺いたと自慢できない愛好家の眼力で集めた財宝のために怯えているのだ。彼はその小物たちを愛している。守銭奴のように激しく、恋人のように嫉妬深く愛している。</p>
-
-<p>毎日、日没になると、橋の両端と表の中庭の入り口を守る、鉄で補強された四つの扉が閉ざされ、閂がかけられる。ほんの少しの衝撃でも、電気ベルが静寂の中に鳴り響く。セーヌ川の側は心配ない。岩がそそり立っているからだ。</p>
-
-<p>さて、九月のある金曜日、いつものように郵便配達人が橋のたもとに現れた。そして毎日の決まりどおり、重い扉を少しだけ開けたのは男爵だった。</p>
-
-<p>男爵は、長年見慣れたこの人の好さそうな陽気な顔と、農民らしい皮肉な目を知っているにもかかわらず、まるで知らない者のように、念入りにその男を調べた。男は笑って言った。</p>
-
-<p>「いつも私ですよ、男爵様。私の上着と帽子を盗んで化けた別人じゃありません」</p>
-
-<p>「わからんからな」とカオルンはつぶやいた。</p>
-
-<p>配達人は新聞の束を渡した。それから付け加えた。</p>
-
-<p>「それから男爵様、今日は珍しいものがあります」</p>
-
-<p>「珍しいもの?」</p>
-
-<p>「手紙です……しかも書留で」</p>
-
-<p>孤立し、友人も、気にかけてくれる人もいない男爵には、手紙が来ることなど一度もなかった。たちまち彼には、それが警戒すべき不吉な出来事に思えた。引きこもる自分を追って来る、この謎の通信相手は何者なのか?</p>
-
-<p>「署名をお願いします、男爵様」</p>
-
-<p>男爵はぶつぶつ言いながら署名した。それから手紙を受け取ると、配達人が道の曲がり角に消えるまで待ち、少し行ったり来たりしたあと、橋の欄干にもたれて封筒を破いた。中には方眼紙が一枚入っており、手書きでこう見出しがあった。パリ、サンテ刑務所。署名を見た。アルセーヌ・ルパン。仰天しながら、男爵は読んだ。</p>
-
-<blockquote class="letter">
-<p>男爵閣下</p>
-<p>貴邸の二つの客間をつなぐ回廊に、フィリップ・ド・シャンパーニュの、出来のすばらしい絵が一枚あり、私はたいへん気に入っております。貴下のルーベンスも私の趣味に合います。ワトーのうち一番小さいものもです。右の客間では、ルイ十三世様式の食器棚、ボーヴェの綴れ織り、ジャコブの署名入りアンピール様式の円卓、ルネサンス様式の長持ちに目を留めました。左の客間では、宝石とミニアチュールの陳列棚をそっくり頂きたく存じます。</p>
-<p>今回は、私にとって換金しやすいと思われるこれらの品々で満足いたします。つきましては、それらを適切に梱包のうえ、私の名義で(送料は貴下負担にて)、一週間以内にバティニョル駅へ発送いただきたい……さもなくば、九月二十七日水曜日から二十八日木曜日にかけての夜に、私自身が運び出しに参ります。その際には、上記の品々だけで満足するとは申しません。</p>
-<p>ささやかなご迷惑をおかけしますことをお許しください。敬意を込めて。</p>
-<p class="sign">アルセーヌ・ルパン</p>
-<p>追伸　ワトーのうち一番大きなものは、決して送らないでください。競売場で三万フランもお支払いになったとのことですが、あれは複製にすぎません。原画は総裁政府の時代に、バラスが酒池肉林の夜に燃やしてしまったのです。ガラの未刊の『回想録』をご参照ください。</p>
-<p>ルイ十五世様式の腰飾り鎖も要りません。真贋が疑わしいように思われますので。</p>
-</blockquote>
-
-<p>この手紙はカオルン男爵をひどく動揺させた。ほかの誰の署名であっても、すでにかなり不安にさせただろうが、アルセーヌ・ルパンの署名なのだ!</p>
-
-<p>新聞の熱心な読者であり、盗みや犯罪の世界で起きることなら何でも知っていた男爵は、この悪魔のような盗賊の武勲をすべて知っていた。たしかに、ルパンが宿敵ガニマールによってアメリカで逮捕され、たしかに投獄されていること、その裁判の予審が進められていること(ずいぶん骨が折れたようだが!)も知っていた。</p>
-
-<p>だが同時に、この男からは何が飛び出してもおかしくないと知っていた。それに、城についての、絵や家具の配置についての正確な知識は、極めて恐ろしい手がかりだった。誰も見たことのないものを、誰が彼に教えたのか?</p>
-
-<p>男爵は目を上げ、マラキ城の荒々しい姿、その切り立った台座、それを取り巻く深い水をじっと見つめ、肩をすくめた。いや、やはり危険などない。この世の誰も、彼の収集品の不可侵の聖域にまでは入り込めないはずだ。</p>
-
-<p>誰も、たしかにそうだ。だがアルセーヌ・ルパンなら?アルセーヌ・ルパンにとって、扉や跳ね橋や城壁など存在するだろうか?アルセーヌ・ルパンがある目標に到達しようと決めたなら、どんなに巧みに考え出された障害や、どんなに抜け目のない用心が、何の役に立つだろう?</p>
-
-<p>その晩のうちに、男爵はルーアンの検事正に手紙を書いた。脅迫状を送り、援助と保護を求めた。</p>
-
-<p>返事はすぐに来た。アルセーヌ・ルパンなる者は現在サンテ刑務所に拘留され、厳重に監視されており、手紙を書くことは不可能である。したがってその手紙は、ただの悪ふざけに違いない。論理も常識も、事実の現実も、すべてがそれを示している。ただし念には念を入れ、筆跡鑑定人が任命された。鑑定人は、いくつかの類似点はあるものの、この筆跡は被拘留者のものではないと断言している、と。</p>
-
-<p>「いくつかの類似点はあるものの」。男爵が心に留めたのは、この三つの恐ろしい言葉だけだった。そこに、司法が動くにはそれだけで十分なはずの、疑いの告白を見たのだ。恐怖はいよいよ募った。彼は手紙を読み返し続けた。「私自身が運び出しに参ります」。そしてあの正確な日付。九月二十七日水曜日から二十八日木曜日にかけての夜!……</p>
-
-<p>猜疑心が強く、無口な男爵は、使用人たちにも打ち明ける勇気がなかった。彼らの忠誠が、あらゆる試練に耐えるとは思えなかったのだ。それでも、数年ぶりに、誰かに話し、助言を得たいという欲求を感じた。自国の司法に見捨てられ、自分の力だけで身を守ることはもう期待できず、パリまで出かけて、誰か元警官の助けを請おうかと思うところまで来た。</p>
-
-<p>二日が過ぎた。三日目、新聞を読んでいて、彼は喜びに身を震わせた。『コードベックの目覚め』紙に、こんな短い記事が載っていたのだ。</p>
-
-<blockquote>
-<p>「当市に、すでに三週間近く、保安警察の古参の一人、ガニマール主任警部がご滞在であることを、喜びとともにお知らせする。アルセーヌ・ルパン逮捕という最新の手柄でヨーロッパ中に名声を得たガニマール氏は、長い疲れを癒すため、ハヤやブリークの釣りをお楽しみである」</p>
-</blockquote>
-
-<p>ガニマール!カオルン男爵が探していた助手は、まさに彼だ!老獪で辛抱強いガニマール以上に、ルパンの企みを挫ける者がいるだろうか?</p>
-
-<p>男爵はためらわなかった。城からコードベックの小さな町までは六キロある。救いへの希望に興奮した男の軽やかな足取りで、彼はその道を踏破した。</p>
-
-<p>主任警部の宿の所在を知ろうと何度か試みて失敗した後、男爵は、河岸の中ほどにある『目覚め』紙の事務所へ向かった。そこで例の記事の執筆者を見つけると、彼は窓に近づいて叫んだ。</p>
-
-<p>「ガニマール?それなら、河岸で釣り竿を持っている姿に確実に会えますよ。そこで知り合ったんです。釣り竿に彫られた名前を偶然見て知りました。ほら、遊歩道の木々の下に、あそこに見える小柄な老人です」</p>
-
-<p>「フロックコートに麦わら帽子の?」</p>
-
-<p>「そのとおり!ええ、変わった人ですよ。口数が少なくて、どちらかといえば無愛想で」</p>
-
-<p>五分後、男爵は有名なガニマールに声をかけ、自己紹介をして、会話を始めようとした。うまくいかないので、彼は率直に本題へ入り、自分の件を説明した。</p>
-
-<p>相手は動かずに耳を傾け、狙っている魚から目を離さなかったが、やがて顔を向け、頭のてっぺんから爪先まで、深い憐れみの目で男爵を眺めて言った。</p>
-
-<p>「あなた、盗もうとしている相手に前もって知らせるなんて習慣は、ふつうありませんよ。ましてアルセーヌ・ルパンなら、そんなへまはしません」</p>
-
-<p>「しかし……」</p>
-
-<p>「あなた、私に少しでも疑いがあれば、あの愛すべきルパンをもう一度ひっかけてやる楽しみが、ほかのどんな考慮にも勝つでしょう。ところが残念ながら、あの若者は檻の中にいるんです」</p>
-
-<p>「もし脱走したら?……」</p>
-
-<p>「サンテからは脱走できません」</p>
-
-<p>「しかし、あの男は……」</p>
-
-<p>「あの男だって、他の誰とも同じです」</p>
-
-<p>「それでも……」</p>
-
-<p>「いいですか、仮に脱走したらしたで、結構なことです。また捕まえますから。それまでは、安心してお休みなさい。そして、このブリークをこれ以上脅かさないでください」</p>
-
-<p>会話は終わった。男爵は、ガニマールの無頓着さにいくらか安心して家へ戻った。錠前を確かめ、使用人たちを見張り、さらに四十八時間が過ぎた。そのあいだに彼は、結局のところ自分の不安は空想にすぎないと、ほとんど信じ込むまでになった。そうだ、やはりガニマールの言ったとおり、盗もうとしている相手に前もって知らせるはずがない。</p>
-
-<p>日付は近づいていた。二十七日の前日、火曜日の朝は、これといって何もなかった。だが三時に、少年が呼び鈴を鳴らした。電報を届けに来たのだ。</p>
-
-<blockquote class="telegram">
-<p>「バティニョル駅に荷物は着いていません。明日の夜に備えて、すべて用意しておくこと。</p>
-<p class="sign">アルセーヌ」</p>
-</blockquote>
-
-<p>またしても男爵は動転した。あまりの取り乱しように、アルセーヌ・ルパンの要求に屈するべきではないかと考えたほどだった。</p>
-
-<p>彼はコードベックへ走った。ガニマールは同じ場所で、折りたたみ椅子に座って釣りをしていた。男爵は一言も言わず、電報を差し出した。</p>
-
-<p>「それで?」と警部は言った。</p>
-
-<p>「それで?ですが、明日なんです!」</p>
-
-<p>「何が?」</p>
-
-<p>「盗みが!私の収集品が略奪されるんです!」</p>
-
-<p>ガニマールは釣り竿を置き、男爵のほうを向き、胸の前で両腕を組み、苛立った調子で叫んだ。</p>
-
-<p>「まったく、私がこんな馬鹿げた話に関わると思っているんですか!」</p>
-
-<p>「九月二十七日から二十八日の夜に、城で過ごしていただくには、いくらお望みですか?」</p>
-
-<p>「一銭もいりません、放っておいてください」</p>
-
-<p>「ご自分で値段をつけてください。私は金持ちです、非常に金持ちなんです」</p>
-
-<p>申し出のあまりの強引さにガニマールは面食らい、いくぶん落ち着いて続けた。</p>
-
-<p>「私はここへは休暇で来ているんです。首を突っ込む権利は……」</p>
-
-<p>「誰にも知られません。何が起ころうと、黙っていると約束します」</p>
-
-<p>「いや、何も起こりませんよ」</p>
-
-<p>「ならば、三千フランでは足りますか?」</p>
-
-<p>警部は嗅ぎタバコをひとつまみ吸い、考え、そして口にした。</p>
-
-<p>「いいでしょう。ただし、正直に申し上げなければなりません。窓から金を捨てるようなものですよ」</p>
-
-<p>「構いません」</p>
-
-<p>「それなら……それに、結局のところ、あの悪魔のようなルパンのことは、何とも言えませんからね!手下の一団を従えているに違いない……使用人たちは信用できますか?」</p>
-
-<p>「それが……」</p>
-
-<p>「それなら、あてにしないでおきましょう。信頼できる仲間を二人、電報で呼びます。もっと安全になるはずです。……さて、行ってください。一緒にいるところを見られないように。明日の九時ごろに伺います」</p>
-
-<hr class="scene">
-
-<p>翌日、アルセーヌ・ルパンが指定した日に、カオルン男爵は武具の飾りを壁から外し、武器を磨き、マラキ城の周囲を歩き回った。怪しいものは何も目に入らなかった。</p>
-
-<p>夜八時半、男爵は使用人たちを下がらせた。彼らは街道に面した棟に住んでいたが、少し奥まった、城の一番端のほうだった。一人になると、男爵は静かに四つの扉を開けた。しばらくして、近づいてくる足音が聞こえた。</p>
-
-<p>ガニマールは二人の助手を紹介した。牛のような首と力強い手をした、がっしりした大男たちだった。それから、いくつか説明を求めた。場所の配置を確かめると、彼は脅威にさらされた広間に入れるすべての出入り口を、念入りに閉め、バリケードで塞いだ。壁を調べ、綴れ織りを持ち上げ、最後に助手たちを中央の回廊に配置した。</p>
-
-<p>「ばかな真似はするな、いいな?ここへは寝に来たんじゃない。少しでも異変があれば、中庭の窓を開けて私を呼べ。水の側にも注意しろ。十メートルの垂直の崖だが、あの手の悪魔どもには、それも怖くない」</p>
-
-<p>彼らを閉じ込め、鍵を持ち去ると、彼は男爵に言った。</p>
-
-<p>「さて、持ち場につきましょう」</p>
-
-<p>夜を過ごす場所に彼が選んだのは、外壁の厚みの中に作られた小さな部屋だった。二つの主要な扉のあいだにあり、かつては見張り番の小部屋だった。橋に向いた覗き窓が一つ、中庭に向いたものがもう一つ開いている。隅には、井戸の口のようなものが見えた。</p>
-
-<p>「男爵、この井戸が地下道への唯一の入り口で、人の記憶にある限り塞がれている、とおっしゃいましたね?」</p>
-
-<p>「そうです」</p>
-
-<p>「では、誰にも知られていない別の出口が、アルセーヌ・ルパンにだけ知られてあるのでない限り(それはちょっと考えにくいが)、我々は安心です」</p>
-
-<p>彼は三脚の椅子を並べ、ゆったりと横になり、パイプに火をつけてため息をついた。</p>
-
-<p>「本当に、男爵、私が余生を過ごす家にもう一階建て増したい気持ちがよほど強くなければ、こんなつまらない仕事は引き受けませんよ。この話を友人のルパンに聞かせたら、腹を抱えて笑うでしょう」</p>
-
-<p>男爵は笑わなかった。耳をそばだて、不安を募らせながら、沈黙に問いかけていた。ときどき井戸に身をかがめ、ぽっかり空いた穴の中を、心配そうに覗き込んだ。</p>
-
-<p>十一時、零時、一時が鳴った。</p>
-
-<p>突然、男爵がガニマールの腕をつかみ、ガニマールははっと目を覚ました。</p>
-
-<p>「聞こえましたか?」</p>
-
-<p>「ええ」</p>
-
-<p>「何です?」</p>
-
-<p>「私のいびきですよ!」</p>
-
-<p>「いや、違う、聞いてください……」</p>
-
-<p>「ああ、確かに、自動車の警笛だ」</p>
-
-<p>「それで?」</p>
-
-<p>「それで、ルパンが自動車を破城槌のように使って、あなたの城を壊すとは、まず考えにくい。ですから、男爵、あなたの立場なら、私は眠ります……私がまたそうする栄誉に浴するようにね。おやすみなさい」</p>
-
-<p>警報はそれだけだった。ガニマールは中断された眠りに戻ることができ、男爵には、彼の大きく規則正しいいびきしか聞こえなくなった。</p>
-
-<p>夜が明けるころ、二人は小部屋から出た。大きな静かな平和、冷たい水辺の朝の平和が、城を包んでいた。喜びに輝く男爵と、相変わらず穏やかなガニマールは、階段を上った。物音一つなかった。怪しいものは何もなかった。</p>
-
-<p>「だから言ったでしょう、男爵?結局のところ、引き受けるべきではなかった……恥ずかしいくらいです……」</p>
-
-<p>彼は鍵を取り、回廊に入った。</p>
-
-<p>二脚の椅子の上に、身をかがめ、腕をだらりと垂らして、二人の助手が眠っていた。</p>
-
-<p>「なんてこった!」と警部はうなった。</p>
-
-<p>同じ瞬間、男爵が叫び声を上げた。</p>
-
-<p>「絵が!……食器棚が!……」</p>
-
-<p>男爵はどもり、息を詰まらせ、空になった場所へ、釘が突き出て不要になった縄がぶら下がる、剥き出しの壁へ、手を伸ばした。ワトーが消えている!ルーベンスが持ち去られている!綴れ織りが外されている!陳列棚の宝石は空っぽだ!</p>
-
-<p>「それに私のルイ十六世様式の燭台が!……摂政の枝付き燭台が!……十二世紀の聖母像が!……」</p>
-
-<p>彼はあちらこちらへ、動転し、絶望して走り回った。購入価格を思い出し、被った損失を合計し、数字を積み重ね、すべてをごちゃ混ぜに、不明瞭な言葉と未完の文で口にした。足を踏み鳴らし、身をよじり、怒りと苦痛に気が狂わんばかりだった。まるで破産して、もう頭を撃ち抜くしかない男のようだった。</p>
-
-<p>何か彼を慰めるものがあったとすれば、それはガニマールの驚愕した姿だったろう。男爵とは反対に、警部は動かなかった。石になったようで、ぼんやりした目で物を調べていた。窓?閉まっている。扉の錠?無傷だ。天井に穴はない。床に穴はない。秩序は完璧だった。すべては、容赦のない論理的な計画に従って、手際よく行われたに違いない。</p>
-
-<p>「アルセーヌ・ルパン……アルセーヌ・ルパン」と彼は、打ちのめされてつぶやいた。</p>
-
-<p>突然、彼は二人の助手に飛びかかった。ようやく怒りに揺さぶられたかのように、激しく突き飛ばし、罵った。彼らは目を覚まさなかった!</p>
-
-<p>「くそ」と彼は言った。「まさか、これは……?」</p>
-
-<p>彼は身をかがめて、順番に二人をじっと観察した。眠ってはいるが、自然な眠りではなかった。</p>
-
-<p>彼は男爵に言った。</p>
-
-<p>「眠らされている」</p>
-
-<p>「でも、誰に?」</p>
-
-<p>「そりゃあ、彼ですよ!……あるいは彼の一味だ、彼が指揮している。奴ならではの手口です。爪痕がはっきりしている」</p>
-
-<p>「では、私はもう終わりだ、打つ手はない」</p>
-
-<p>「打つ手はありません」</p>
-
-<p>「しかしそれはひどい、とんでもない」</p>
-
-<p>「被害届を出しなさい」</p>
-
-<p>「何になります?」</p>
-
-<p>「さあ!とにかくやってみなさい……司法には手段があります……」</p>
-
-<p>「司法!あなたご自身で見ておられるでしょう……そら、今この瞬間に、手がかりを探し、何かを見つけられるはずなのに、あなたは少しも動かない」</p>
-
-<p>「アルセーヌ・ルパン相手に何かを見つけるって!あのですね、アルセーヌ・ルパンは背後に何も残さないんです!アルセーヌ・ルパンに偶然はありません!私は、アメリカで彼が私に逮捕されたのも、わざとだったのではないかと思い始めているくらいです!」</p>
-
-<p>「では、私は絵も、すべても諦めなければならないのか!しかし、盗まれたのは私の収集品の真珠までだ。取り戻せるなら財産を投げ出してもいい。彼に何もできないなら、せめて彼に値段を言わせてください!」</p>
-
-<p>ガニマールは彼をじっと見つめた。</p>
-
-<p>「それは分別のあるお言葉だ。撤回なさいませんね?」</p>
-
-<p>「ええ、ええ、ええ。しかし、なぜです?」</p>
-
-<p>「ある考えがありまして」</p>
-
-<p>「どんな考えです?」</p>
-
-<p>「捜査が実を結ばなかったときに話しましょう……ただし、私の成功を望むなら、私のことは一言も漏らさないでください」</p>
-
-<p>彼は歯のあいだから付け加えた。</p>
-
-<p>「それに、正直なところ、自慢できることは何もないんです」</p>
-
-<p>二人の助手は少しずつ意識を取り戻していた。催眠の眠りから覚めた者に特有の、ぼんやりした表情で。驚いた目を開き、理解しようとしていた。ガニマールが質問すると、二人は何も覚えていなかった。</p>
-
-<p>「しかし、誰か見たはずだ」</p>
-
-<p>「いいえ」</p>
-
-<p>「思い出せ」</p>
-
-<p>「いいえ、いいえ」</p>
-
-<p>「何か飲まなかったか?」</p>
-
-<p>二人は考え込み、一人が答えた。</p>
-
-<p>「はい、私は水を少し飲みました」</p>
-
-<p>「あの水差しの水か?」</p>
-
-<p>「はい」</p>
-
-<p>「私もです」ともう一人が言った。</p>
-
-<p>ガニマールは水の匂いを嗅ぎ、味を見た。特別な味も、匂いもなかった。</p>
-
-<p>「やれやれ」と彼は言った。「時間の無駄だ。アルセーヌ・ルパンが出した問題は、五分では解けない。だが、畜生、必ずまた捕まえてやる。奴は第二ラウンドを取った。決勝戦は私のものだ!」</p>
-
-<p>その日のうちに、カオルン男爵は、サンテ刑務所に拘留されているアルセーヌ・ルパンに対して、加重窃盗の告訴状を提出した。</p>
-
-<hr class="scene">
-
-<p>男爵は、マラキ城が憲兵や検事、予審判事、新聞記者、来るべきでない場所に入り込んでくるあらゆる野次馬たちに明け渡されるのを見て、この告訴を何度も後悔した。</p>
-
-<p>事件はすでに世論を沸かせていた。あまりに特殊な状況で起こり、アルセーヌ・ルパンの名があまりに人々の想像力を刺激したため、最も空想的な話が新聞の紙面を埋め、世間に信じられた。</p>
-
-<p>だが、『エコー・ド・フランス』が掲載した、アルセーヌ・ルパンの最初の手紙は(誰がその文面を提供したのか、結局誰にもわからなかった)、カオルン男爵がこの脅威を堂々と予告されていたというその手紙は、大きな反響を呼んだ。たちまち、途方もない説明が提案された。有名な地下道の存在が思い出された。影響を受けた検察は、その方向に捜索を進めた。</p>
-
-<p>城は上から下まで捜索された。すべての石に問いただされた。羽目板や暖炉、鏡の枠や天井の梁が調べられた。松明の明かりで、かつてマラキ城の領主たちが弾薬や食料を貯めていた広大な地下室が調べられた。岩の腹の中まで探りを入れた。無駄だった。地下道の痕跡はひとかけらも見つからなかった。秘密の通路は存在しなかった。</p>
-
-<p>結構、と至る所で答えがあった。だが家具や絵が幽霊のように消えることはない。それは扉や窓から出ていくのだ。それらを奪う人間たちも、扉や窓から入り、扉や窓から出ていくのだ。その人間たちは誰か?どうやって入ったのか?どうやって出ていったのか?</p>
-
-<p>ルーアンの検察は、自分たちの無力を悟り、パリの警官たちの助けを求めた。保安警察の長、デュドゥイ氏は、「鉄の旅団」から最も優秀な猟犬たちを派遣した。彼自身も四十八時間マラキ城に滞在した。やはり成功しなかった。</p>
-
-<p>そこで彼は、これまで何度もその働きを評価する機会のあった、ガニマール主任警部を呼び寄せた。</p>
-
-<p>ガニマールは上司の指示を黙って聞き、それから首を振って言った。</p>
-
-<p>「城の捜索にこだわり続けるのは、見当違いだと思います。答えは別のところにあります」</p>
-
-<p>「どこだ?」</p>
-
-<p>「アルセーヌ・ルパンのところです」</p>
-
-<p>「アルセーヌ・ルパンのところ!それを想定するということは、彼の関与を認めることだぞ」</p>
-
-<p>「認めます。それどころか、確実だと考えています」</p>
-
-<p>「ガニマール、馬鹿げている。アルセーヌ・ルパンは刑務所にいる」</p>
-
-<p>「アルセーヌ・ルパンは刑務所にいる、結構です。監視されています、それも認めます。しかし、たとえ足に鎖をつけられ、手首を縄で縛られ、口に猿ぐつわをされていても、私の考えは変わりません」</p>
-
-<p>「なぜそこまで頑固なんだ?」</p>
-
-<p>「これほどの規模の仕掛けを組み立て、それを成功するように、そして実際に成功したように組み立てられるのは、アルセーヌ・ルパンだけだからです」</p>
-
-<p>「言葉だけだ、ガニマール!」</p>
-
-<p>「現実に即した言葉です。しかし、地下道だの、軸で回る石だの、その手のくだらないことを探すのはやめましょう。この男は、そんな古臭い手段は使いません。今日の、というより明日の男です」</p>
-
-<p>「それで、君の結論は?」</p>
-
-<p>「結論として、一時間、彼と会う許可を、はっきりお願いします」</p>
-
-<p>「彼の独房でか?」</p>
-
-<p>「はい。アメリカからの帰りの航海中、我々の間には非常によい関係がありました。そして、彼を逮捕できた私に、彼はいくらかの好意を持っていると、あえて言わせていただきます。自分を危うくせずに教えられるなら、彼は私に無駄足を踏ませないでしょう」</p>
-
-<p>ガニマールがアルセーヌ・ルパンの独房に通されたのは、正午を少し過ぎたころだった。ルパンはベッドに横たわっていたが、顔を上げ、喜びの声を上げた。</p>
-
-<p>「おや、これは本当に驚いた。愛しのガニマール君が、ここに!」</p>
-
-<p>「本人だ」</p>
-
-<p>「私が選んだこの隠れ家には、いろんなものを望んでいたが……君を迎えること以上に熱烈に望んだものはなかったよ」</p>
-
-<p>「恐縮だ」</p>
-
-<p>「いやいや、僕は君に最大の敬意を抱いているんだ」</p>
-
-<p>「光栄だ」</p>
-
-<p>「僕はいつも主張してきた。ガニマールは我々の最高の探偵だ。ほとんど……僕がいかに率直か、見てくれたまえ!……ほとんどシャーロック・ホームズに匹敵する。ただ、本当に申し訳ない、この腰掛けしか差し出せなくて。それに飲み物もない!ビール一杯もない!ご勘弁を、僕はここに通りすがりなんだ」</p>
-
-<p>ガニマールは微笑んで腰を下ろし、囚人は話せるのが嬉しそうに続けた。</p>
-
-<p>「いやあ、誠実な人間の顔に目を休められて、何と嬉しいことか!スパイや密告者の顔にはうんざりしていたんだ。連中は日に十回、僕のポケットとささやかな独房を点検しに来て、脱獄の準備をしていないか確かめるんだから。まったく、政府はよほど僕に執着しているらしい!……」</p>
-
-<p>「当然だ」</p>
-
-<p>「とんでもない!僕は、自分の小さな片隅で静かに生きさせてもらえたら、どんなに幸せか!」</p>
-
-<p>「他人の年金でな」</p>
-
-<p>「そうだろう?簡単なことなのに!だが、僕はしゃべりすぎた、馬鹿なことを言った。君は急いでいるかもしれない。本題に入ろう、ガニマール!どんなご用で、この名誉に預かれたんだ?」</p>
-
-<p>「カオルン事件だ」と、ガニマールは遠回しにせず言った。</p>
-
-<p>「待った!ちょっと待って……何しろ事件が多くてね!まず頭の中から、カオルン事件の書類を探さなければ……ああ、これだ、思い出した。カオルン事件、マラキ城、セーヌ=アンフェリュール県……ルーベンスが二枚、ワトーが一枚、それとちょっとした小物」</p>
-
-<p>「ちょっとした!」</p>
-
-<p>「ああ、本当に、そんなものは取るに足らないよ。もっといいものもある!だが、君が興味を持った事件なら十分だ……さあ、話してくれ、ガニマール」</p>
-
-<p>「予審がどの段階にあるか、説明しようか?」</p>
-
-<p>「必要ない。今朝の新聞を読んだ。言わせてもらえば、あまり進んでいないようだね」</p>
-
-<p>「だからこそ、あなたの親切におすがりするのだ」</p>
-
-<p>「すっかり君の言うとおりにするよ」</p>
-
-<p>「まず、これだ。この事件を仕組んだのは、あなたか?」</p>
-
-<p>「AからZまで」</p>
-
-<p>「予告の手紙は?電報は?」</p>
-
-<p>「君の下僕のものだ。どこかに受領証もあるはずだ」</p>
-
-<p>アルセーヌは、独房の家具のすべて、つまりベッドと腰掛けとともにあるものを成していた白木の小さな机の引き出しを開け、紙切れを二枚取り出してガニマールに差し出した。</p>
-
-<p>「まったく!」と、ガニマールは叫んだ。「あなたは監視されていて、何かと言えば身体検査を受けているものと思っていた。それなのに新聞は読むし、郵便の受領証は集めている……」</p>
-
-<p>「ふん!あの連中は愚かだからね!僕の上着の裏地を引き裂き、短靴の底を調べ、この部屋の壁を叩いて音を確かめる。でも、アルセーヌ・ルパンがこんな簡単な隠し場所を選ぶほど間抜けだとは、誰も思いつかない。僕が当てにしたのは、まさにそこさ」</p>
-
-<p>面白がって、ガニマールは声を上げた。</p>
-
-<p>「なんと変わった男だ!あなたには面食らう。さあ、あの事件の話をしてくれ」</p>
-
-<p>「おやおや!そんなに急がないで。君を僕の秘密のすべてに引き入れるなんて……僕の小さな手品を明かすなんて……重大なことだよ」</p>
-
-<p>「あなたの親切を当てにしたのは、間違いだったか?」</p>
-
-<p>「いや、ガニマール、君がそう言うなら……」</p>
-
-<p>アルセーヌ・ルパンは部屋の中を二、三度行ったり来たりし、それから立ち止まった。</p>
-
-<p>「男爵への僕の手紙をどう思う?」</p>
-
-<p>「あなたは楽しもうとした、観客を少し驚かせようとした、と思う」</p>
-
-<p>「ああ、そう、観客を驚かせる!いやはや、ガニマール、君はもっと切れる男だと思っていたよ。僕が、アルセーヌ・ルパンが、そんな子供じみたことに時間を費やすと思うか!男爵に手紙を書かずに盗めたなら、あの手紙を書いただろうか?いいか、君も、ほかの連中も、わかるべきだ。あの手紙は不可欠な出発点で、機械全体を動かし始めたバネなんだ。さあ、順序立てて、よければ一緒に、マラキ城の盗みを準備しよう」</p>
-
-<p>「聞こう」</p>
-
-<p>「では、徹底的に閉ざされた、バリケードで固められた城を仮定しよう。カオルン男爵の城のように。僕は、それを含む城が近づけないからという口実で、勝負を諦め、欲しい宝を断念するだろうか?」</p>
-
-<p>「当然、しない」</p>
-
-<p>「昔のように、冒険者の一団の先頭に立って襲撃を試みるだろうか?」</p>
-
-<p>「子供じみている!」</p>
-
-<p>「こっそり忍び込むだろうか?」</p>
-
-<p>「不可能だ」</p>
-
-<p>「残る手段は一つ、僕の考えでは唯一の手段は、その城の持ち主に自分を招待させることだ」</p>
-
-<p>「独創的な手段だ」</p>
-
-<p>「しかも、なんて簡単だろう!ある日、その持ち主が手紙を受け取るとする。アルセーヌ・ルパンなる名の、悪名高い盗賊が自分に対して企んでいることを知らせる手紙だ。彼はどうする?」</p>
-
-<p>「その手紙を検事に送るだろう」</p>
-
-<p>「検事は彼を笑い飛ばす。そのルパンは現在刑務所にいるのだから。そこで、その男は取り乱し、最初に現れた人間に助けを求める気になる。そうじゃないか?」</p>
-
-<p>「疑いない」</p>
-
-<p>「そして、近所の町に有名な警官が休暇で滞在している、とどこかの三流紙で読んだら……」</p>
-
-<p>「その警官に相談に行くだろう」</p>
-
-<p>「そのとおり。だが一方で、この避けられない行動を見越して、アルセーヌ・ルパンが、最も腕の立つ友人の一人に、コードベックに居を構え、男爵が購読している『目覚め』紙の記者と知り合いになり、自分はこれこれ、あの有名な警官だと匂わせるよう頼んでいたとしたらどうなる?」</p>
-
-<p>「記者が『目覚め』紙で、その警官が当地に滞在していると報じるだろう」</p>
-
-<p>「完璧だ。そして二つに一つ。魚、つまりカオルンが針にかからなければ、何も起こらない。あるいは、これが最もありそうな仮定だが、ぴちぴち跳ねながら駆けつける。こうして、僕のカオルンは僕に対抗する助けを、僕の友人に懇願するわけだ!」</p>
-
-<p>「ますます独創的だ」</p>
-
-<p>「もちろん、偽の警官は最初は協力を断る。そこで、アルセーヌ・ルパンの電報だ。男爵は恐怖し、再び友人に懇願して、身の安全を守ってくれたら、これだけ出すと申し出る。その友人は承諾し、一味の屈強な連中を二人連れてくる。夜、カオルンが保護者に見張られている間に、彼らは窓から品物をいくつか運び出し、そのために借り上げた上等な小舟に、縄で滑り降ろす。ルパン並みに単純だ」</p>
-
-<p>「そして、馬鹿馬鹿しいほど見事だ」とガニマールは叫んだ。「構想の大胆さと細部の巧みさは、いくら褒めても足りない。だが、その名が男爵をそこまで引きつけ、暗示にかけるほど有名な警官など、私には思い当たらない」</p>
-
-<p>「一人いる。ただ一人だけいる」</p>
-
-<p>「誰だ?」</p>
-
-<p>「最も有名な警官の名前さ。アルセーヌ・ルパンの宿敵、つまりガニマール警部だ」</p>
-
-<p>「私か!」</p>
-
-<p>「君自身だよ、ガニマール。そして、ここが痛快なところだ。もし君があそこへ行って、男爵が話す気になったら、君は結局、自分を逮捕するのが自分の義務だと気づくだろう。僕をアメリカで逮捕したようにね。ねえ、なんとも滑稽な仕返しじゃないか。僕はガニマールをガニマールに逮捕させるのさ!」</p>
-
-<p>アルセーヌ・ルパンは心から笑った。警部はひどく気分を害し、唇を噛んだ。この冗談が、そんな大笑いに値するとは思えなかった。</p>
-
-<p>看守が来て、彼は気を取り直す暇を得た。男は、アルセーヌ・ルパンが特別の許可を得て隣のレストランから取り寄せている食事を運んできた。盆を机に置くと、看守は退出した。アルセーヌは席につき、パンを割り、二、三口食べて続けた。</p>
-
-<p>「でも、安心したまえ、愛しいガニマール、君はあそこへは行かない。君を驚かせることを教えよう。カオルン事件は、まもなく打ち切られる」</p>
-
-<p>「なんだと!」</p>
-
-<p>「まもなく打ち切られる、と言っているんだ」</p>
-
-<p>「まさか。私はたった今、保安警察の長と別れたところだ」</p>
-
-<p>「だから何だ?デュドゥイ氏が、僕に関することを僕以上に知っているとでも?教えてあげよう。ガニマールは、失礼、偽ガニマールは、男爵とたいへん良好な関係を保っている。男爵は、これが彼が何も打ち明けなかった主な理由だが、僕との取引を交渉するという、極めて微妙な任務を彼に託したんだ。そして現在、ある金額と引き換えに、男爵は愛しい小物たちをおそらく取り戻している。その見返りに、彼は告訴を取り下げる。つまり、盗みはなくなる。ゆえに、検察は諦めざるをえない……」</p>
-
-<p>ガニマールは、呆然として囚人を見つめた。</p>
-
-<p>「どうして、あなたにそんなことがわかる?」</p>
-
-<p>「待っていた電報が、いま届いたところだ」</p>
-
-<p>「電報が今届いた?」</p>
-
-<p>「たった今だよ、友よ。礼儀として、君の前では読まなかった。でも、君が許してくれるなら……」</p>
-
-<p>「からかっているな、ルパン」</p>
-
-<p>「友よ、この半熟卵の頭を、そっと切り落としてくれないか。僕が君をからかっていないことが、君自身でわかるはずだ」</p>
-
-<p>ガニマールは機械的に従い、ナイフの刃で卵を割った。驚きの声が彼の口から漏れた。空の殻の中に、青い紙が一枚入っていたのだ。アルセーヌに促されて、彼はそれを広げた。それは電報、というより、郵便局の記載を破り取った電報の一部だった。彼は読んだ。</p>
-
-<blockquote class="telegram">
-<p>「話はまとまった。十万フランを納入。すべて順調」</p>
-</blockquote>
-
-<p>「十万フラン?」と彼は言った。</p>
-
-<p>「そう、十万フランだ!少ないが、まあ、時代が厳しい……それに僕の経費はひどく重い!僕の予算を知ったら……大都市の予算なんだぞ!」</p>
-
-<p>ガニマールは立ち上がった。不機嫌は消えていた。数秒考え、事件全体をひと目で見渡し、その弱点を見つけようとした。それから、目利きとしての感嘆をはっきりと滲ませた口調で言った。</p>
-
-<p>「幸いなことに、あなたのような男が何ダースもいるわけじゃない。さもなければ、店を畳むしかなくなる」</p>
-
-<p>アルセーヌ・ルパンは謙虚そうな小さな顔つきをして答えた。</p>
-
-<p>「いやあ、気晴らしが必要だっただけさ。暇つぶしにね……それに、この一撃は、僕が刑務所にいなければ成功しなかったんだ」</p>
-
-<p>「何だと!」とガニマールは叫んだ。「あなたの裁判、あなたの弁護、予審、そんなものでは気晴らしに足りないのか?」</p>
-
-<p>「ああ、足りないね。なぜなら、僕は自分の裁判には出ないと決めたから」</p>
-
-<p>「ほう!ほう!」</p>
-
-<p>アルセーヌ・ルパンは、落ち着いて繰り返した。</p>
-
-<p>「僕は自分の裁判には出ない」</p>
-
-<p>「本当に!」</p>
-
-<p>「いやはや、君、僕が湿った藁の上で腐っていくとでも思うのか?侮辱だよ。アルセーヌ・ルパンが刑務所にいるのは、自分が望む間だけで、一分たりとも長くない」</p>
-
-<p>「そもそも入らないほうが、もっと慎重だったかもしれないな」と、警部は皮肉な調子で反論した。</p>
-
-<p>「ああ、君は嘲笑するのか?君は僕を逮捕する栄誉に浴したことを思い出しているんだな?知っておきたまえ、尊敬すべき友よ、あの危機的な瞬間に、もっとはるかに大きな関心事が僕を引きつけていなければ、君であろうと誰であろうと、僕に手を触れることはできなかったんだ」</p>
-
-<p>「驚いたな」</p>
-
-<p>「一人の女性が僕を見ていた、ガニマール、そして僕は彼女を愛していた。愛する女性に見つめられるということが、どれほどのことか、わかるか?あとのことは、僕にはどうでもよかった、誓って。だから、僕はここにいる」</p>
-
-<p>「ずいぶん長いことだが、と言わせてもらおう」</p>
-
-<p>「まず、忘れたかったんだ。笑わないでくれ。あの冒険は魅力的で、僕はいまも優しい思い出を抱いている……それに、僕は少し神経衰弱でね!最近の生活は熱に浮かされすぎている!ある時期には、いわゆる隔離療養をしなければならない。この場所は、その手の療養に絶好だ。ここでは、サンテ(健康)療養が厳格に実践されているよ」</p>
-
-<p>「アルセーヌ・ルパン」とガニマールは言った。「あなたは私をばかにしている」</p>
-
-<p>「ガニマール」とルパンは断言した。「今日は金曜日だ。次の水曜日、午後四時に、ペルゴレーズ通りの君の家へ、葉巻を吸いに行くよ」</p>
-
-<p>「アルセーヌ・ルパン、お待ちしている」</p>
-
-<p>二人は、互いの真価を認め合う良き友人同士のように握手を交わし、老警官は扉のほうへ向かった。</p>
-
-<p>「ガニマール!」</p>
-
-<p>警官は振り返った。</p>
-
-<p>「何だ?」</p>
-
-<p>「ガニマール、君の時計を忘れているよ」</p>
-
-<p>「私の時計?」</p>
-
-<p>「そう、僕のポケットに迷い込んでしまった」</p>
-
-<p>ルパンは、詫びながら時計を返した。</p>
-
-<p>「ごめん……悪い癖でね……でも、僕の時計が取り上げられたからといって、君のを奪っていい理由にはならない。それに、ここには文句のない、僕の必要を十分に満たしてくれる精密時計があるんだ」</p>
-
-<p>彼は引き出しから、大きくて分厚く、頼もしい金時計を取り出した。重い鎖が付いていた。</p>
-
-<p>「その時計は、どのポケットから来たんだ?」とガニマールは尋ねた。</p>
-
-<p>アルセーヌ・ルパンは、イニシャルを無造作に眺めた。</p>
-
-<p>「J・B……いったい誰だろう?……ああ、そうだ、思い出した。ジュール・ブーヴィエ、僕の予審判事だ、感じのいい人だよ……」</p>
-<div class="pager">
-  <a class="prev" href="#ch1"><small>前の章</small>第一話　アルセーヌ・ルパンの逮捕</a>
-  <a class="next" href="#ch3"><small>次の章</small>第三話　アルセーヌ・ルパンの脱獄</a>
-</div>
-</article>
-
-<article class="chapter" id="ch3" data-title="第三話　アルセーヌ・ルパンの脱獄" hidden>
-<h1>アルセーヌ・ルパンの脱獄</h1>
-<p>アルセーヌ・ルパンが食事を終え、ポケットから金の帯がついた立派な葉巻を取り出して、満足げにそれを眺めていたとき、独房の扉が開いた。彼は葉巻を引き出しに放り込み、机から離れるのがやっとだった。看守が入ってきた。散歩の時間だった。</p>
-
-<p>「お待ちしていましたよ、わが友」とルパンは、相変わらず上機嫌で叫んだ。</p>
-
-<p>二人は出ていった。彼らが廊下の角に消えるか消えないかのうちに、今度は二人の男が独房に入り、念入りな検分を始めた。一人はディユジー警部、もう一人はフォルナンファン警部だった。</p>
-
-<p>決着をつけたかったのだ。疑いの余地はなかった。アルセーヌ・ルパンは外部と連絡を保ち、手下たちと通じている。つい前日にも、『グラン・ジュルナル』紙が、同紙の司法担当記者に宛てたこんな文面を掲載していた。</p>
-
-<blockquote>
-<p>「拝啓</p>
-<p>先日掲載された記事の中で、貴下は私について、何ら正当化できない言葉遣いで論じておられました。裁判が始まる数日前に、そのことについて釈明を求めに伺います。</p>
-<p>敬具</p>
-<p class="sign">アルセーヌ・ルパン」</p>
-</blockquote>
-
-<p>筆跡は紛れもなくアルセーヌ・ルパンのものだった。つまり、彼は手紙を出している。ならば、受け取ってもいる。ならば、あれほど傲慢に予告した脱獄を、彼が準備しているのは確実だった。</p>
-
-<p>状況は耐えがたいものになっていた。予審判事と協議のうえ、保安警察の長デュドゥイ氏は自らサンテ刑務所へ出向き、所長に取るべき措置を説明した。そして到着するやいなや、部下二人を被拘留者の独房に送り込んだのだった。</p>
-
-<p>彼らは敷石を一枚残らず持ち上げ、ベッドを解体し、こうした場合に通例行うことをすべて行ったが、結局何も見つけられなかった。調査を諦めかけたところへ、看守が大急ぎで駆けつけて言った。</p>
-
-<p>「引き出しです……机の引き出しを見てください。私が入ったとき、彼がそれを押し戻したように見えました」</p>
-
-<p>彼らは調べた。ディユジーが叫んだ。</p>
-
-<p>「ちくしょう、今度こそ奴を押さえたぞ」</p>
-
-<p>フォルナンファンが制した。</p>
-
-<p>「待て、坊や。目録を作るのはボスだ」</p>
-
-<p>「でも、この高級葉巻は……」</p>
-
-<p>「ハバナはそのままにしておけ。ボスに知らせよう」</p>
-
-<p>二分後、デュドゥイ氏は引き出しを調べていた。最初に見つかったのは、『アルギュス・ド・ラ・プレス』社が切り抜いたアルセーヌ・ルパン関連の新聞記事の束、それから煙草入れ、パイプ、いわゆる薄葉紙、そして最後に二冊の本だった。</p>
-
-<p>彼は題名を見た。カーライルの『英雄崇拝論』の英語版と、当時の装丁がついた美しいエルゼヴィル版の本、一六三四年にライデンで刊行されたドイツ語訳の『エピクテトス提要』である。ぱらぱらとめくってみると、どのページも傷がつけられ、線が引かれ、書き込みがされていた。これは符丁なのか、それとも本への熱意を示す跡なのか。</p>
-
-<p>「詳しくは後で調べよう」とデュドゥイ氏は言った。</p>
-
-<p>彼は煙草入れとパイプを調べた。それから、有名な金の帯の葉巻をつかんで言った。</p>
-
-<p>「これは驚いた。わが友は贅沢だな、アンリ・クレとは!」</p>
-
-<p>喫煙者の機械的な仕草で、彼はそれを耳に近づけ、ぱきりと鳴らした。たちまち、叫び声が口をついて出た。葉巻が、指の圧力で柔らかくなったのだ。彼はもっと注意深く調べ、やがて煙草の葉のあいだに何か白いものがあるのを見つけた。ピンを使って慎重に、爪楊枝ほどの太さしかない、ごく薄い紙の巻物を引き出した。それは伝言だった。彼は広げて、女性の細かな筆跡で書かれたこんな言葉を読んだ。</p>
-
-<blockquote>
-<p>「護送車は別のものと入れ替わりました。十室のうち八室は準備済みです。外側の足で押せば、板は上から下へと持ち上がります。毎日十二時から十六時まで、H・Pが待っています。でも、どこで?すぐに返事を。ご安心を、あなたの友があなたを見守っています」</p>
-</blockquote>
-
-<p>デュドゥイ氏はしばらく考えてから言った。</p>
-
-<p>「十分にはっきりしている……護送車……八つの区画……十二時から十六時、つまり正午から午後四時までか……」</p>
-
-<p>「しかし、待つというこのH・Pとは?」</p>
-
-<p>「この場合のH・Pは自動車のことだろう。H・Pはホース・パワー、スポーツ界では、エンジンの力をそう表すじゃないか?二十四H・Pなら、二十四馬力の自動車だ」</p>
-
-<p>彼は立ち上がり、尋ねた。</p>
-
-<p>「被拘留者は昼食を終えるところだったのか?」</p>
-
-<p>「はい」</p>
-
-<p>「それに、葉巻の状態が示すように、彼はまだこの伝言を読んでいない。おそらく受け取ったばかりだ」</p>
-
-<p>「どうやってです?」</p>
-
-<p>「食べ物の中だろう。パンの中か、じゃがいもの中か、さあ、何とも言えんが」</p>
-
-<p>「不可能です。彼に食事の取り寄せを許可したのは罠にかけるためで、何も見つかっていません」</p>
-
-<p>「今夜、ルパンの返事を探そう。今のところは、彼を独房の外に留めておいてくれ。私はこれを予審判事殿のところに持っていく。判事殿が私と同意見なら、すぐに手紙を撮影させ、一時間後には、これらの品に加えて、原物の伝言を入れた同じ葉巻を引き出しに戻せるだろう。被拘留者に何も疑わせてはならない」</p>
-
-<p>その夜、デュドゥイ氏は、ある種の好奇心を抱きながら、ディユジー警部とともにサンテ刑務所の事務室へ戻った。部屋の隅のストーブの上に、三枚の皿が並んでいた。</p>
-
-<p>「彼は食べたか?」</p>
-
-<p>「はい」と所長が答えた。</p>
-
-<p>「ディユジー、このマカロニの切れ端をごく細かく刻んで、このパンの団子を割ってくれ……何もないか?」</p>
-
-<p>「ありません、ボス」</p>
-
-<p>デュドゥイ氏は皿を調べ、フォーク、スプーン、そしてナイフ、先の丸い規格品のナイフを調べた。柄を左に回し、次に右に回した。右に回すと、柄が緩んで外れた。ナイフは空洞で、一枚の紙を収める筒になっていた。</p>
-
-<p>「ふん!」と彼は言った。「アルセーヌほどの男にしては、あまり巧妙ではないな。だが時間を無駄にするまい。ディユジー、君はこのレストランに行って調べてくれ」</p>
-
-<p>それから彼は読んだ。</p>
-
-<blockquote>
-<p>「君に任せる。H・Pは毎日、遠くからついてくること。僕のほうから迎えに行く。近いうちに、親愛なる、すばらしい友よ」</p>
-</blockquote>
-
-<p>「やれやれ」とデュドゥイ氏は両手をこすりながら叫んだ。「事件はうまくいきそうだ。我々がちょっと手を貸せば、脱走は成功する……少なくとも、共犯者たちを捕まえられるだけには成功するだろう」</p>
-
-<p>「それで、アルセーヌ・ルパンが指の間をすり抜けたら?」と所長が反論した。</p>
-
-<p>「必要なだけの人数を投入する。それでも、彼があまりに巧みにやってのけたなら……まあ、仕方がない!一味については、頭目が口を割らないのだから、ほかの者たちが話すだろう」</p>
-
-<hr class="scene">
-
-<p>実際、アルセーヌ・ルパンはあまり話さなかった。何か月も前から、予審判事のジュール・ブーヴィエ氏は、むなしく手を尽くしていた。尋問は、判事と、弁護士会の花形の一人であるダンヴァル弁護士のあいだの、味気ない問答に終始した。ただし、その弁護士も、被告人について知っていることは、そのへんの誰とも変わらなかった。</p>
-
-<p>ときどき、礼儀のつもりで、アルセーヌ・ルパンはこう口にした。</p>
-
-<p>「ええ、判事殿、おっしゃるとおりです。クレディ・リヨネの盗み、バビロン通りの盗み、偽造紙幣の発行、保険証券の件、アルメネル、グーレ、アンブルヴァン、グロゼイエ、マラキの各城の盗難、そのすべて、あなたのしもべの仕業です」</p>
-
-<p>「では、説明していただけますか……」</p>
-
-<p>「その必要はありません。一括して全部認めます。全部、あなたが想像する十倍のこともね」</p>
-
-<p>判事は根負けして、この退屈な尋問を中断していた。傍受した二通の伝言を知ってから、尋問を再開した。そして、規則的に、正午になると、アルセーヌ・ルパンは、何人かの被拘留者とともに、護送車でサンテ刑務所から留置所へ連れていかれた。彼らは三時か四時ごろ、そこから帰っていった。</p>
-
-<p>さて、ある日の午後、この帰りの移送が特別な状況で行われた。サンテ刑務所のほかの被拘留者たちはまだ尋問を受けていなかったので、まずアルセーヌ・ルパンだけを連れ帰ることになったのだ。そこで彼は、一人で車に乗った。</p>
-
-<p>これらの護送車は、俗に「サラダ籠」と呼ばれ、縦方向に中央の通路で仕切られ、その通路に面して十の小部屋が、右に五つ、左に五つ開いている。各小部屋は、座った姿勢でいなければならないように作られており、したがって五人の囚人は、互いに重なるように座りながら、平行な仕切り板で互いに隔てられている。端に置かれた衛兵が、通路を見張っている。</p>
-
-<p>アルセーヌは右の三番目の小部屋に入れられ、重い車が動き出した。彼は、車がオルロージュ河岸を離れ、裁判所の前を通り過ぎるのを感じ取った。それから、サン=ミシェル橋の中ほどで、彼は毎回そうしていたように、外側の足、つまり右足で、小部屋を閉じている鉄板を押した。すぐに何かが外れ、鉄板がそっと開いた。彼は、自分がちょうど二つの車輪の間にいるのを確かめることができた。</p>
-
-<p>彼は目を光らせて待った。車はサン=ミシェル大通りを歩調ゆるやかに上っていった。サン=ジェルマンの交差点で、車は止まった。荷馬車の馬が倒れたのだ。交通が遮断され、たちまち辻馬車や乗合馬車の渋滞になった。</p>
-
-<p>アルセーヌ・ルパンは顔を出した。別の護送車が、彼の乗っている車の横に止まっていた。彼は鉄板をもっと持ち上げ、大きな車輪のスポークの一本に足をかけ、地面に飛び降りた。</p>
-
-<p>一人の御者が彼を見て、爆笑し、それから呼び止めようとした。だが、再び流れ出した車の轟音に、その声はかき消された。それに、アルセーヌ・ルパンはもう遠くにいた。</p>
-
-<p>彼は数歩走ったが、左の歩道で振り返り、あたりを見回し、風向きをうかがうような様子をした。どの方向へ行くべきか、まだよくわからない人のように。それから決心して両手をポケットに突っ込み、散歩者の呑気な様子で、大通りをぶらぶらと上り続けた。</p>
-
-<p>天気は穏やかで、秋の幸せな軽やかな日だった。カフェはどこも満員だった。彼はその一軒のテラスに座った。</p>
-
-<p>ビールを一杯と、煙草を一箱注文した。小さく口をつけてグラスを空け、静かに一本吸い、二本目に火をつけた。やがて立ち上がり、給仕に支配人を呼んでくれと頼んだ。</p>
-
-<p>支配人が来ると、アルセーヌは、皆に聞こえるほどの声で言った。</p>
-
-<p>「申し訳ない、財布を忘れました。僕の名前をご存じなら、数日間のつけにしていただけるかもしれません。アルセーヌ・ルパンです」</p>
-
-<p>支配人は冗談だと思って彼を見た。だがアルセーヌは繰り返した。</p>
-
-<p>「ルパン。サンテ刑務所の被拘留者で、現在脱獄中です。この名前なら、十分に信用していただけるでしょう」</p>
-
-<p>そして、笑い声の中を、相手が支払いを求めようとも考えないうちに、彼は立ち去った。</p>
-
-<p>彼はスフロ通りを斜めに横切り、サン=ジャック通りに入った。ショーウィンドウの前で足を止め、煙草を吸いながら、のんびりとそこを進んだ。ポール=ロワイヤル大通りで方角を確かめ、道を尋ね、サンテ通りへまっすぐ歩いた。刑務所の高い陰気な壁がまもなく立ちはだかった。それに沿って歩き、見張りに立っている衛兵のそばへ来ると、彼は帽子を取って言った。</p>
-
-<p>「ここはサンテ刑務所で間違いありませんか?」</p>
-
-<p>「そうだが」</p>
-
-<p>「自分の独房に戻りたいのです。護送車が僕を途中で置いていってしまいまして、ご迷惑をおかけしたくないので……」</p>
-
-<p>衛兵はうなった。</p>
-
-<p>「おい、そこの男、行きすぎろ、さっさとだ」</p>
-
-<p>「失礼、失礼。ですが僕の道は、この門を通るのですよ。それにアルセーヌ・ルパンが通るのをあなたが妨げたら、高くつくかもしれませんよ、お友達」</p>
-
-<p>「アルセーヌ・ルパン!何を言っているんだ!」</p>
-
-<p>「名刺を持っていなくて残念です」と、アルセーヌはポケットを探るふりをしながら言った。</p>
-
-<p>衛兵は、呆然として、頭のてっぺんから爪先まで彼を眺めた。それから、一言も発さず、ほとんど無意識に、呼び鈴を引いた。鉄の扉が少し開いた。</p>
-
-<p>数分後、所長が事務室に駆けつけ、身振り手振りで激しく怒っているふりをした。アルセーヌは微笑んだ。</p>
-
-<p>「さあ、所長殿、僕の前で策士ぶるのはおやめなさい。何ということか!わざわざ僕を一人だけで車に乗せ、都合のいい小さな渋滞を用意しておいて、僕が一目散に友人たちのもとへ駆けつけると思っている。それなら、徒歩で、辻馬車で、自転車で僕たちを護衛していた二十人の保安警察の連中はどうなんです?いやあ、彼らは僕をどうしてくれたことか!生きて出られなかったでしょうよ。ねえ所長殿、もしかすると、そこに期待していたのではありませんか?」</p>
-
-<p>彼は肩をすくめて付け加えた。</p>
-
-<p>「お願いですから、所長殿、僕のことで世話を焼かないでください。僕が脱走したいと思う日には、誰の助けも要りません」</p>
-
-<p>二日後、『エコー・ド・フランス』紙は、確かにアルセーヌ・ルパンの武勲の公式な広報紙になりつつあった(同紙の主要な出資者の一人は彼だとも言われていた)。その『エコー・ド・フランス』が、この脱獄未遂についての最も詳細な内容を掲載した。被拘留者とその謎の友人とのあいだで交わされた伝言の文面そのもの、この通信に用いられた手段、警察の共謀、サン=ミシェル大通りの散歩、カフェ・スフロでの一件、すべてが暴露された。レストランの給仕たちを調べたディユジー警部の捜査が何の成果も上げなかったことも知れ渡った。さらに、この男が持つ手段の限りない多様さを示す驚くべき事実も知らされた。彼を運んだ護送車は、完全に細工された車で、刑務所の業務を構成する通常の六台のうちの一台に、彼の一味がすり替えたものだったというのである。</p>
-
-<p>アルセーヌ・ルパンの近い脱獄は、もはや誰にも疑われなかった。実際、彼自身がそれをきっぱりと予告していた。事件の翌日、ブーヴィエ氏への彼の返答がそれを証明した。判事が彼の失敗をあざ笑うと、彼は判事を見つめ、冷静に言った。</p>
-
-<p>「よく聞いてください、判事殿、僕の言葉を信じていただきたい。この脱獄未遂は、僕の脱獄計画の一部だったのです」</p>
-
-<p>「わけがわからんね」と判事は嘲笑った。</p>
-
-<p>「あなたがわかる必要はありません」</p>
-
-<p>そして、この尋問は『エコー・ド・フランス』の紙面にそっくり載ったのだが、判事が予審に話を戻そうとしたとき、彼はうんざりしたように叫んだ。</p>
-
-<p>「ああ、まったく、まったく、何になるんです!こんな質問は全部、何の重要性もない!」</p>
-
-<p>「どういうことだ、重要性がないとは?」</p>
-
-<p>「だって、僕は自分の裁判には出ないのですから」</p>
-
-<p>「君は出ない……」</p>
-
-<p>「ええ、これは固定観念です。撤回できない決意です。何があっても妥協しません」</p>
-
-<p>これほどの自信と、毎日のように起きる説明のつかない情報漏洩は、司法を苛立たせ、当惑させた。アルセーヌ・ルパンだけが知る秘密があり、したがってその漏洩は彼自身からしか来ようがない。だが、何のために彼はそれを暴露するのか?どうやって?</p>
-
-<p>アルセーヌ・ルパンは独房を移された。ある晩、彼は下の階に降りた。判事のほうは予審を締めくくり、事件を起訴審理部に回付した。</p>
-
-<p>静寂が訪れた。それは二か月続いた。アルセーヌはそれをベッドに横たわって過ごし、顔はほとんどいつも壁のほうを向いていた。この独房の移動が、彼を打ちのめしたかのようだった。弁護士との面会も拒んだ。看守たちとさえ、ほとんど言葉を交わさなかった。</p>
-
-<p>裁判の前の二週間、彼は元気を取り戻したようだった。空気が足りないと訴えた。朝のごく早い時間に、二人の男に両脇を固められて、中庭に出されるようになった。</p>
-
-<p>とはいえ、世間の好奇心は衰えていなかった。毎日、人々は彼の脱獄の知らせを待っていた。ほとんど望んでさえいた。それほどまでに、この人物は、その熱弁、陽気さ、多彩さ、発明の才、生涯の謎によって、群衆に愛されていたのだ。アルセーヌ・ルパンは脱獄するはずだった。それは避けられない、宿命的なことだった。それがこれほど遅れることに、人々は驚きさえしていた。毎朝、警視総監は秘書に尋ねた。</p>
-
-<p>「それで、彼はまだ出ていかないのか?」</p>
-
-<p>「はい、総監閣下」</p>
-
-<p>「では、明日だな」</p>
-
-<p>そして、裁判の前日、一人の紳士が『グラン・ジュルナル』の事務所に現れ、司法担当記者を呼び出し、その顔に名刺を投げつけ、足早に立ち去った。名刺にはこう書かれていた。「アルセーヌ・ルパンは、常に約束を守る」</p>
-
-<hr class="scene">
-
-<p>こうした状況のもとで、公判が始まった。</p>
-
-<p>傍聴人の数は膨大だった。名高いアルセーヌ・ルパンを見たがらない者はなく、彼が裁判長をどう手玉に取るかを、あらかじめ味わおうとしない者もいなかった。弁護士や判事、コラムニストや社交界の人々、芸術家や上流の婦人たち、パリ中の名士たちが、傍聴席に押し合っていた。</p>
-
-<p>外は雨で、日は暗く、衛兵に連れられて入ってきたアルセーヌ・ルパンの姿はよく見えなかった。それでも、その重い態度、自分の席に身を投げ出すように座った様子、無関心で受け身の不動の姿は、彼に好印象を与えなかった。何度も、彼の弁護人が、ダンヴァル弁護士が、自分に課せられた役割を品位に欠けるとして降りたため、その事務所の書記の一人が彼に話しかけた。彼は首を振って黙っていた。</p>
-
-<p>書記官が起訴状を読み上げ、それから裁判長が宣告した。</p>
-
-<p>「被告人、起立しなさい。氏名、年齢、職業は?」</p>
-
-<p>返事がないので、彼は繰り返した。</p>
-
-<p>「氏名は?名前を尋ねているのだが?」</p>
-
-<p>濁った疲れた声が発音した。</p>
-
-<p>「ボードリュ、デジレ」</p>
-
-<p>ざわめきが起こった。だが裁判長は続けた。</p>
-
-<p>「ボードリュ、デジレ?ほう、また新しい化身か!君が名乗るのはこれでおよそ八つ目の名前で、おそらく他の名前と同様に架空だろうから、よければ、君がより有利に知られている、アルセーヌ・ルパンという名前で通すことにしよう」</p>
-
-<p>裁判長は書類を見て、また口を開いた。</p>
-
-<p>「あらゆる捜査にもかかわらず、君の身元を再構成することは不可能だった。君は、現代社会ではかなり珍しいことだが、過去を持たない。君が誰なのか、どこから来たのか、子供時代をどこで過ごしたのか、何もわからない。三年前、どんな環境からかもわからず、突然あらわれ、たちまちアルセーヌ・ルパンとして正体を現した。つまり、知性と倒錯、不道徳と寛大さが奇妙に混ざり合った者としてだ。この時期以前の君に関する資料は、むしろ推測にすぎない。八年前に奇術師ディクソンの傍らで働いたロスタという男は、おそらくアルセーヌ・ルパンその人だった。六年前にサン=ルイ病院のアルティエ博士の研究室に出入りし、細菌学についての仮説の巧妙さと皮膚病の実験の大胆さで、しばしば師を驚かせたロシア人学生は、おそらくアルセーヌ・ルパンその人だった。アルセーヌ・ルパンはまた、パリで柔術が話題になるずっと前にこの地に居を構えた、日本式格闘技の教師でもある。アルセーヌ・ルパンは、我々の考えでは、万国博覧会のグランプリを獲得し、一万フランを受け取り、二度と姿を現さなかった自転車選手でもある。そして、慈善バザーの小窓から多くの人を救い出し……その人々から金品を奪った者も、おそらくアルセーヌ・ルパンだ」</p>
-
-<p>そして、間を置いて、裁判長は結論づけた。</p>
-
-<p>「これこそが、君が社会に対して企てた闘いのための、念入りな準備にすぎなかったと思われる時期だ。君の力、精力、手腕を最高度に高めた、系統的な修行の時代だった。こうした事実の正確さを認めるか?」</p>
-
-<p>この演説のあいだ、被告人は片足からもう片足へと体を揺らし、背を丸め、腕をだらりと下げていた。より明るい光の下で、その極端な痩せ方、こけた頬、奇妙に突き出た頬骨、小さな赤い斑点がまだらにある土色の顔、不揃いでまばらな髭に縁取られた顔が目についた。牢獄は彼を著しく老けさせ、しなびさせていた。新聞が何度もその好感を呼ぶ肖像を載せてきた、あの優雅な姿も、あの若々しい顔も、もう見分けがつかなかった。</p>
-
-<p>彼は、自分に向けられた質問が聞こえなかったかのようだった。質問は二度繰り返された。やがて彼は目を上げ、考えているように見え、それから、激しく努力して、つぶやいた。</p>
-
-<p>「ボードリュ、デジレ」</p>
-
-<p>裁判長は笑い出した。</p>
-
-<p>「君が採用した弁護方針がよくわからないな、アルセーヌ・ルパン。愚か者や責任能力のない者を演じるつもりなら、好きにしたまえ。私としては、君の気まぐれには構わず、まっすぐ本題に入る」</p>
-
-<p>そして、彼はルパンにかけられた窃盗、詐欺、偽造の容疑の詳細に入っていった。ときどき被告人に問いただした。被告人はうなり声を上げるか、答えなかった。</p>
-
-<p>証人の入廷が始まった。取るに足らない証言がいくつか、もっと重みのある証言も続いたが、そのすべてが互いに矛盾するという共通点を持っていた。厄介な暗闇が公判を包んでいたが、ガニマール主任警部が入廷すると、関心が目を覚ました。</p>
-
-<p>ところが、最初から、この老警官は多少の失望を与えた。彼は臆してはいなかった(彼はもっと多くのことを見てきたのだ)が、不安げで、居心地が悪そうに見えた。何度も、明らかな気まずさをもって被告人のほうに目を向けた。それでも、両手を証言台について、彼は自分が関わった出来事を語り、ヨーロッパ中の追跡、アメリカへの到着を述べた。人々は貪るように聞き入った。最も心躍る冒険の物語を聞くかのように。しかし終わりのほうで、アルセーヌ・ルパンとの面会に触れたとき、彼は二度、上の空になり、ためらって言葉を止めた。</p>
-
-<p>別の考えが彼に取りついているのは明らかだった。裁判長が言った。</p>
-
-<p>「具合が悪いのなら、証言を中断したほうがよいかもしれない」</p>
-
-<p>「いえ、いえ、ただ……」</p>
-
-<p>彼は黙り、長く、深く被告人を見つめ、それから言った。</p>
-
-<p>「被告人をもっと近くで調べる許可をお願いします。私が解明しなければならない謎がここにあります」</p>
-
-<p>彼は近づき、さらに長く、全神経を集中させて被告人を観察し、それから証言台に戻った。そこで、いささか厳粛な口調で彼は宣言した。</p>
-
-<p>「裁判長閣下、私に向かい合っているここのこの男は、アルセーヌ・ルパンではないと断言します」</p>
-
-<p>この言葉は、大きな沈黙で迎えられた。最初は面食らった裁判長が叫んだ。</p>
-
-<p>「何を言うのだ!君は気が狂ったのか」</p>
-
-<p>警部は落ち着いて断言した。</p>
-
-<p>「一見すると、確かに存在する、認めますが、似ているという印象に騙されることがあります。しかし、一秒注意して見れば十分です。鼻、口、髪、肌の色……要するに、これはアルセーヌ・ルパンではありません。それに目です!あの男が、こんな酒飲みの目をしていたことがありますか?」</p>
-
-<p>「さあ、さあ、説明してもらおう。証人、君は何を主張しているのだ?」</p>
-
-<p>「私にわかるものですか!あの男が、自分の身代わりに、哀れな男を据えたのでしょう。その男が、彼の身代わりに有罪を宣告されようとしている……さもなければ、共犯者です」</p>
-
-<p>この予期せぬ劇的な展開に揺れる法廷中から、叫び声、笑い声、感嘆の声が上がった。裁判長は予審判事、サンテ刑務所の所長、看守たちを呼び出し、休廷とした。</p>
-
-<p>再開したとき、被告人と対面したブーヴィエ氏と所長は、アルセーヌ・ルパンとこの男のあいだには、ごく漠然とした顔立ちの類似しかないと証言した。</p>
-
-<p>「では」と裁判長は叫んだ。「この男は誰なのだ?どこから来たのだ?どうして司法の手中にあるのだ?」</p>
-
-<p>サンテ刑務所の二人の看守が呼び入れられた。驚くべき矛盾だが、彼らは交代で見張っていた被拘留者だと認めた!裁判長は息をついた。</p>
-
-<p>だが看守の一人が続けた。</p>
-
-<p>「ええ、ええ、この男だと思います」</p>
-
-<p>「どういうことだ、思う、とは?」</p>
-
-<p>「それが、ほとんど見ていないのです。夜に引き渡されて、二か月前から、いつも壁のほうを向いて寝ているので」</p>
-
-<p>「しかし、この二か月より前は?」</p>
-
-<p>「ああ、その前は、二十四号室にはいませんでした」</p>
-
-<p>刑務所長がこの点を明確にした。</p>
-
-<p>「脱獄未遂の後、被拘留者を別の独房に移しました」</p>
-
-<p>「しかし所長、あなたはこの二か月、彼を見ましたか?」</p>
-
-<p>「見る機会がありませんでした……おとなしくしていたので」</p>
-
-<p>「そして、この男は、あなたに引き渡された被拘留者ではないのか?」</p>
-
-<p>「違います」</p>
-
-<p>「では、誰なのだ?」</p>
-
-<p>「わかりません」</p>
-
-<p>「ならば我々は、二か月前に行われたかもしれないすり替えに直面していることになる。どう説明するのか?」</p>
-
-<p>「不可能です」</p>
-
-<p>「では?」</p>
-
-<p>万策尽きた裁判長は、被告人のほうを向き、優しい声で言った。</p>
-
-<p>「さあ、被告人、いつ、どのようにして司法の手に渡ったのか、説明してもらえないだろうか?」</p>
-
-<p>この好意的な口調が、男の警戒心を解いたのか、理解力を刺激したのか。彼は答えようと努めた。ついに、巧みに穏やかに質問されて、いくつかの文をまとめることができ、そこから次のことが明らかになった。二か月前、彼は留置所に連れてこられた。そこで一晩と午前を過ごした。七十五サンチームの所持金があったので、釈放された。しかし、中庭を横切っているとき、二人の衛兵が彼の腕をつかみ、護送車まで連れていった。それ以来、二十四号室で暮らしている。不幸ではない……食事はいいし……眠りも悪くない……だから抗議しなかった、と。</p>
-
-<p>すべてがもっともらしく思えた。笑いと大きな興奮の中で、裁判長は追加調査のため、事件を別の開廷期に回した。</p>
-
-<hr class="scene">
-
-<p>調査はたちまち、留置所の入所台帳に記録された事実を確定した。八週間前、ボードリュ・デジレという男が留置所に泊まった。翌日釈放され、午後二時に留置所を出た。ところが、その日の二時、最後の尋問を受けたアルセーヌ・ルパンが予審を終えて、護送車で戻っていったのだ。</p>
-
-<p>看守たちは間違いを犯したのか?似ていることに騙され、一瞬の不注意で、この男を自分たちの囚人とすり替えたのか?それには、彼らの勤務記録からは想像できないほどの手心が必要だった。</p>
-
-<p>すり替えは事前に仕組まれていたのか?場所の配置が、それをほとんど実現不可能にしていたうえに、その場合、ボードリュが共犯者で、アルセーヌ・ルパンの身代わりになる目的だけで自分を逮捕させたのでなければならなかった。しかしそれでは、ありえない偶然の連続、偶発的な出会い、途方もない間違いだけに基づくそんな計画が、どんな奇跡で成功したのか?</p>
-
-<p>デジレ・ボードリュは人体測定課に回されたが、彼の人相書きに対応するカードはなかった。そのうえ、彼の足取りは容易に見つかった。クルブヴォワ、アニエール、ルヴァロワで、彼は知られていた。施しで暮らし、テルヌ市門の近くに密集する屑拾いの小屋の一つで寝ていた。だが、一年前から姿を消していた。</p>
-
-<p>彼はアルセーヌ・ルパンに雇われたのか?そう信じる根拠は何もなかった。仮にそうだったとしても、囚人の逃亡について、それ以上のことはわからなかっただろう。奇跡は同じままだった。それを説明しようとする二十の仮説のうち、どれ一つとして満足のいくものはなかった。脱獄だけは疑いようがなかった。理解できず、人を圧倒するような脱獄だった。世間も司法も、そこに長い準備の努力と、見事に絡み合った一連の行為を感じていた。その結末は、アルセーヌ・ルパンの誇らしげな予言、「僕は自分の裁判には出ない」を正当化していた。</p>
-
-<p>念入りな捜査の一か月が過ぎても、謎は相変わらず解読不能なままだった。それでも、この哀れなボードリュを無期限に拘留しておくわけにはいかなかった。彼の裁判は馬鹿げたものになっただろう。どんな罪状が彼にあるというのか?予審判事によって釈放が署名された。しかし保安警察の長は、彼の周囲に厳重な監視を敷くことにした。</p>
-
-<p>この案はガニマールから出たものだった。彼の見方では、共犯も偶然もなかった。ボードリュは、アルセーヌ・ルパンがその並外れた巧みさで弄んだ道具だった。ボードリュが自由になれば、彼を通じてアルセーヌ・ルパンまで、少なくとも一味の誰かまで辿り着けるはずだった。</p>
-
-<p>ガニマールには二人の警部、フォルナンファンとディユジーが付けられ、一月のある朝、霧深い天気の中、牢獄の扉がボードリュ・デジレのために開いた。</p>
-
-<p>彼は初め、かなり当惑した様子で、時間の使い方についてはっきりした考えのない男のように歩いた。サンテ通りとサン=ジャック通りを進んだ。古着屋の店の前で上着とチョッキを脱ぎ、チョッキを数スーで売り、上着を着直して立ち去った。</p>
-
-<p>彼はセーヌ川を渡った。シャトレで乗合馬車が彼を追い越した。乗ろうとしたが、席がなかった。車掌が番号札を取るよう勧めたので、彼は待合室に入った。</p>
-
-<p>そのとき、ガニマールは二人の部下を呼び寄せ、事務所から目を離さずに、急いで言った。</p>
-
-<p>「馬車を止めろ……いや、二台だ、そのほうが用心になる。私は君たちの一人と行って、あとをつける」</p>
-
-<p>部下たちは従った。だがボードリュは姿を現さなかった。ガニマールは進み出た。待合室には誰もいなかった。</p>
-
-<p>「俺は間抜けだ」と彼はつぶやいた。「もう一つの出口を忘れていた」</p>
-
-<p>その事務所は、実際、内部の通路でサン=マルタン通りの事務所とつながっている。ガニマールは飛び出した。ちょうど間に合い、リヴォリ通りの角を曲がるバティニョル=植物園行きの乗合馬車の二階席にボードリュを見つけた。彼は走って乗合馬車に追いついた。だが二人の部下を見失っていた。追跡を続けるのは彼一人だった。</p>
-
-<p>怒りのあまり、彼はこれ以上の手続きを踏まずに男の襟首をつかみそうになった。このいわゆる愚か者は、周到に、巧妙な策略で、自分を助手たちから引き離したのではないか?</p>
-
-<p>彼はボードリュを見た。長椅子でうとうとし、頭が右へ左へと揺れていた。口を少し開け、その顔は信じられないほどの愚かさを表していた。いや、これは老ガニマールを手玉に取れる敵ではない。偶然が彼に味方した、それだけのことだ。</p>
-
-<p>ギャルリー・ラファイエットの交差点で、男は乗合馬車からミュエット行きの市電に飛び移った。オスマン大通り、ヴィクトル・ユゴー大通りを進んだ。ボードリュはミュエット駅の前でしか降りなかった。そして悠然とした足取りで、ブーローニュの森に入っていった。</p>
-
-<p>彼はある小道から別の小道へ移り、引き返し、遠ざかった。何を探していたのか?目的があったのか?</p>
-
-<p>一時間もこの動きを続けたのち、彼は疲れ果てているようだった。実際、ベンチを見つけて座った。オートゥイユからそう遠くない、木々に隠れた小さな湖のほとりのその場所は、まったく人気がなかった。半時間が過ぎた。じれたガニマールは、話しかけることにした。</p>
-
-<p>そこで近づき、ボードリュの隣に腰を下ろした。煙草に火をつけ、杖の先で砂に丸を描いて言った。</p>
-
-<p>「寒いですな」</p>
-
-<p>沈黙があった。そして突然、その沈黙の中に笑い声が響いた。だが陽気な、幸せな笑い声、笑いの発作に襲われて、笑わずにいられない子供の笑い声だった。はっきりと、本当に、ガニマールは、持ち上がった頭皮の下で髪が逆立つのを感じた。この笑い声、彼がよく知っているこの悪魔のような笑い声!……</p>
-
-<p>彼は荒々しい身振りで、男の上着の折り返しをつかみ、深く、激しく、重罪裁判所で見たとき以上に男を見つめた。そして実のところ、もはやその男は見えなかった。それは男であり、同時にもう一人の男、本物だった。</p>
-
-<p>共犯めいた意志に助けられて、彼は目の熱い生命を取り戻し、やせこけた仮面を補い、傷んだ表皮の下に本物の肉を、歪めた口元越しに本物の口を認めた。それはあの男の目であり、あの男の口であり、とりわけその鋭く、生き生きとして、嘲るような、才気のある、とても澄んで若々しい表情だった!</p>
-
-<p>「アルセーヌ・ルパン、アルセーヌ・ルパン」と彼はどもった。</p>
-
-<p>そして突然、怒りにとらわれて、その喉を締め上げ、押し倒そうとした。五十歳にもかかわらず、彼はまだ並外れた力を持っていたが、相手はかなり体調が悪そうに見えた。それに、もし連れ戻せたなら、何という大手柄だろう!</p>
-
-<p>闘いは短かった。アルセーヌ・ルパンはほとんど抵抗せず、そして襲いかかったときと同じ素早さで、ガニマールは手を離した。彼の右腕はだらりと垂れ、麻痺していた。</p>
-
-<p>「もし、オルフェーヴル河岸で柔術を教えていれば」とルパンは言った。「この技が日本語でウデ・シギと呼ばれることを、君は知っていただろうに」</p>
-
-<p>そして冷ややかに付け加えた。</p>
-
-<p>「あと一秒で、腕を折っていたよ。そうされても自業自得だ。何ということだ、僕が尊敬する旧友の君に、自分から正体を明かしたというのに、僕の信頼を裏切るとは!悪いことだよ……それで、どうしたんだね?」</p>
-
-<p>ガニマールは黙っていた。自分に責任があると思っているこの脱獄は(センセーショナルな証言で司法を誤らせたのは、彼ではなかったか?)、彼の経歴の恥のように思えた。涙が一粒、灰色の口髭のほうへ転がった。</p>
-
-<p>「おやおや、ガニマール、気に病むなよ。君が話さなかったとしても、他の誰かに話させるように僕が手配したさ。考えてみたまえ、ボードリュ・デジレが有罪にされるのを、僕が許せたと思うか?」</p>
-
-<p>「では」とガニマールはつぶやいた。「あそこにいたのはあなただったのか?ここにいるのも、あなたなのか!」</p>
-
-<p>「僕さ、いつも僕、僕だけだ」</p>
-
-<p>「そんなことが可能なのか?」</p>
-
-<p>「ああ、魔法使いである必要はないよ。あの立派な裁判長が言ったように、あらゆる事態に備えられるよう、十二年ほど準備しておけば十分なんだ」</p>
-
-<p>「しかし、顔は?目は?」</p>
-
-<p>「サン=ルイ病院でアルティエ博士と十八か月も働いたのは、芸術への愛からではないと、わかるだろう。いつかアルセーヌ・ルパンと名乗る名誉を得る者は、外見と身元という通常の法則から逃れなければならないと考えたんだ。外見?好きなように変えられる。パラフィンの皮下注射は、選んだ場所の皮膚をちょうど膨らませる。ピロガロール酸は君をモヒカン族に変える。クサノオウの汁は、このうえなく効果的な湿疹や腫れ物で君を飾る。ある化学処理は髭や髪の伸びに作用し、別のものは声の調子に作用する。それに加えて、二十四号室での二か月の絶食、口をこの引きつり笑いの形に開け、頭をこの傾きに保ち、背中をこの曲線に保つための、千回の反復練習。最後に、目に五滴のアトロピンを点して、おどおどと落ち着きのない目にすれば、手品は完成だ」</p>
-
-<p>「看守たちが、気づかなかったとは考えられない……」</p>
-
-<p>「変身は段階的だった。彼らには日々の変化に気づけなかったんだ」</p>
-
-<p>「だが、ボードリュ・デジレは?」</p>
-
-<p>「ボードリュは実在する。去年出会った哀れな無邪気な男で、実に僕と顔立ちがいくらか似ている。いつでも起こりうる逮捕に備えて、彼を安全な場所に置き、最初から二人を隔てる相違点を見極めて、できるだけ自分の側でそれを和らげるように努めた。仲間たちは彼を留置所で一晩過ごさせ、僕とほぼ同じ時刻に出てくるようにして、偶然の一致が容易に確認できるようにした。というのも、いいかね、彼が通過した痕跡が見つかるようにする必要があったんだ。さもなければ、司法は僕が誰なのかを問うただろう。ところが、この立派なボードリュを差し出せば、司法がそれに飛びつくのは必然、わかるか、必然なんだ。すり替えには乗り越えがたい困難があるにもかかわらず、自分の無知を認めるよりは、すり替えを信じるほうを選ぶ、とね」</p>
-
-<p>「ああ、ああ、確かに」とガニマールはつぶやいた。</p>
-
-<p>「それに」とアルセーヌ・ルパンは叫んだ。「僕は手に強力な切り札を持っていた。最初から自分で仕掛けておいたカードだ。皆が僕の脱獄を待ち構えているという状況だよ。ここが、司法と僕が始めた、僕の自由を賭けたあの心躍る勝負で、君も他の者たちも犯した大きな間違いだ。君たちはまたしても、僕が虚勢を張っていると、青二才のように成功に酔っていると思い込んだ。この僕、アルセーヌ・ルパンが、そんな弱さを!カオルン事件のときと同じで、君たちは『アルセーヌ・ルパンが脱獄すると屋根の上から叫んでいるのは、そう叫ばなければならない理由があるからだ』とは考えなかった。いやはや、わかってくれたまえ、脱獄しないで脱獄するには、人々がその脱獄をあらかじめ信じている必要があった。それが信仰箇条であり、絶対的な確信であり、太陽のように明らかな真実であることが必要だったんだ。そして、僕の意志で、そうなった。アルセーヌ・ルパンは脱獄する、アルセーヌ・ルパンは自分の裁判には出ない、と。だから、君が立ち上がって『この男はアルセーヌ・ルパンではない』と言ったとき、皆が即座に、僕がアルセーヌ・ルパンではないと信じない方が不自然だった。たった一人でも疑ったなら、たった一人でも『もしアルセーヌ・ルパンだったら?』という単純な留保を口にしたなら、その瞬間に僕は終わりだった。僕のほうに身を乗り出すだけでよかった。君や他の者たちがやったように、僕がアルセーヌ・ルパンではないと思ってではなく、僕がアルセーヌ・ルパンかもしれないと思って。そうすれば、あらゆる用心にもかかわらず、僕は見破られていた。でも僕は安心していた。論理的にも心理的にも、誰もそんな単純なささやかな考えを持てるはずがなかったんだ」</p>
-
-<p>彼は突然、ガニマールの手をつかんだ。</p>
-
-<p>「さあ、ガニマール、認めたまえ。サンテ刑務所での面会の八日後、僕が頼んだとおり、君は四時に自宅で僕を待っていたろう?」</p>
-
-<p>「それで、あなたの護送車は?」とガニマールは、答えるのを避けて言った。</p>
-
-<p>「はったりだ!あの使えなくなった古い車を修繕してすり替えたのは仲間たちで、一撃を試みたかったんだ。でも、例外的な状況の重なりがなければ実行できないことは、わかっていた。ただ、この脱獄未遂を完成させ、最大限に宣伝するのが有益だと考えたんだ。大胆に仕組まれた最初の脱獄が、二度目の脱獄に、あらかじめ実現済みの脱獄の価値を与えたんだよ」</p>
-
-<p>「ということは、葉巻は……」</p>
-
-<p>「僕がくり抜いた。ナイフもだ」</p>
-
-<p>「それに伝言は?」</p>
-
-<p>「僕が書いた」</p>
-
-<p>「あの謎の女性の文通相手は?」</p>
-
-<p>「彼女と僕は一人だ。どんな筆跡も好きなように書ける」</p>
-
-<p>ガニマールはしばらく考え、反論した。</p>
-
-<p>「どうして人体測定課で、ボードリュのカードを取ったとき、それがアルセーヌ・ルパンのものと一致しているのに気づかなかったのか?」</p>
-
-<p>「アルセーヌ・ルパンのカードは存在しない」</p>
-
-<p>「まさか!」</p>
-
-<p>「少なくとも、偽物だ。これは僕がずいぶん研究した問題でね。ベルティヨン方式にはまず視覚的な人相書きがあり(完全ではないとわかるだろう)、次に寸法による記録、つまり頭、指、耳などの計測がある。これは打つ手がない」</p>
-
-<p>「では?」</p>
-
-<p>「では、金を払うしかなかった。僕がアメリカから戻る前に、課の職員の一人が、いくらかの金で、僕の計測の最初に偽の寸法を記入することを引き受けた。それで制度全体が逸れるのに十分だ。カードは、本来行き着くはずの欄と正反対の欄に向かう。だからボードリュのカードが、アルセーヌ・ルパンのカードと一致するはずはなかったんだ」</p>
-
-<p>また沈黙があり、それからガニマールが尋ねた。</p>
-
-<p>「それで、これからどうするのです?」</p>
-
-<p>「これから」とルパンは声を上げた。「休息をとって、栄養過多の食事療法を続けて、少しずつ自分に戻る。ボードリュだろうが何だろうが、シャツのように人格を取り替え、外見、声、眼差し、筆跡を選ぶのは、とても結構なことだ。でも、そのうち自分がわからなくなってしまうことがあって、それはとても悲しいんだ。いま僕は、影をなくした男が感じたに違いないことを感じている。自分を探しに行こう……そして、自分を見つけるんだ」</p>
-
-<p>彼は行ったり来たりした。日の光に少しだけ暗がりが混じっていた。彼はガニマールの前で足を止めた。</p>
-
-<p>「もう、話すことはないと思うが?」</p>
-
-<p>「いえ」と警部は答えた。「あなたの脱獄の真実を明かすのかどうか、知りたいのです……私が犯した間違いを……」</p>
-
-<p>「ああ!釈放されたのがアルセーヌ・ルパンだったなんて、誰にも知られることはないよ。僕の周りに最も不思議な闇を積み重ねることに、僕は大きな関心がある。この脱獄に、ほとんど奇跡のような性格を残しておかないわけにはいかない。だから、心配はいらない、わが善き友よ。さようなら。今夜は外で食事なんだ、着替える時間しかない」</p>
-
-<p>「あなたは、とても休息をとりたがっていると思っていましたが!」</p>
-
-<p>「ああ!逃れられない社交上の義務もあるのさ。休息は明日から始まる」</p>
-
-<p>「それで、どこで食事を?」</p>
-
-<p>「イギリス大使館で」</p>
-<div class="pager">
-  <a class="prev" href="#ch2"><small>前の章</small>第二話　アルセーヌ・ルパン、獄中にあり</a>
-  <span class="spacer"></span>
-</div>
-</article>
-</main>
 
 <script>
 (function () {
-  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
-  var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[data-ch]'));
-  var menu = document.getElementById('menu');
-  var menuBtn = document.getElementById('menuBtn');
-  var catcher = document.getElementById('catcher');
-  var KEY = 'lupin-last-chapter';
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var order = ['auto', 'light', 'sepia', 'dark'];
+  var names = { auto: '自動', light: 'ライト', sepia: 'セピア', dark: 'ダーク' };
+  var meta = document.querySelector('meta[name="theme-color"]');
 
-  function store(id) { try { localStorage.setItem(KEY, id); } catch (e) {} }
-  function recall() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-
-  function isOpen() { return !menu.hidden; }
-
-  function setMenu(open, restoreFocus) {
-    menu.hidden = !open;
-    catcher.hidden = !open;
-    menuBtn.setAttribute('aria-expanded', String(open));
-    menuBtn.setAttribute('aria-label', open ? '章の一覧を閉じる' : '章の一覧を開く');
-    if (open) {
-      var current = menu.querySelector('[aria-current="true"]') || links[0];
-      if (current) current.focus();
-    } else if (restoreFocus) {
-      menuBtn.focus();
+  function current() {
+    try { return localStorage.getItem('classic-novels-theme') || 'auto'; } catch (e) { return 'auto'; }
+  }
+  function apply(t) {
+    if (t === 'auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
+    btn.textContent = '配色：' + names[t];
+    if (meta) {
+      var c = getComputedStyle(root).getPropertyValue('--paper').trim();
+      if (c) meta.setAttribute('content', c);
     }
   }
-
-  function show(id, scrollTop) {
-    var target = chapters.filter(function (c) { return c.id === id; })[0] || chapters[0];
-    chapters.forEach(function (c) { c.hidden = (c !== target); });
-    links.forEach(function (a) {
-      if (a.getAttribute('data-ch') === target.id) a.setAttribute('aria-current', 'true');
-      else a.removeAttribute('aria-current');
-    });
-    document.title = target.getAttribute('data-title') + ' | 怪盗紳士ルパン';
-    store(target.id);
-    if (scrollTop) window.scrollTo(0, 0);
-  }
-
-  menuBtn.addEventListener('click', function () { setMenu(!isOpen(), false); });
-  catcher.addEventListener('click', function () { setMenu(false, false); });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen()) setMenu(false, true);
+  btn.addEventListener('click', function () {
+    var next = order[(order.indexOf(current()) + 1) % order.length];
+    try { localStorage.setItem('classic-novels-theme', next); } catch (e) {}
+    apply(next);
   });
-
-  links.forEach(function (a) {
-    a.addEventListener('click', function () {
-      /* 今の章を選んだ場合は hashchange が起きないので、ここで閉じる */
-      setMenu(false, false);
-      if (a.getAttribute('data-ch') === (location.hash || '').slice(1)) window.scrollTo(0, 0);
-    });
-  });
-
-  window.addEventListener('hashchange', function () {
-    setMenu(false, false);
-    show((location.hash || '').slice(1), true);
-  });
-
-
-  /* 表示設定:配色と文字サイズ */
-  var root = document.documentElement;
-  var THEMES = ['auto', 'light', 'sepia', 'green', 'dark', 'black'];
-  var SCALES = [0.85, 1, 1.15, 1.3, 1.5, 1.7];
-  var themeBtns = Array.prototype.slice.call(document.querySelectorAll('[data-theme-choice]'));
-  var fsDown = document.getElementById('fsDown');
-  var fsUp = document.getElementById('fsUp');
-  var fsReset = document.getElementById('fsReset');
-  var themeMeta = document.querySelector('meta[name="theme-color"]');
-  var scaleIdx = 1;
-
-  function updateThemeColor() {
-    var c = getComputedStyle(root).getPropertyValue('--paper').trim();
-    if (themeMeta && c) themeMeta.setAttribute('content', c);
-  }
-
-  function applyTheme(t, save) {
-    if (THEMES.indexOf(t) < 0) t = 'auto';
-    if (t === 'auto') root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', t);
-    themeBtns.forEach(function (b) {
-      b.setAttribute('aria-checked', String(b.getAttribute('data-theme-choice') === t));
-    });
-    if (save) store2('lupin-theme', t);
-    updateThemeColor();
-  }
-
-  function applyScale(i, save) {
-    scaleIdx = Math.max(0, Math.min(SCALES.length - 1, i));
-    root.style.setProperty('--fs', String(SCALES[scaleIdx]));
-    fsReset.textContent = Math.round(SCALES[scaleIdx] * 100) + '%';
-    fsDown.disabled = (scaleIdx === 0);
-    fsUp.disabled = (scaleIdx === SCALES.length - 1);
-    if (save) store2('lupin-scale', String(SCALES[scaleIdx]));
-  }
-
-  function store2(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  function recall2(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-
-  themeBtns.forEach(function (b) {
-    b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-choice'), true); });
-  });
-  fsDown.addEventListener('click', function () { applyScale(scaleIdx - 1, true); });
-  fsUp.addEventListener('click', function () { applyScale(scaleIdx + 1, true); });
-  fsReset.addEventListener('click', function () { applyScale(1, true); });
-
-  if (window.matchMedia) {
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
-    var onScheme = function () { updateThemeColor(); };
-    if (mq.addEventListener) mq.addEventListener('change', onScheme);
-    else if (mq.addListener) mq.addListener(onScheme);
-  }
-
-  var savedScale = parseFloat(recall2('lupin-scale'));
-  var nearest = 1, best = Infinity;
-  if (isFinite(savedScale)) {
-    SCALES.forEach(function (s, i) {
-      var diff = Math.abs(s - savedScale);
-      if (diff < best) { best = diff; nearest = i; }
-    });
-  }
-  applyTheme(recall2('lupin-theme') || 'auto', false);
-  applyScale(nearest, false);
-
-  show((location.hash || '').slice(1) || recall() || 'ch1', false);
+  apply(current());
 })();
 </script>
 </body>
